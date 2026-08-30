@@ -1,30 +1,4 @@
-# PTrade 知识库汇总
-
-> 由 QuantMore 种子导入逻辑生成:60 个文档按子目录切割为 17 个知识库单元,
-> 此处合并为单个 Markdown 文件(与知识库向量化内容一致)。
-
-- 单元数:17
-- 源目录:`/Users/pengpai/Desktop/ptrade-qmt-docs-scraper/docs`
-
----
-
 # 01-Ptrade API文档
-
-## 01-Ptrade API文档
-
-# Ptrade API文档
-
-### >>> QMT API文档
-
-#### 本站点由公众号：可转债量化分析 提供资源部署。并定期更新API和示例
-
-![](assets/kzz.jpg)
-
-如需开通Ptrade权限的券商，请关注公众号并后台留言：ptrade开通 或者 ptrade试用，市面上支持ptrade的券商均可开通
-
-ptrade、qmt策略代写后台留言：ptrade代写
-
-##### 开户后可加入Ptrade,QMT 微信群，获得代码指导学习机会
 
 目前支持券商有 [国盛证券(SZ002670)](https://xueqiu.com/snowman/S/SZ002670)，[国金证券(SH600109)](https://xueqiu.com/S/SH600109)，东莞证券，[湘财证券(大智慧)](https://xueqiu.com/S/SH601519)，[长江证券](https://xueqiu.com/S/SZ000783)，[国泰君安-海通](https://xueqiu.com/S/SH601211)等
 
@@ -38,8 +12,6 @@ ptrade、qmt策略代写后台留言：ptrade代写
 
 ##### Ptrade软件下载链接（安装后ptrade会自动升级更新到最新）
 
-如果链接失效，可私信公众号单独发送
-
 券商实盘版无法盘中回测，可盘后回测；部分券商实盘版不支持回测。（盘中回测消耗服务器资源导致实盘运行的策略变慢，以至于大部分券商停掉盘中回测功能）
 
 需要回测功能的，可申请模拟客户端，回测没有时间限制
@@ -52,13 +24,13 @@ ptrade、qmt策略代写后台留言：ptrade代写
 - [国盛证券-Ptrade测试版](https://pan.baidu.com/s/1GfDrOHBtnYMGGfIaLJ4jcQ?pwd=zdv9)
 - [湘财证券-Ptrade实盘版](https://wap.xcsc.com/file/Ptrade/PTrade.exe)
 - [湘财证券-Ptrade测试版](https://pan.baidu.com/s/1ekrPh0Xk4UV7uC8oLSpRZw)（提取码：8jmg）
-- [东莞证券-Ptrade实盘版](https://media.dgzq.com.cn/app/file/get?group=group1&name=M00/00/95/rBQam2YKEXOACyPRCgyAaEJhSHs591.exe&fileName=PTrade1.0-Client-V202301-45(%E4%B8%9C%E8%8E%9E))
+- [东莞证券-Ptrade实盘版](https://media.dgzq.com.cn/app/file/get?group=group1\&name=M00/00/95/rBQam2YKEXOACyPRCgyAaEJhSHs591.exe\&fileName=PTrade1.0-Client-V202301-45\(%E4%B8%9C%E8%8E%9E\))
 - [东莞证券-Ptrade测试版](#)
-- [国泰君安-海通-Ptrade测试版](https://dl2.app.gtja.com/dzswem/softwareVersion/202504/07/PTrade1.0-Client-V202403-07-000(PTrade-UAT).zip)
-- [国泰君安-海通-Ptrade实盘版](https://dl2.app.gtja.com/dzswem/softwareVersion/202504/07/PTrade1.0-Client-V202403-07-005(PTrade).zip)
+- [国泰君安-海通-Ptrade测试版](https://dl2.app.gtja.com/dzswem/softwareVersion/202504/07/PTrade1.0-Client-V202403-07-000\(PTrade-UAT\).zip)
+- [国泰君安-海通-Ptrade实盘版](https://dl2.app.gtja.com/dzswem/softwareVersion/202504/07/PTrade1.0-Client-V202403-07-005\(PTrade\).zip)
 - [长江证券-Ptrade实盘版](https://downcq.95579.com/jcj/zg/PTrade1.0-Client-V202308-15-000_CY.zip)
-- [山西证券-Ptrade测试版](https://dn2-ctc.i618.com.cn/download/PTrade1.0-ClientV202507-00-017-C012-10969-FZ(%E5%B1%B1%E8%A5%BF-FZ).zip)
-- [山西证券-Ptrade实盘版](https://dn2-ctc.i618.com.cn/download/PTrade1.0-ClientV202507-00-017-C013-10969-SC(%E5%B1%B1%E8%A5%BF).zip)
+- [山西证券-Ptrade测试版](https://dn2-ctc.i618.com.cn/download/PTrade1.0-ClientV202507-00-017-C012-10969-FZ\(%E5%B1%B1%E8%A5%BF-FZ\).zip)
+- [山西证券-Ptrade实盘版](https://dn2-ctc.i618.com.cn/download/PTrade1.0-ClientV202507-00-017-C013-10969-SC\(%E5%B1%B1%E8%A5%BF\).zip)
 - [申万宏源-Ptrade实盘版](https://pcd.swhysc.com/static-file/software/SWHY_PTrade1.0_Client_V202308.zip)
 
 ---
@@ -67,13 +39,7 @@ ptrade、qmt策略代写后台留言：ptrade代写
 
 ## 01-常见问题解答（个人整理）
 
-# 常见问题解答（个人整理）
-
 Ptrade常见问题(不定期收集群友反馈的问题) [点击进入](https://ptradeapi.com/hub/data/qa_data.html)
-
-## README
-
-# 必看-快速了解Ptrade
 
 #### 本文在原API文档的基础上加入个人的理解，和容易被忽略的地方，对原文档不够详尽的地方，稍加提示,并加入可转债实盘的示例代码
 
@@ -85,7 +51,7 @@ Ptrade常见问题(不定期收集群友反馈的问题) [点击进入](https://
 - Ptrade内置运行python版本：部分券商（国金）Ptrade内置python版本更新到3.11，而大部分券商停留在3.5。 Python版本不同，Ptrade部分函数也会有不同，数据返回的格式也有区别，具体数据以你券商Ptrade为准
 - 运行模式： 在Ptrade里面写好的策略代码，保存，在交易面板里点击运行，程序每天运行,真正做到无人值守,不需要额外购买云服务器或者本地电脑。如果需要停止，在Ptrade里面点击停止按钮即可终止策略
 - Ptrade编辑策略环境：windows系统。支持虚拟机上安装运行；如果是macbook OSX / Linux系统， 可以先安装一个虚拟机，然后将Ptrade安装在虚拟机上，在上面编写你的策略代码并运行，后面就可以退出你的虚拟机，而策略会在券商机房里面一直运行。
-- 除了使用python编程编写策略以外，Ptrade也自带了量化工具，你只需要点点鼠标，设置几个参数就可以运行一些基本的大众化量化策略，比如有：ETF趋势交易，网格交易，大股东增持策略，拐点交易，盘口扫单，篮子交易，追涨停，可转债套利等 ![](https://ptradeapi.com/hub/static/images/quant_tool.jpg)
+- 除了使用python编程编写策略以外，Ptrade也自带了量化工具，你只需要点点鼠标，设置几个参数就可以运行一些基本的大众化量化策略，比如有：ETF趋势交易，网格交易，大股东增持策略，拐点交易，盘口扫单，篮子交易，追涨停，可转债套利等 [image](https://ptradeapi.com/hub/static/images/quant_tool.jpg)
 - 由于托管在券商机房，Ptrade处于内网环境，无法连接到互联网。并且Ptrade内部无法通过python的pip安装第三方的库，只允许使用内置的第三方库，具体支持的第三方库可以参考这里 [内置第三方库](#支持的三方库)
 - 但也有极少数的券商的Ptrade支持链接外网功能，因为可以通过http接口的方式与Ptrade进行数据传输，甚至可以通过http触发下单信号，Ptrade只执行下单操作，笔者编写了大量的可转债接口数据，可以实时传输给Ptrade，从而解决Ptrade缺乏可转债溢价率，规模，评级，强赎，YTM等因子的数据源问题，因子笔者推荐大家开通此类券商的ptrade，可以很有效地解决数据缺失的问题
 
@@ -93,63 +59,29 @@ Ptrade常见问题(不定期收集群友反馈的问题) [点击进入](https://
 
 ##### Ptrade默认可获取委托十档数据，部分券商内置了L2逐笔数据，重点是免费的
 
----
-
-# 03-视频教程
-
-## 03-视频教程
-
-# 视频教程
-
-之前上传到知乎的Ptrade视频教程，共有18个短视频，配合本API文档观看，效果更佳
-
-[Ptrade 18节课 视频教程 ](https://zhuanlan.zhihu.com/p/399103868)
-
-[![](assets/ptrade_video.png)](https://zhuanlan.zhihu.com/p/399103868)
-
----
-
-# 04-快速入门
+# 03-快速入门
 
 ## 01-新建策略
 
-# 新建策略
-
 开始回测和交易前需要先新建策略，点击下图中左上角标识进行策略添加。可以选择不同的业务类型（比如股票），然后给策略设定一个名称，添加成功后可以在默认策略模板基础上进行策略编写。
-
-![](../assets/creat_strategy.png)
 
 ## 02-新建回测
 
-# 新建回测
-
 策略添加完成后就可以开始进行回测操作了。回测之前需要对开始时间、结束时间、回测资金、回测基准、回测频率几个要素进行设定，设定完毕后点击保存。然后再点击回测按键，系统就会开始运行回测，回测的评价指标、收益曲线、日志都会在界面中展现。
-
-![](../assets/backtest_factor.png)
 
 ## 03-新建交易
 
-# 新建交易
-
 交易界面点击新增按键进行新增交易操作，策略方案中的对象为所有策略列表中的策略，给本次交易设定名称并点击确定后系统就开始运行交易了。
-
-![](../assets/creat_trade.png)
 
 交易开始运行后，可以实时看到总资产和可用资金情况，同时可以在交易列表查询交易状态。
 
-![](../assets/account_info.png)
-
 交易开始运行后，可以点击交易详情，查看策略评价指标、交易明细、持仓明细、交易日志。
-
-![](../assets/trade_info.png)
 
 ## 04-策略运行周期
 
-# 策略运行周期
+回测支持日线级别、分钟级别运行，详见[handle\_data](#handle_data)方法。
 
-回测支持日线级别、分钟级别运行，详见[handle_data](#handle_data)方法。
-
-交易支持日线级别、分钟级别、tick级别运行，日线级别和分钟级别详见[handle_data](#handle_data)方法，tick级别运行详见[run_interval](#run_interval)和[tick_data](#tick_data)方法。
+交易支持日线级别、分钟级别、tick级别运行，日线级别和分钟级别详见[handle\_data](#handle_data)方法，tick级别运行详见[run\_interval](#run_interval)和[tick\_data](#tick_data)方法。
 
 频率：日线级别
 
@@ -165,29 +97,23 @@ Ptrade常见问题(不定期收集群友反馈的问题) [点击进入](https://
 
 ## 05-策略运行时间
 
-# 策略运行时间
-
 盘前运行:
 
-9:30分钟之前为盘前运行时间，交易环境支持运行在[run_daily](#run_daily)中指定交易时间(如time='09:15')运行的函数；回测环境和交易环境支持运行[before_trading_start](#before_trading_start)函数
+9:30分钟之前为盘前运行时间，交易环境支持运行在[run\_daily](#run_daily)中指定交易时间(如time='09:15')运行的函数；回测环境和交易环境支持运行[before\_trading\_start](#before_trading_start)函数
 
 盘中运行:
 
-9:31(回测)/9:30(交易)~15:00分钟为盘中运行时间，分钟级别回测环境和交易环境支持运行在[run_daily](#run_daily)中指定交易时间(如time='14:30')运行的函数；回测环境和交易环境支持运行[handle_data](#handle_data)函数；交易环境支持运行[run_interval](#run_interval)函数和[](#tick_data)tick_data函数
+9:31(回测)/9:30(交易)~15:00分钟为盘中运行时间，分钟级别回测环境和交易环境支持运行在[run\_daily](#run_daily)中指定交易时间(如time='14:30')运行的函数；回测环境和交易环境支持运行[handle\_data](#handle_data)函数；交易环境支持运行[run\_interval](#run_interval)函数和tick_data函数
 
 盘后运行:
 
-15:30分钟为盘后运行时间，回测环境和交易环境支持运行[after_trading_end](#after_trading_end)函数(该函数为定时运行)；15:00之后交易环境支持运行在[run_daily](#run_daily)中指定交易时间(如time='15:10')运行的函数，
+15:30分钟为盘后运行时间，回测环境和交易环境支持运行[after\_trading\_end](#after_trading_end)函数(该函数为定时运行)；15:00之后交易环境支持运行在[run\_daily](#run_daily)中指定交易时间(如time='15:10')运行的函数，
 
 ## 06-交易策略委托下单时间
-
-# 交易策略委托下单时间
 
 使用order系列接口进行股票委托下单，将直接报单到柜台。
 
 ## 07-回测支持业务类型
-
-# 回测支持业务类型
 
 目前所支持的业务类型:
 
@@ -204,8 +130,6 @@ Ptrade常见问题(不定期收集群友反馈的问题) [点击进入](https://
 6、ETF基金买卖(单位：股)。
 
 ## 08-交易支持业务类型
-
-# 交易支持业务类型
 
 目前所支持的业务类型:
 
@@ -241,17 +165,11 @@ Ptrade常见问题(不定期收集群友反馈的问题) [点击进入](https://
 
 7.国债期货投机类型交易(最小价差：0.005)。
 
-## README
-
-# 快速入门
-
 ---
 
-# 05-开始写策略
+# 04-开始写策略
 
 ## 01-简单但是完整的策略
-
-# 简单但是完整的策略
 
 先来看一个简单但是完整的策略:
 
@@ -272,8 +190,6 @@ def handle_data(context, data):
 
 ## 02-添加一些交易
 
-# 添加一些交易
-
 ```python
 def initialize(context):
     g.security = '600570.SS'
@@ -290,8 +206,6 @@ def handle_data(context, data):
 这个策略里，当我们没有创建订单时就买入1000股'600570.SS'，具体的下单API请看[order](#order)函数。这里我们有了交易，但是只是无意义的交易，没有依据当前的数据做出合理的分析。
 
 ## 03-实用的策略
-
-# 实用的策略
 
 下面我们来看一个真正实用的策略
 
@@ -335,8 +249,6 @@ def handle_data(context, data):
 
 ## 04-模拟盘和实盘注意事项
 
-# 模拟盘和实盘注意事项
-
 ### 关于持久化
 
 #### 为什么要做持久化处理
@@ -349,11 +261,11 @@ def handle_data(context, data):
 
 注意事项：
 
-1. 框架会在[before_trading_start（隔日开始）](#before_trading_start)、[handle_data](#handle_data)、[after_trading_end](#after_trading_end)事件后触发持久化信息更新及保存操作；
+1. 框架会在[before\_trading\_start（隔日开始）](#before_trading_start)、[handle\_data](#handle_data)、[after\_trading\_end](#after_trading_end)事件后触发持久化信息更新及保存操作；
 2. 券商升级/环境重启后恢复交易时，框架会先执行策略[initialize](#initialize)函数再执行持久化信息恢复操作。如果持久化信息保存有策略定义的全局对象g中的变量，将会以持久化信息中的变量覆盖掉[initialize](#initialize)函数中初始化的该变量。
-3. 全局变量g中不能被序列化的变量将不会被保存。您可在[initialize](#initialize)中初始化该变量时名字以'__'开头；
+3. 全局变量g中不能被序列化的变量将不会被保存。您可在[initialize](#initialize)中初始化该变量时名字以'\_\_'开头；
 4. 涉及到IO(打开的文件，实例化的类对象等)的对象是不能被序列化的；
-5. 全局变量g中以'__'开头的变量为私有变量，持久化时将不会被保存；
+5. 全局变量g中以'\_\_'开头的变量为私有变量，持久化时将不会被保存；
 
 #### 示例
 
@@ -422,28 +334,24 @@ def handle_data(context, data):
 
 ## 05-策略中支持的代码尾缀
 
-# 策略中支持的代码尾缀
-
-| 市场品种 | 尾缀全称 | 尾缀简称 |
-| --- | --- | --- |
-| 上海市场证券 | XSHG | SS |
-| 深圳市场证券 | XSHE | SZ |
-| 指数 | XBHS |  |
-| 中金所期货 | CCFX |  |
-| 上海股票期权 | XSHO |  |
-| 深圳股票期权 | XSZO |  |
-| 上海港股通 | XHKG-SS |  |
-| 深圳港股通 | XHKG-SZ |  |
+| 市场品种   | 尾缀全称    | 尾缀简称 |
+| ------ | ------- | ---- |
+| 上海市场证券 | XSHG    | SS   |
+| 深圳市场证券 | XSHE    | SZ   |
+| 指数     | XBHS    |      |
+| 中金所期货  | CCFX    |      |
+| 上海股票期权 | XSHO    |      |
+| 深圳股票期权 | XSZO    |      |
+| 上海港股通  | XHKG-SS |      |
+| 深圳港股通  | XHKG-SZ |      |
 
 ## 06-关于异常处理
-
-# 关于异常处理
 
 ##### 为什么要做异常处理
 
 交易场景数据缺失等原因会导致策略运行过程中常规的处理出现语法错误，导致策略终止，所以需要做一些异常处理的保护。以下是一些基本的处理方法介绍。
 
-###### 示例
+#### 示例
 
 ```python
 try:
@@ -495,8 +403,6 @@ finally:
 
 ## 07-关于限价交易的价格
 
-# 关于限价交易的价格
-
 可转债、ETF、LOF的价格是小数点三位。
 
 股票的价格是小数点两位。
@@ -507,17 +413,11 @@ ETF期权的价格是小数点四位。
 
 用户在使用限价单委托（如order()入参limit_price）和市价委托保护限价（order_market()入参limit_price）的场景时务必要对入参价格的小数点位数进行处理，否则会导致委托失败。
 
-## README
-
-# 开始写策略
-
 ---
 
-# 06-策略引擎简介
+# 05-策略引擎简介
 
 ## 01-业务流程框架
-
-# 业务流程框架
 
 ptrade量化引擎以事件触发为基础，通过初始化事件（initialize）、盘前事件（before_trading_start）、盘中事件（handle_data）、盘后事件（after_trading_end）来完成每个交易日的策略任务。
 
@@ -528,8 +428,6 @@ handle_data仅满足日线和分钟级别的盘中处理，tick级别的盘中�
 ptrade还支持委托主推事件（on_order_respense）、交易主推事件（on_trade_response），可以通过委托和成交的信息来处理策略逻辑，是tick级的一个补充。
 
 除了以上的一些事件以外，ptrade也支持通过定时任务来运行策略逻辑，可以通过run_daily接口实现。
-
-![](../assets/BizFrame.png)
 
 ### initialize（必选）
 
@@ -551,15 +449,15 @@ initialize(context)
 
 #### 可调用接口
 
-| [set_universe(回测/交易)](#set_universe) | [set_benchmark(回测/交易)](#set_benchmark) | [set_commission(回测)](#set_commission) |  |
-| --- | --- | --- | --- |
-| [set_fixed_slippage(回测)](#set_fixed_slippage) | [set_slippage(回测)](#set_slippage) | [set_volume_ratio(回测)](#set_volume_ratio) |  |
-| [set_limit_mode(回测)](#set_limit_mode) | [set_yesterday_position(回测)](#set_yesterday_position) | [set_parameters(回测/交易)](#set_parameters) | [run_daily(回测/交易)](#run_daily) |
-| [run_interval(交易)](#run_interval) | [get_trading_day(研究/回测/交易)](#get_trading_day) | [get_all_trades_days(研究/回测/交易)](#get_all_trades_days) |  |
-| [get_trade_days(交易)](#get_trade_days) | [convert_position_from_csv(回测)](#convert_position_from_csv) | [get_user_name(回测/交易)](#get_user_name) |  |
-| [is_trade(回测/交易)](#is_trade) | [get_research_path(回测/交易)](#get_research_path) | [permission_test(交易)](#permission_test) |  |
-| [set_future_commission(回测(期货))](#set_future_commission) | [set_margin_rate(回测(期货))](#set_margin_rate) | [get_margin_rate(回测(期货))](#get_margin_rate) |  |
-| [create_dir(回测/交易)](#create_dir) |  |  |  |
+| [set\_universe(回测/交易)](#set_universe)                     | [set\_benchmark(回测/交易)](#set_benchmark)                        | [set\_commission(回测)](#set_commission)                   |                                 |
+| --------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------- | ------------------------------- |
+| [set\_fixed\_slippage(回测)](#set_fixed_slippage)           | [set\_slippage(回测)](#set_slippage)                             | [set\_volume\_ratio(回测)](#set_volume_ratio)              |                                 |
+| [set\_limit\_mode(回测)](#set_limit_mode)                   | [set\_yesterday\_position(回测)](#set_yesterday_position)        | [set\_parameters(回测/交易)](#set_parameters)                | [run\_daily(回测/交易)](#run_daily) |
+| [run\_interval(交易)](#run_interval)                        | [get\_trading\_day(研究/回测/交易)](#get_trading_day)                | [get\_all\_trades\_days(研究/回测/交易)](#get_all_trades_days) |                                 |
+| [get\_trade\_days(交易)](#get_trade_days)                   | [convert\_position\_from\_csv(回测)](#convert_position_from_csv) | [get\_user\_name(回测/交易)](#get_user_name)                 |                                 |
+| [is\_trade(回测/交易)](#is_trade)                             | [get\_research\_path(回测/交易)](#get_research_path)               | [permission\_test(交易)](#permission_test)                 |                                 |
+| [set\_future\_commission(回测(期货))](#set_future_commission) | [set\_margin\_rate(回测(期货))](#set_margin_rate)                  | [get\_margin\_rate(回测(期货))](#get_margin_rate)            |                                 |
+| [create\_dir(回测/交易)](#create_dir)                         |                                                                |                                                          |                                 |
 
 #### 参数
 
@@ -603,20 +501,20 @@ before_trading_start(context, data)
 
 #### 可调用接口
 
-| [set_universe(回测/交易)](#set_universe) | [get_Ashares(研究/回测/交易)](#get_Ashares) | [set_yesterday_position(回测)](#set_yesterday_position) |
-| --- | --- | --- |
-| [get_stock_info(研究/回测/交易)](#get_stock_info) | [get_index_stocks(研究/回测/交易)](#get_index_stocks) | [get_fundamentals(研究/回测/交易)](#get_fundamentals) |
-| [get_trading_day(回测/交易)](#get_trading_day) | [get_all_trades_days(研究/回测/交易)](#get_all_trades_days) | [get_trade_days(研究/回测/交易)](#get_trade_days) |
-| [get_history(回测/交易)](#get_history) | [get_price(研究/回测/交易)](#get_price) | [get_individual_entrust(交易)](#get_individual_entrust) |
-| [get_individual_transcation(交易)](#get_individual_transcation) | [convert_position_from_csv(回测)](#convert_position_from_csv) | [get_stock_name(研究/回测/交易)](#get_stock_name) |
-| [get_stock_status(研究/回测/交易)](#get_stock_status) | [get_stock_exrights(研究/回测/交易)](#get_stock_exrights) | [get_stock_blocks(研究/回测/交易)](#get_stock_blocks) |
-| [get_etf_list(交易)](#get_etf_list) | [get_industry_stocks(研究/回测/交易)](#get_industry_stocks) | [get_user_name(回测/交易)](#get_user_name) |
-| [get_cb_list(交易)](#get_cb_list) | [get_deliver(交易)](#get_deliver) | [get_fundjour(交易)](#get_fundjour) |
-| [get_research_path(回测/交易)](#get_research_path) | [get_market_list(研究/回测/交易)](#get_market_list) | [get_market_detail(研究/回测/交易)](#get_market_detail) |
-| [permission_test(交易)](#permission_test) | [get_trade_name(交易)](#get_trade_name) | [set_future_commission(回测(期货))](#set_future_commission) |
-| [set_margin_rate(回测(期货))](#set_margin_rate) | [get_margin_rate(回测(期货))](#get_margin_rate) | [get_instruments(回测/交易(期货))](#get_instruments) |
-| [get_MACD(回测/交易)](#get_MACD) | [get_KDJ(回测/交易)](#get_KDJ) | [get_RSI(回测/交易)](#get_RSI) |
-| [get_CCI(回测/交易)](#get_CCI) | [create_dir(回测/交易)](#create_dir) |  |
+| [set\_universe(回测/交易)](#set_universe)                           | [get\_Ashares(研究/回测/交易)](#get_Ashares)                         | [set\_yesterday\_position(回测)](#set_yesterday_position)   |
+| --------------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------- |
+| [get\_stock\_info(研究/回测/交易)](#get_stock_info)                   | [get\_index\_stocks(研究/回测/交易)](#get_index_stocks)              | [get\_fundamentals(研究/回测/交易)](#get_fundamentals)          |
+| [get\_trading\_day(回测/交易)](#get_trading_day)                    | [get\_all\_trades\_days(研究/回测/交易)](#get_all_trades_days)       | [get\_trade\_days(研究/回测/交易)](#get_trade_days)             |
+| [get\_history(回测/交易)](#get_history)                             | [get\_price(研究/回测/交易)](#get_price)                             | [get\_individual\_entrust(交易)](#get_individual_entrust)   |
+| [get\_individual\_transcation(交易)](#get_individual_transcation) | [convert\_position\_from\_csv(回测)](#convert_position_from_csv) | [get\_stock\_name(研究/回测/交易)](#get_stock_name)             |
+| [get\_stock\_status(研究/回测/交易)](#get_stock_status)               | [get\_stock\_exrights(研究/回测/交易)](#get_stock_exrights)          | [get\_stock\_blocks(研究/回测/交易)](#get_stock_blocks)         |
+| [get\_etf\_list(交易)](#get_etf_list)                             | [get\_industry\_stocks(研究/回测/交易)](#get_industry_stocks)        | [get\_user\_name(回测/交易)](#get_user_name)                  |
+| [get\_cb\_list(交易)](#get_cb_list)                               | [get\_deliver(交易)](#get_deliver)                               | [get\_fundjour(交易)](#get_fundjour)                        |
+| [get\_research\_path(回测/交易)](#get_research_path)                | [get\_market\_list(研究/回测/交易)](#get_market_list)                | [get\_market\_detail(研究/回测/交易)](#get_market_detail)       |
+| [permission\_test(交易)](#permission_test)                        | [get\_trade\_name(交易)](#get_trade_name)                        | [set\_future\_commission(回测(期货))](#set_future_commission) |
+| [set\_margin\_rate(回测(期货))](#set_margin_rate)                   | [get\_margin\_rate(回测(期货))](#get_margin_rate)                  | [get\_instruments(回测/交易(期货))](#get_instruments)           |
+| [get\_MACD(回测/交易)](#get_MACD)                                   | [get\_KDJ(回测/交易)](#get_KDJ)                                    | [get\_RSI(回测/交易)](#get_RSI)                               |
+| [get\_CCI(回测/交易)](#get_CCI)                                     | [create\_dir(回测/交易)](#create_dir)                              |                                                           |
 
 #### 参数
 
@@ -666,33 +564,33 @@ handle_data(context, data)
 
 #### 可调用接口
 
-| [get_trading_day(回测/交易)](#get_trading_day) | [get_all_trades_days(研究/回测/交易)](#get_all_trades_days) | [get_trade_days(研究/回测/交易)](#get_trade_days) |  |  |
-| --- | --- | --- | --- | --- |
-| [get_history(回测/交易)](#get_history) | [get_price(研究/回测/交易)](#get_price) | [get_individual_entrust(交易)](#get_individual_entrust) |  |  |
-| [get_individual_transcation(交易)](#get_individual_transcation) | [get_gear_price(交易)](#get_gear_price) | [get_stock_name(研究/回测/交易)](#get_stock_name) |  |  |
-| [get_stock_status(研究/回测/交易)](#get_stock_status) | [get_stock_exrights(研究/回测/交易)](#get_stock_exrights) | [get_stock_blocks(研究/回测/交易)](#get_stock_blocks) |  |  |
-| [get_index_stocks(研究/回测/交易)](#get_index_stocks) | [get_industry_stocks(研究/回测/交易)](#get_industry_stocks) | [get_fundamentals(研究/回测/交易)](#get_fundamentals) |  |  |
-| [get_Ashares(研究/回测/交易)](#get_Ashares) | [get_snapshot(交易)](#get_snapshot) | [convert_position_from_csv(回测)](#convert_position_from_csv) | [get_cb_info(研究/交易)](#get_cb_info) | [get_trend_data(研究/回测/交易)](#get_trend_data) |
-| [order(回测/交易)](#order) | [order_target(回测/交易)](#order_target) | [order_value(回测/交易)](#order_value) |  |  |
-| [order_target_value(回测/交易)](#order_target_value) | [order_market(交易)](#order_market) | [ipo_stocks_order(交易)](#ipo_stocks_order) |  |  |
-| [after_trading_order(交易)](#after_trading_order) | [after_trading_cancel_order(交易)](#after_trading_cancel_order) | [etf_basket_order(交易)](#etf_basket_order) |  |  |
-| [etf_purchase_redemption(交易)](#etf_purchase_redemption) | [cancel_order(回测/交易)](#cancel_order) | [get_stock_info(研究/回测/交易)](#get_stock_info) |  |  |
-| [get_order(回测/交易)](#get_order) | [get_orders(回测/交易)](#get_orders) | [get_open_orders(回测/交易)](#get_open_orders) |  |  |
-| [get_trades(回测/交易)](#get_trades) | [get_position(回测/交易)](#get_position) | [get_positions(回测/交易)](#get_positions) |  |  |
-| [get_etf_info(交易)](#get_etf_info) | [get_etf_stock_info(交易)](#get_etf_stock_info) | [get_etf_stock_list(交易)](#get_etf_stock_list) |  |  |
-| [get_etf_list(交易)](#get_etf_list) | [get_all_orders(交易)](#get_all_orders) | [cancel_order_ex(交易)](#cancel_order_ex) |  |  |
-| [debt_to_stock_order(交易)](#debt_to_stock_order) | [get_user_name(回测/交易)](#get_user_name) | [get_research_path(回测/交易)](#get_research_path) |  |  |
-| [get_marginsec_stocks(交易)](#get_marginsec_stocks) | [get_margincash_stocks(交易)](#get_margincash_stocks) | [debt_to_stock_order(交易)](#debt_to_stock_order) |  |  |
-| [get_margin_contractreal(交易)](#get_margin_contractreal) | [get_margin_contract(交易)](#get_margin_contract) | [marginsec_direct_refund(交易)](#marginsec_direct_refund) |  |  |
-| [get_margin_entrans_amount(交易)](#get_margin_entrans_amount) | [get_margin_contract(交易)](#get_margin_contract) | [margincash_direct_refund(交易)](#margincash_direct_refund) |  |  |
-| [marginsec_open(交易)](#marginsec_open) | [marginsec_close(交易)](#marginsec_close) | [margincash_open(交易)](#margincash_open) |  |  |
-| [margincash_close(交易)](#margincash_close) | [margin_trade(交易)](#margin_trade) | [get_marginsec_close_amount(交易)](#get_marginsec_close_amount) |  |  |
-| [get_marginsec_open_amount(交易)](#get_marginsec_open_amount) | [get_margincash_close_amount(交易)](#get_margincash_close_amount) | [get_margincash_open_amount(交易)](#get_margincash_open_amount) |  |  |
-| [get_cb_list(交易)](#get_cb_list) | [get_tick_direction(交易)](#get_tick_direction) | [get_sort_msg(交易)](#get_sort_msg) |  |  |
-| [get_trade_name(交易)](#get_trade_name) | [get_margin_rate(回测(期货))](#get_margin_rate) | [get_instruments(回测/交易(期货)](#get_instruments) |  |  |
-| [buy_open(回测/交易(期货)](#buy_open) | [sell_close(回测/交易(期货)](#sell_close) | [sell_close(回测/交易(期货)](#sell_close) |  |  |
-| [buy_close(回测/交易(期货)](#buy_close) | [get_MACD(回测/交易)](#get_MACD) | [get_KDJ(回测/交易)](#get_KDJ) |  |  |
-| [get_RSI(回测/交易)](#get_RSI) | [get_CCI(回测/交易)](#get_CCI) | [create_dir(回测/交易)](#create_dir) |  |  |
+| [get\_trading\_day(回测/交易)](#get_trading_day)                    | [get\_all\_trades\_days(研究/回测/交易)](#get_all_trades_days)           | [get\_trade\_days(研究/回测/交易)](#get_trade_days)                    |                                      |                                               |
+| --------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------- | ------------------------------------ | --------------------------------------------- |
+| [get\_history(回测/交易)](#get_history)                             | [get\_price(研究/回测/交易)](#get_price)                                 | [get\_individual\_entrust(交易)](#get_individual_entrust)          |                                      |                                               |
+| [get\_individual\_transcation(交易)](#get_individual_transcation) | [get\_gear\_price(交易)](#get_gear_price)                            | [get\_stock\_name(研究/回测/交易)](#get_stock_name)                    |                                      |                                               |
+| [get\_stock\_status(研究/回测/交易)](#get_stock_status)               | [get\_stock\_exrights(研究/回测/交易)](#get_stock_exrights)              | [get\_stock\_blocks(研究/回测/交易)](#get_stock_blocks)                |                                      |                                               |
+| [get\_index\_stocks(研究/回测/交易)](#get_index_stocks)               | [get\_industry\_stocks(研究/回测/交易)](#get_industry_stocks)            | [get\_fundamentals(研究/回测/交易)](#get_fundamentals)                 |                                      |                                               |
+| [get\_Ashares(研究/回测/交易)](#get_Ashares)                          | [get\_snapshot(交易)](#get_snapshot)                                 | [convert\_position\_from\_csv(回测)](#convert_position_from_csv)   | [get\_cb\_info(研究/交易)](#get_cb_info) | [get\_trend\_data(研究/回测/交易)](#get_trend_data) |
+| [order(回测/交易)](#order)                                          | [order\_target(回测/交易)](#order_target)                              | [order\_value(回测/交易)](#order_value)                              |                                      |                                               |
+| [order\_target\_value(回测/交易)](#order_target_value)              | [order\_market(交易)](#order_market)                                 | [ipo\_stocks\_order(交易)](#ipo_stocks_order)                      |                                      |                                               |
+| [after\_trading\_order(交易)](#after_trading_order)               | [after\_trading\_cancel\_order(交易)](#after_trading_cancel_order)   | [etf\_basket\_order(交易)](#etf_basket_order)                      |                                      |                                               |
+| [etf\_purchase\_redemption(交易)](#etf_purchase_redemption)       | [cancel\_order(回测/交易)](#cancel_order)                              | [get\_stock\_info(研究/回测/交易)](#get_stock_info)                    |                                      |                                               |
+| [get\_order(回测/交易)](#get_order)                                 | [get\_orders(回测/交易)](#get_orders)                                  | [get\_open\_orders(回测/交易)](#get_open_orders)                     |                                      |                                               |
+| [get\_trades(回测/交易)](#get_trades)                               | [get\_position(回测/交易)](#get_position)                              | [get\_positions(回测/交易)](#get_positions)                          |                                      |                                               |
+| [get\_etf\_info(交易)](#get_etf_info)                             | [get\_etf\_stock\_info(交易)](#get_etf_stock_info)                   | [get\_etf\_stock\_list(交易)](#get_etf_stock_list)                 |                                      |                                               |
+| [get\_etf\_list(交易)](#get_etf_list)                             | [get\_all\_orders(交易)](#get_all_orders)                            | [cancel\_order\_ex(交易)](#cancel_order_ex)                        |                                      |                                               |
+| [debt\_to\_stock\_order(交易)](#debt_to_stock_order)              | [get\_user\_name(回测/交易)](#get_user_name)                           | [get\_research\_path(回测/交易)](#get_research_path)                 |                                      |                                               |
+| [get\_marginsec\_stocks(交易)](#get_marginsec_stocks)             | [get\_margincash\_stocks(交易)](#get_margincash_stocks)              | [debt\_to\_stock\_order(交易)](#debt_to_stock_order)               |                                      |                                               |
+| [get\_margin\_contractreal(交易)](#get_margin_contractreal)       | [get\_margin\_contract(交易)](#get_margin_contract)                  | [marginsec\_direct\_refund(交易)](#marginsec_direct_refund)        |                                      |                                               |
+| [get\_margin\_entrans\_amount(交易)](#get_margin_entrans_amount)  | [get\_margin\_contract(交易)](#get_margin_contract)                  | [margincash\_direct\_refund(交易)](#margincash_direct_refund)      |                                      |                                               |
+| [marginsec\_open(交易)](#marginsec_open)                          | [marginsec\_close(交易)](#marginsec_close)                           | [margincash\_open(交易)](#margincash_open)                         |                                      |                                               |
+| [margincash\_close(交易)](#margincash_close)                      | [margin\_trade(交易)](#margin_trade)                                 | [get\_marginsec\_close\_amount(交易)](#get_marginsec_close_amount) |                                      |                                               |
+| [get\_marginsec\_open\_amount(交易)](#get_marginsec_open_amount)  | [get\_margincash\_close\_amount(交易)](#get_margincash_close_amount) | [get\_margincash\_open\_amount(交易)](#get_margincash_open_amount) |                                      |                                               |
+| [get\_cb\_list(交易)](#get_cb_list)                               | [get\_tick\_direction(交易)](#get_tick_direction)                    | [get\_sort\_msg(交易)](#get_sort_msg)                              |                                      |                                               |
+| [get\_trade\_name(交易)](#get_trade_name)                         | [get\_margin\_rate(回测(期货))](#get_margin_rate)                      | [get\_instruments(回测/交易(期货)](#get_instruments)                   |                                      |                                               |
+| [buy\_open(回测/交易(期货)](#buy_open)                                | [sell\_close(回测/交易(期货)](#sell_close)                               | [sell\_close(回测/交易(期货)](#sell_close)                             |                                      |                                               |
+| [buy\_close(回测/交易(期货)](#buy_close)                              | [get\_MACD(回测/交易)](#get_MACD)                                      | [get\_KDJ(回测/交易)](#get_KDJ)                                      |                                      |                                               |
+| [get\_RSI(回测/交易)](#get_RSI)                                     | [get\_CCI(回测/交易)](#get_CCI)                                        | [create\_dir(回测/交易)](#create_dir)                                |                                      |                                               |
 
 #### 参数
 
@@ -740,19 +638,19 @@ after_trading_end(context, data)
 
 #### 可调用接口
 
-| [get_trades_file(回测)](#get_trades_file) | [get_stock_info(研究/回测/交易)](#get_stock_info) | [get_open_orders(回测/交易)](#get_open_orders) |
-| --- | --- | --- |
-| [get_all_trades_days(研究/回测/交易)](#get_all_trades_days) | [get_trade_days(研究/回测/交易)](#get_trade_days) | [get_history(回测/交易)](#get_history) |
-| [get_price(研究/回测/交易)](#get_price) | [get_individual_entrust(交易)](#get_individual_entrust) | [get_individual_transcation(交易)](#get_individual_transcation) |
-| [get_Ashares(研究/回测/交易)](#get_Ashares) | [get_stock_name(研究/回测/交易)](#get_stock_name) | [get_stock_status(研究/回测/交易)](#get_stock_status) |
-| [get_stock_exrights(研究/回测/交易)](#get_stock_exrights) | [get_stock_blocks(研究/回测/交易)](#get_stock_blocks) | [get_index_stocks(研究/回测/交易)](#get_index_stocks) |
-| [get_industry_stocks(研究/回测/交易)](#get_industry_stocks) | [get_fundamentals(研究/回测/交易)](#get_fundamentals) | [get_user_name(回测/交易)](#get_user_name) |
-| [get_cb_list(交易)](#get_cb_list) | [get_deliver(交易)](#get_deliver) | [get_fundjour(交易)](#get_fundjour) |
-| [get_research_path(回测/交易)](#get_research_path) | [get_trade_name(交易)](#get_trade_name) | [get_market_list(研究/回测/交易)](#get_market_list) |
-| [get_market_detail(研究/回测/交易)](#get_market_detail) | [permission_test(交易)](#permission_test) | [get_tick_direction(交易)](#get_tick_direction) |
-| [get_sort_msg(交易)](#get_sort_msg) | [get_margin_rate(回测(期货))](#get_margin_rate) | [get_margin_rate(回测(期货))](#get_margin_rate) |
-| [get_instruments(回测/交易(期货))](#get_instruments) | [get_MACD(回测/交易)](#get_MACD) | [get_KDJ(回测/交易)](#get_KDJ) |
-| [get_RSI(回测/交易)](#get_RSI) | [get_CCI(回测/交易)](#get_CCI) | [create_dir(回测/交易)](#create_dir) |
+| [get\_trades\_file(回测)](#get_trades_file)                | [get\_stock\_info(研究/回测/交易)](#get_stock_info)           | [get\_open\_orders(回测/交易)](#get_open_orders)                    |
+| -------------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------- |
+| [get\_all\_trades\_days(研究/回测/交易)](#get_all_trades_days) | [get\_trade\_days(研究/回测/交易)](#get_trade_days)           | [get\_history(回测/交易)](#get_history)                             |
+| [get\_price(研究/回测/交易)](#get_price)                       | [get\_individual\_entrust(交易)](#get_individual_entrust) | [get\_individual\_transcation(交易)](#get_individual_transcation) |
+| [get\_Ashares(研究/回测/交易)](#get_Ashares)                   | [get\_stock\_name(研究/回测/交易)](#get_stock_name)           | [get\_stock\_status(研究/回测/交易)](#get_stock_status)               |
+| [get\_stock\_exrights(研究/回测/交易)](#get_stock_exrights)    | [get\_stock\_blocks(研究/回测/交易)](#get_stock_blocks)       | [get\_index\_stocks(研究/回测/交易)](#get_index_stocks)               |
+| [get\_industry\_stocks(研究/回测/交易)](#get_industry_stocks)  | [get\_fundamentals(研究/回测/交易)](#get_fundamentals)        | [get\_user\_name(回测/交易)](#get_user_name)                        |
+| [get\_cb\_list(交易)](#get_cb_list)                        | [get\_deliver(交易)](#get_deliver)                        | [get\_fundjour(交易)](#get_fundjour)                              |
+| [get\_research\_path(回测/交易)](#get_research_path)         | [get\_trade\_name(交易)](#get_trade_name)                 | [get\_market\_list(研究/回测/交易)](#get_market_list)                 |
+| [get\_market\_detail(研究/回测/交易)](#get_market_detail)      | [permission\_test(交易)](#permission_test)                | [get\_tick\_direction(交易)](#get_tick_direction)                 |
+| [get\_sort\_msg(交易)](#get_sort_msg)                      | [get\_margin\_rate(回测(期货))](#get_margin_rate)           | [get\_margin\_rate(回测(期货))](#get_margin_rate)                   |
+| [get\_instruments(回测/交易(期货))](#get_instruments)          | [get\_MACD(回测/交易)](#get_MACD)                           | [get\_KDJ(回测/交易)](#get_KDJ)                                     |
+| [get\_RSI(回测/交易)](#get_RSI)                              | [get\_CCI(回测/交易)](#get_CCI)                             | [create\_dir(回测/交易)](#create_dir)                               |
 
 #### 参数
 
@@ -797,40 +695,40 @@ tick_data(context, data)
 
 1. 该函数执行时间为9:30 -- 14:59。
 2. 该函数中只能使用order_tick进行对应的下单操作。
-3. 该函数中的data和[handle_data](#handle_data)函数中的data是不一样的，请勿混肴。
+3. 该函数中的data和[handle\_data](#handle_data)函数中的data是不一样的，请勿混肴。
 4. 参数data中包含的逐笔委托，逐笔成交数据需开通level2行情才有数据推送，否则对应数据返回None。
 
 #### 可调用接口
 
-| [get_trading_day(研究/回测/交易)](#get_trading_day) | [get_all_trades_days(研究/回测/交易)](#get_all_trades_days) | [get_trade_days(研究/回测/交易)](#get_trade_days) |
-| --- | --- | --- |
-| [get_cb_list(交易)](#get_cb_list) | [get_history(回测/交易)](#get_history) | [get_price(研究/回测/交易)](#get_price) |
-| [get_individual_entrust(交易)](#get_individual_entrust) | [get_individual_transcation(交易)](#get_individual_transcation) | [get_tick_direction(交易)](#get_tick_direction) |
-| [get_sort_msg(交易)](#get_sort_msg) | [get_etf_info(交易)](#get_etf_info) | [get_etf_stock_info(交易)](#get_etf_stock_info) |
-| [get_gear_price(交易)](#get_gear_price) | [get_snapshot(交易)](#get_snapshot) | [get_stock_name(研究/回测/交易)](#get_stock_name) |
-| [get_stock_info(研究/回测/交易)](#get_stock_info) | [get_stock_status(研究/回测/交易)](#get_stock_status) | [get_stock_exrights(研究/回测/交易)](#get_stock_exrights) |
-| [get_stock_blocks(研究/回测/交易)](#get_stock_blocks) | [get_index_stocks(研究/回测/交易)](#get_index_stocks) | [get_etf_stock_list(交易)](#get_etf_stock_list) |
-| [get_industry_stocks(研究/回测/交易)](#get_industry_stocks) | [get_fundamentals(研究/回测/交易)](#get_fundamentals) | [get_Ashares(研究/回测/交易)](#get_Ashares) |
-| [get_etf_list(交易)](#get_etf_list) | [get_user_name(回测/交易)](#get_user_name) | [get_research_path(研究/回测/交易)](#get_research_path) |
-| [get_trade_name(交易)](#get_trade_name) | [set_universe(回测/交易)](#set_universe) | [order(回测/交易)](#order) |
-| [order_target(回测/交易)](#order_target) | [order_value(回测/交易)](#order_value) | [order_target_value(回测/交易)](#order_target_value) |
-| [order_market(交易)](#order_market) | [ipo_stocks_order(交易)](#ipo_stocks_order) | [after_trading_order(交易)](#after_trading_order) |
-| [after_trading_cancel_order(交易)](#after_trading_cancel_order) | [etf_basket_order(交易)](#etf_basket_order) | [etf_purchase_redemption(交易)](#etf_purchase_redemption) |
-| [get_positions(回测/交易)](#get_positions) | [order_tick(交易)](#order_tick) | [cancel_order(回测/交易)](#cancel_order) |
-| [cancel_order_ex(交易)](#cancel_order_ex) | [debt_to_stock_order(交易)](#debt_to_stock_order) | [get_open_orders(回测/交易)](#get_open_orders) |
-| [get_order(回测/交易)](#get_order) | [get_orders(回测/交易)](#get_orders) | [get_all_orders(交易)](#get_all_orders) |
-| [get_trades(回测/交易)](#get_trades) | [get_position(回测/交易)](#get_position) | [margin_trade(交易)](#margin_trade) |
-| [margincash_open(交易)](#margincash_open) | [margincash_close(交易)](#margincash_close) | [margincash_direct_refund(交易)](#margincash_direct_refund) |
-| [marginsec_open(交易)](#marginsec_open) | [marginsec_close(交易)](#marginsec_close) | [marginsec_direct_refund(交易)](#marginsec_direct_refund) |
-| [get_margincash_stocks(交易)](#get_margincash_stocks) | [get_marginsec_stocks(交易)](#get_marginsec_stocks) | [get_margin_contract(交易)](#get_margin_contract) |
-| [get_margin_contractreal(交易)](#get_margin_contractreal) | [get_margin_assert(交易)](#get_margin_assert) | [get_assure_security_list(交易)](#get_assure_security_list) |
-| [get_margincash_open_amount(交易)](#get_margincash_open_amount) | [get_margincash_close_amount(交易)](#get_margincash_close_amount) | [get_marginsec_open_amount(交易)](#get_marginsec_open_amount) |
-| [get_marginsec_close_amount(交易)](#get_marginsec_close_amount) | [get_margin_entrans_amount(交易)](#get_margin_entrans_amount) | [buy_open(回测/交易(期货))](#buy_open) |
-| [sell_close(回测/交易(期货))](#sell_close) | [sell_open(回测/交易(期货))](#sell_open) | [buy_close(回测/交易(期货))](#buy_close) |
-| [get_instruments(回测/交易(期货))](#get_instruments) | [log(回测/交易)](#log) | [is_trade(回测/交易)](#is_trade) |
-| [check_limit(交易)](#check_limit) | [send_email(交易)](#send_email) | [send_qywx(交易)](#send_qywx) |
-| [get_MACD(回测/交易)](#get_MACD) | [get_KDJ(回测/交易)](#get_KDJ) | [get_RSI(回测/交易)](#get_RSI) |
-| [get_CCI(回测/交易)](#get_CCI) | [create_dir(回测/交易)](#create_dir) |  |
+| [get\_trading\_day(研究/回测/交易)](#get_trading_day)                  | [get\_all\_trades\_days(研究/回测/交易)](#get_all_trades_days)           | [get\_trade\_days(研究/回测/交易)](#get_trade_days)                  |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------- |
+| [get\_cb\_list(交易)](#get_cb_list)                                | [get\_history(回测/交易)](#get_history)                                | [get\_price(研究/回测/交易)](#get_price)                             |
+| [get\_individual\_entrust(交易)](#get_individual_entrust)          | [get\_individual\_transcation(交易)](#get_individual_transcation)    | [get\_tick\_direction(交易)](#get_tick_direction)                |
+| [get\_sort\_msg(交易)](#get_sort_msg)                              | [get\_etf\_info(交易)](#get_etf_info)                                | [get\_etf\_stock\_info(交易)](#get_etf_stock_info)               |
+| [get\_gear\_price(交易)](#get_gear_price)                          | [get\_snapshot(交易)](#get_snapshot)                                 | [get\_stock\_name(研究/回测/交易)](#get_stock_name)                  |
+| [get\_stock\_info(研究/回测/交易)](#get_stock_info)                    | [get\_stock\_status(研究/回测/交易)](#get_stock_status)                  | [get\_stock\_exrights(研究/回测/交易)](#get_stock_exrights)          |
+| [get\_stock\_blocks(研究/回测/交易)](#get_stock_blocks)                | [get\_index\_stocks(研究/回测/交易)](#get_index_stocks)                  | [get\_etf\_stock\_list(交易)](#get_etf_stock_list)               |
+| [get\_industry\_stocks(研究/回测/交易)](#get_industry_stocks)          | [get\_fundamentals(研究/回测/交易)](#get_fundamentals)                   | [get\_Ashares(研究/回测/交易)](#get_Ashares)                         |
+| [get\_etf\_list(交易)](#get_etf_list)                              | [get\_user\_name(回测/交易)](#get_user_name)                           | [get\_research\_path(研究/回测/交易)](#get_research_path)            |
+| [get\_trade\_name(交易)](#get_trade_name)                          | [set\_universe(回测/交易)](#set_universe)                              | [order(回测/交易)](#order)                                         |
+| [order\_target(回测/交易)](#order_target)                            | [order\_value(回测/交易)](#order_value)                                | [order\_target\_value(回测/交易)](#order_target_value)             |
+| [order\_market(交易)](#order_market)                               | [ipo\_stocks\_order(交易)](#ipo_stocks_order)                        | [after\_trading\_order(交易)](#after_trading_order)              |
+| [after\_trading\_cancel\_order(交易)](#after_trading_cancel_order) | [etf\_basket\_order(交易)](#etf_basket_order)                        | [etf\_purchase\_redemption(交易)](#etf_purchase_redemption)      |
+| [get\_positions(回测/交易)](#get_positions)                          | [order\_tick(交易)](#order_tick)                                     | [cancel\_order(回测/交易)](#cancel_order)                          |
+| [cancel\_order\_ex(交易)](#cancel_order_ex)                        | [debt\_to\_stock\_order(交易)](#debt_to_stock_order)                 | [get\_open\_orders(回测/交易)](#get_open_orders)                   |
+| [get\_order(回测/交易)](#get_order)                                  | [get\_orders(回测/交易)](#get_orders)                                  | [get\_all\_orders(交易)](#get_all_orders)                        |
+| [get\_trades(回测/交易)](#get_trades)                                | [get\_position(回测/交易)](#get_position)                              | [margin\_trade(交易)](#margin_trade)                             |
+| [margincash\_open(交易)](#margincash_open)                         | [margincash\_close(交易)](#margincash_close)                         | [margincash\_direct\_refund(交易)](#margincash_direct_refund)    |
+| [marginsec\_open(交易)](#marginsec_open)                           | [marginsec\_close(交易)](#marginsec_close)                           | [marginsec\_direct\_refund(交易)](#marginsec_direct_refund)      |
+| [get\_margincash\_stocks(交易)](#get_margincash_stocks)            | [get\_marginsec\_stocks(交易)](#get_marginsec_stocks)                | [get\_margin\_contract(交易)](#get_margin_contract)              |
+| [get\_margin\_contractreal(交易)](#get_margin_contractreal)        | [get\_margin\_assert(交易)](#get_margin_assert)                      | [get\_assure\_security\_list(交易)](#get_assure_security_list)   |
+| [get\_margincash\_open\_amount(交易)](#get_margincash_open_amount) | [get\_margincash\_close\_amount(交易)](#get_margincash_close_amount) | [get\_marginsec\_open\_amount(交易)](#get_marginsec_open_amount) |
+| [get\_marginsec\_close\_amount(交易)](#get_marginsec_close_amount) | [get\_margin\_entrans\_amount(交易)](#get_margin_entrans_amount)     | [buy\_open(回测/交易(期货))](#buy_open)                              |
+| [sell\_close(回测/交易(期货))](#sell_close)                            | [sell\_open(回测/交易(期货))](#sell_open)                                | [buy\_close(回测/交易(期货))](#buy_close)                            |
+| [get\_instruments(回测/交易(期货))](#get_instruments)                  | [log(回测/交易)](#log)                                                 | [is\_trade(回测/交易)](#is_trade)                                  |
+| [check\_limit(交易)](#check_limit)                                 | [send\_email(交易)](#send_email)                                     | [send\_qywx(交易)](#send_qywx)                                   |
+| [get\_MACD(回测/交易)](#get_MACD)                                    | [get\_KDJ(回测/交易)](#get_KDJ)                                        | [get\_RSI(回测/交易)](#get_RSI)                                    |
+| [get\_CCI(回测/交易)](#get_CCI)                                      | [create\_dir(回测/交易)](#create_dir)                                  |                                                                |
 
 #### 参数
 
@@ -999,14 +897,14 @@ on_order_response(context, order_list)
 
 #### 可调用委托接口
 
-| [order(回测/交易)](#order) | [order_target(回测/交易)](#order_target) | [order_value(回测/交易)](#order_value) |
-| --- | --- | --- |
-| [order_target_value(回测/交易)](#order_target_value) | [order_market(交易)](#order_market) | [ipo_stocks_order(交易)](#ipo_stocks_order) |
-| [after_trading_order(交易)](#after_trading_order) | [after_trading_cancel_order(交易)](#after_trading_cancel_order) | [etf_basket_order(交易)](#etf_basket_order) |
-| [etf_purchase_redemption(交易)](#etf_purchase_redemption) | [cancel_order(回测/交易)](#cancel_order) | [margin_trade(交易)](#margin_trade) |
-| [margincash_open(交易)](#margincash_open) | [margincash_close(交易)](#margincash_close) | [margincash_direct_refund(交易)](#margincash_direct_refund) |
-| [margincash_open(交易)](#marginsec_open) | [marginsec_close(交易)](#marginsec_close) | [marginsec_direct_refund(交易)](#marginsec_direct_refund) |
-| [get_user_name(回测/交易)](#get_user_name) | [get_cb_list(交易)](#get_cb_list) | [get_instruments(回测/交易(期货))](#get_instruments) |
+| [order(回测/交易)](#order)                                    | [order\_target(回测/交易)](#order_target)                            | [order\_value(回测/交易)](#order_value)                         |
+| --------------------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------- |
+| [order\_target\_value(回测/交易)](#order_target_value)        | [order\_market(交易)](#order_market)                               | [ipo\_stocks\_order(交易)](#ipo_stocks_order)                 |
+| [after\_trading\_order(交易)](#after_trading_order)         | [after\_trading\_cancel\_order(交易)](#after_trading_cancel_order) | [etf\_basket\_order(交易)](#etf_basket_order)                 |
+| [etf\_purchase\_redemption(交易)](#etf_purchase_redemption) | [cancel\_order(回测/交易)](#cancel_order)                            | [margin\_trade(交易)](#margin_trade)                          |
+| [margincash\_open(交易)](#margincash_open)                  | [margincash\_close(交易)](#margincash_close)                       | [margincash\_direct\_refund(交易)](#margincash_direct_refund) |
+| [margincash\_open(交易)](#marginsec_open)                   | [marginsec\_close(交易)](#marginsec_close)                         | [marginsec\_direct\_refund(交易)](#marginsec_direct_refund)   |
+| [get\_user\_name(回测/交易)](#get_user_name)                  | [get\_cb\_list(交易)](#get_cb_list)                                | [get\_instruments(回测/交易(期货))](#get_instruments)             |
 
 #### 参数
 
@@ -1022,7 +920,6 @@ order_list：一个列表，当前委托单发生变化时，发生变化的委�
 - 6 -- 信用融资
 - 7 -- 信用融券
 - 9 -- 信用交易
-
 - 0 -- 买卖
 - 1 -- 配股
 - 3 -- 申购
@@ -1037,7 +934,6 @@ order_list：一个列表，当前委托单发生变化时，发生变化的委�
 - b -- 定价委托
 - c -- 确认委托
 - d -- 限价委托
-
 - status -- 委托状态，详见[Order对象](#Order)；
 - entrust_type -- 委托类别(str)
 - entrust_prop -- 委托属性(str)
@@ -1096,14 +992,14 @@ on_trade_response (context, trade_list)
 
 #### 可调用委托接口
 
-| [order(回测/交易)](#order) | [order_target(回测/交易)](#order_target) | [order_value(回测/交易)](#order_value) |
-| --- | --- | --- |
-| [order_target_value(回测/交易)](#order_target_value) | [order_market(交易)](#order_market) | [ipo_stocks_order(交易)](#ipo_stocks_order) |
-| [after_trading_order(交易)](#after_trading_order) | [after_trading_cancel_order(交易)](#after_trading_cancel_order) | [etf_basket_order(交易)](#etf_basket_order) |
-| [etf_purchase_redemption(交易)](#etf_purchase_redemption) | [cancel_order(回测/交易)](#cancel_order) | [margin_trade(交易)](#margin_trade) |
-| [margincash_open(交易)](#margincash_open) | [margincash_close(交易)](#margincash_close) | [margincash_direct_refund(交易)](#margincash_direct_refund) |
-| [margincash_open(交易)](#marginsec_open) | [marginsec_close(交易)](#marginsec_close) | [marginsec_direct_refund(交易)](#marginsec_direct_refund) |
-| [get_user_name(回测/交易)](#get_user_name) | [get_cb_list(交易)](#get_cb_list) | [get_instruments(回测/交易(期货))](#get_instruments) |
+| [order(回测/交易)](#order)                                    | [order\_target(回测/交易)](#order_target)                            | [order\_value(回测/交易)](#order_value)                         |
+| --------------------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------- |
+| [order\_target\_value(回测/交易)](#order_target_value)        | [order\_market(交易)](#order_market)                               | [ipo\_stocks\_order(交易)](#ipo_stocks_order)                 |
+| [after\_trading\_order(交易)](#after_trading_order)         | [after\_trading\_cancel\_order(交易)](#after_trading_cancel_order) | [etf\_basket\_order(交易)](#etf_basket_order)                 |
+| [etf\_purchase\_redemption(交易)](#etf_purchase_redemption) | [cancel\_order(回测/交易)](#cancel_order)                            | [margin\_trade(交易)](#margin_trade)                          |
+| [margincash\_open(交易)](#margincash_open)                  | [margincash\_close(交易)](#margincash_close)                       | [margincash\_direct\_refund(交易)](#margincash_direct_refund) |
+| [margincash\_open(交易)](#marginsec_open)                   | [marginsec\_close(交易)](#marginsec_close)                         | [marginsec\_direct\_refund(交易)](#marginsec_direct_refund)   |
+| [get\_user\_name(回测/交易)](#get_user_name)                  | [get\_cb\_list(交易)](#get_cb_list)                                | [get\_instruments(回测/交易(期货))](#get_instruments)             |
 
 #### 参数
 
@@ -1147,21 +1043,15 @@ def handle_data(context, data):
     order('600570.SS', 100)
 ```
 
-##### 注意：
+#### 注意：
 
 如果是废单，如下单价格超过价格笼子，order函数依然会返回order_id，而不是None，并且在委托回调函数里面的状态status是2（已报），但在成交回调里面的status是9（废单）
 
-## README
-
-# 策略引擎简介
-
 ---
 
-# 07-策略API介绍
+# 06-策略API介绍
 
 ## 01-设置函数
-
-# 设置函数
 
 ### set_universe-设置股票池
 
@@ -1485,7 +1375,7 @@ poslist：list类型数据，该list中是字典类型的元素，参数不能�
 }]
 ```
 
-参数也可通过csv文件的形式传入，参考接口[convert_position_from_csv](#convert_position_from_csv)
+参数也可通过csv文件的形式传入，参考接口[convert\_position\_from\_csv](#convert_position_from_csv)
 
 #### 返回
 
@@ -1516,11 +1406,11 @@ def handle_data(context, data):
 set_parameters(**kwargs)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数仅在交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该函数用于设置策略中的配置参数。
 
@@ -1528,10 +1418,8 @@ set_parameters(**kwargs)
 
 - 避免在这两个函数中设置无法被系统持久化保存的变量，变量一旦被初始化会导致策略逻辑异常。
 - 避免在这两个函数中调用委托接口，造成重复委托。
-
 - 服务器环境重启拉起交易时，initialize和before_trading_start函数会被重复调用，请务必检查策略编写逻辑：
 - 您可将not_restart_trade入参设置为1，在交易时间段避免重复执行的问题，交易时间段默认为09:00-11:30、13:00-15:30，实际以券商的配置为准。
-
 - 服务器环境重启拉起交易时，before_trading_start函数默认会被调用，为了避免重复调用带来的一系列问题(同上)，您可将server_restart_not_do_before入参设置为"1"，即一个交易日内before_trading_start函数仅调用一次。
 
 1. 该函数入参格式必须为a=b样式。
@@ -1540,7 +1428,7 @@ set_parameters(**kwargs)
 4. server_restart_not_do_before入参配置说明(交易场景务必了解)：
 5. 如果想要取消已经设置的配置参数，需要再次调用该接口并传入xxx(具体配置项)="0"。
 
-##### 支持的参数
+#### 支持的参数
 
 holiday_not_do_before：交易中节假日是否执行before_trading_start。0，执行(缺省)；1，不执行。
 
@@ -1558,11 +1446,11 @@ not_restart_trade：交易时间段若服务器重启，是否自动执行重新
 
 server_restart_not_do_before：若服务器重启导致重拉交易，是否重复执行before_trading_start函数。0，执行(缺省)；1，不执行。
 
-##### 返回
+#### 返回
 
 None
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -1600,17 +1488,17 @@ def handle_data(context, data):
     pass
 ```
 
-#### set_email_info-设置邮件信息
+### set_email_info-设置邮件信息
 
 ```python
 set_email_info(email_address, smtp_code, email_subject)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数仅在交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该函数用于设置邮件信息，当交易报错终止时会发送提示邮件。
 
@@ -1619,7 +1507,7 @@ set_email_info(email_address, smtp_code, email_subject)
 1. 如要使用该函数，需咨询券商当前环境是否支持发送邮件。
 2. 当前仅支持设置QQ邮箱地址。
 
-##### 参数
+#### 参数
 
 email_address(str)：邮箱地址(发送方与接收方一致)。
 
@@ -1627,11 +1515,11 @@ smtp_code(str)：邮箱SMTP授权码。
 
 email_subject(str)：邮件主题。
 
-##### 返回
+#### 返回
 
 返回设置是否成功True/False(bool)。
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -1648,8 +1536,6 @@ def handle_data(context, data):
 ```
 
 ## 02-定时周期性函数
-
-# 定时周期性函数
 
 ### run_daily-按日周期处理
 
@@ -1671,7 +1557,7 @@ run_daily(context, func, time='9:31')
 
 2、该函数可以多次设定，以实现多个定时任务。
 
-3、股票策略回测中，当回测周期为分钟时，time的取值指定在09:31~11:30与13:00~15:00之间，当回测周期为日时，无论设定值是多少都只会在15:00执行；交易中不受此时间限制。
+3、股票策略回测中，当回测周期为分钟时，time的取值指定在09:31~~11:30与13:00~~15:00之间，当回测周期为日时，无论设定值是多少都只会在15:00执行；交易中不受此时间限制。
 
 #### 参数
 
@@ -1754,8 +1640,6 @@ def handle_data(context, data):
 ```
 
 ## 03-获取信息函数
-
-# 获取信息函数
 
 ### 获取基础信息
 
@@ -1901,17 +1785,17 @@ def handle_data(context, data):
     log.info(trading_days)
 ```
 
-#### get_trading_day_by_date - 按日期获取指定交易日
+### get_trading_day_by_date - 按日期获取指定交易日
 
 ```python
 get_trading_day_by_date(query_date, day=0)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在研究、回测、交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该函数用于根据输入日期获取指定的交易日。
 
@@ -1920,17 +1804,17 @@ get_trading_day_by_date(query_date, day=0)
 1. query_date为必传入参。
 2. 该函数主要使用场景：按固定自然日调仓。
 
-##### 参数
+#### 参数
 
 query_date：查询日期,如"20230213"(str)；
 
 day：表示天数，正的为数天后，负的为数天前，day取0表示获取当前交易日，如果当前日期为非交易日则返回下一交易日的日期。day默认取值为0(int)；
 
-##### 返回
+#### 返回
 
 date：交易日日期(str)
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -1982,22 +1866,22 @@ get_market_list()
 
 如返回：
 
-|  | finance_mic | finance_name |
-| --- | --- | --- |
-| 0 | A | 美国证券交易所 |
-| 1 | CBJC | 北京邮票 |
-| 2 | CBOT | 芝加哥商品期货 |
-| 3 | CCFX | 中国金融期货交易所 |
-| 4 | CCGG | 中国国际文交所 |
-| 5 | CCJC | 卡巴拉长江交易所 |
-| … | … | … |
-| 66 | XFUND | 基金 |
-| 67 | XHKG-SS | 沪港通 |
-| 68 | XHKG-SZ | 深港通 |
-| 69 | XSGE | 上海期货交易所 |
-| 70 | XSHO | 上海个股期权 |
-| 71 | XZCE | 郑州商品交易所 |
-| 72 | YCME | 渝川玉石 |
+|    | finance_mic | finance_name |
+| -- | ----------- | ------------ |
+| 0  | A           | 美国证券交易所      |
+| 1  | CBJC        | 北京邮票         |
+| 2  | CBOT        | 芝加哥商品期货      |
+| 3  | CCFX        | 中国金融期货交易所    |
+| 4  | CCGG        | 中国国际文交所      |
+| 5  | CCJC        | 卡巴拉长江交易所     |
+| …  | …           | …            |
+| 66 | XFUND       | 基金           |
+| 67 | XHKG-SS     | 沪港通          |
+| 68 | XHKG-SZ     | 深港通          |
+| 69 | XSGE        | 上海期货交易所      |
+| 70 | XSHO        | 上海个股期权       |
+| 71 | XZCE        | 郑州商品交易所      |
+| 72 | YCME        | 渝川玉石         |
 
 ### get_market_detail-获取市场详细信息
 
@@ -2081,7 +1965,7 @@ get_cb_list()
 
 返回当前可转债市场的所有代码列表(包含停牌代码)(list)。失败则返回空列表[]。
 
-### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -2122,11 +2006,11 @@ def get_trade_cb_list(context):
 get_cb_info()
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数仅在研究、交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 获取可转债基础信息。
 
@@ -2136,11 +2020,11 @@ get_cb_info()
 2. 此API依靠可转债基础数据权限，使用前请与券商确认是否有此权限，无权限时调用返回空DataFrame。
 3. 返回的数据包含历史退市转债数据，需要配合get_cb_list过滤出当前仍交易数据，并且溢价率数据为昨日收盘数据，并非实时数据，因此如获取实时的溢价率，需要获取价格计算。
 
-##### 参数
+#### 参数
 
 无
 
-##### 返回
+#### 返回
 
 正常返回一个DataFrame类型数据，包含每只可转债的信息
 
@@ -2158,7 +2042,7 @@ get_cb_info()
 - convert_price:转股价格(float)；
 - convert_value:转股价值(float)；
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -2223,11 +2107,11 @@ BondCode
 get_reits_list(date=None)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在研究、回测、交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取指定日期沪深市场的所有公募REITs基金代码列表
 
@@ -2237,11 +2121,11 @@ get_reits_list(date=None)
 2. 在研究中，date不入参默认取当天日期。
 3. 在交易中，date不入参默认取当天日期。
 
-##### 参数
+#### 参数
 
 date：格式为YYYYmmdd
 
-##### 返回
+#### 返回
 
 公募REITs基金代码列表，list类型(list[str,...])
 
@@ -2250,7 +2134,7 @@ date：格式为YYYYmmdd
 '508027.SS', '508028.SS', '508056.SS', '508058.SS', '508066.SS', '508068.SS', '508077.SS', '508088.SS', '508096.SS', '508098.SS', '508099.SS'] 
 ```
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -2274,11 +2158,11 @@ def handle_data(context, data):
 get_history(count, frequency='1d', field='close', security_list=None, fq=None, include=False, fill='nan', is_dict=False)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数仅在回测、交易、研究模块可用。（湘财证券无法在研究模块使用该函数）
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取最近N条历史行情K线数据。支持多股票、多行情字段获取。
 
@@ -2289,7 +2173,7 @@ get_history(count, frequency='1d', field='close', security_list=None, fq=None, i
 3. 证监会行业、聚源行业、概念板块、地域板块所对应标的的行情数据为非标准的交易所下发数据，是由数据源自行按照成分股分类规则进行计算的，存在与三方数据源不一致的情况。如用户需要在策略中使用，应自行评估该数据的合理性。
 4. 该接口与get_price接口不支持多线程同时调用，即在run_daily或run_interval等函数中不要与handle_data等框架模块同一时刻调用get_history或get_price接口，否则会偶现获取数据为空的现象
 
-##### 参数
+#### 参数
 
 count： K线数量，大于0，返回指定数量的K线行情；必填参数；入参类型：int；
 
@@ -2318,9 +2202,9 @@ fill：行情获取不到某一时刻的分钟数据时，是否用上一分钟�
 
 is_dict：返回是否是字典(dict)格式{str: array()}，True -是，False-不是；选填参数，默认为False；返回为字典格式取数速度相对较快；入参类型：bool；
 
-##### 返回
+#### 返回
 
-###### dict类型
+#### dict类型
 
 正常返回dict类型数据，异常时返回None(NoneType)。
 
@@ -2328,7 +2212,7 @@ OrderedDict([(股票代码(str), array([日期时间(int), 开盘价(float), 最
 
 OrderedDict([('000001.SZ', array([(202309220931, 11.03, 11.08, 11.03, 11.07, 2289400.0, 25302018.0, 11.07),... ]))])
 
-###### 非dict类型
+#### 非dict类型
 
 当获取单支股票(单只股票必须为字符串类型security_list='600570.SS'，不能用security_list=['600570.SS'])的时候，无论行情字段field入参单个或多个，返回的都是pandas.DataFrame对象，行索引是datetime.datetime对象，列索引是行情字段,为str类型。比如：
 
@@ -2336,8 +2220,8 @@ OrderedDict([('000001.SZ', array([(202309220931, 11.03, 11.08, 11.03, 11.07, 228
 
 - (python3.5、python3.11版本均支持)第一种返回数据：
 
-|  | open |
-| --- | --- |
+|            | open  |
+| ---------- | ----- |
 | 2017-04-11 | 40.30 |
 | 2017-04-12 | 40.08 |
 | 2017-04-13 | 40.03 |
@@ -2352,8 +2236,8 @@ OrderedDict([('000001.SZ', array([(202309220931, 11.03, 11.08, 11.03, 11.07, 228
 
 - (仅python3.11版本支持)第二种返回数据：
 
-|  | code | open |
-| --- | --- | --- |
+|            | code      | open  |
+| ---------- | --------- | ----- |
 | 2017-04-11 | 600570.SS | 40.30 |
 | 2017-04-12 | 600570.SS | 40.08 |
 | 2017-04-13 | 600570.SS | 40.03 |
@@ -2379,13 +2263,13 @@ dataframe_info = get_history(2, frequency='1d', field=['open','close'], security
 
 - (仅python3.5版本支持)第三种返回数据：
 
-|  | 600570.SS | 600571.SS |
-| --- | --- | --- |
-| 2017-04-11 | 40.30 | 17.81 |
-| 2017-04-12 | 40.08 | 17.56 |
-| 2017-04-13 | 40.03 | 17.42 |
-| 2017-04-14 | 40.04 | 17.40 |
-| 2017-04-17 | 39.90 | 17.49 |
+|            | 600570.SS | 600571.SS |
+| ---------- | --------- | --------- |
+| 2017-04-11 | 40.30     | 17.81     |
+| 2017-04-12 | 40.08     | 17.56     |
+| 2017-04-13 | 40.03     | 17.42     |
+| 2017-04-14 | 40.04     | 17.40     |
+| 2017-04-17 | 39.90     | 17.49     |
 
 当获取多支股票(多只股票必须为list类型，特殊情况：当list只有一个股票时仍然当做多股票处理，比如security_list=['600570.SS'])的时候，如果行情字段field入参为多个，则返回pandas.Panel对象，items索引是行情字段(如'open'、'close'等)，里面是很多pandas.DataFrame对象，每个pandas.DataFrame的行索引是datetime.datetime对象， 列索引是股票代码,为str类型，比如:
 
@@ -2393,10 +2277,10 @@ dataframe_info = get_history(2, frequency='1d', field=['open','close'], security
 
 - (仅python3.5版本支持)第四种返回数据：
 
-|  | 600570.SS | 600571.SS |
-| --- | --- | --- |
-| 2015-01-05 | 54.77 | 26.93 |
-| 2015-01-06 | 51.00 | 25.83 |
+|            | 600570.SS | 600571.SS |
+| ---------- | --------- | --------- |
+| 2015-01-05 | 54.77     | 26.93     |
+| 2015-01-06 | 51.00     | 25.83     |
 
 假如要对panel索引中的对象进行转换，比如将items索引由行情字段转换成股票代码，可以通过panel_info = panel_info.swapaxes("minor_axis", "items")的方法转换。
 
@@ -2410,7 +2294,7 @@ panel_info = get_history(2, frequency='1d', field=['open','close'], security_lis
 
 转换之后的索引：df = panel_info['600570.SS']
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -2490,11 +2374,11 @@ dtype={'names': ['datetime', 'open', 'close'], 'formats': ["i8", "f8", "f8"], "o
 get_price(security, start_date=None, end_date=None, frequency='1d', fields=None, fq=None, count=None, is_dict=False)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在研究、回测、交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取指定日期前N条的历史行情K线数据或者指定时间段内的历史行情K线数据。支持多股票、多行情字段获取。
 
@@ -2510,7 +2394,7 @@ get_price(security, start_date=None, end_date=None, frequency='1d', fields=None,
 8. 证监会行业、聚源行业、概念板块、地域板块所对应标的的行情数据为非标准的交易所下发数据，是由数据源自行按照成分股分类规则进行计算的，存在与三方数据源不一致的情况。如用户需要在策略中使用，应自行评估该数据的合理性。
 9. 该接口与get_history接口不支持多线程同时调用，即在run_daily或run_interval等函数中不要与handle_data等框架模块同一时刻调用get_history或get_price接口，否则会偶现获取数据为空的现象。
 
-##### 参数
+#### 参数
 
 security：一支股票代码或者一个股票代码的list(list[str]/str)
 
@@ -2539,9 +2423,9 @@ count：大于0，不能与start_date同时输入，获取end_date前count根的
 
 is_dict：返回是否是字典(dict)格式{str: array()}，True -是，False-不是；选填参数，默认为False；返回为字典格式取数速度相对较快，入参类型：bool；
 
-##### 返回
+#### 返回
 
-###### dict类型
+#### dict类型
 
 正常返回dict类型数据，异常时返回None(NoneType)。
 
@@ -2549,9 +2433,9 @@ OrderedDict([(股票代码(str), array([日期时间(int), 开盘价(float), 最
 
 OrderedDict([('600570.SS', array([(201706010931, 37.1, 37.14, 37.05, 37.09, 128200.0, 4756263.0, 37.09),...]))])
 
-###### 非dict类型
+#### 非dict类型
 
-get_price对于多股票和多字段不同场景下获取返回数据的规则与[get_history](#get_history)一致，如下：
+get_price对于多股票和多字段不同场景下获取返回数据的规则与[get\_history](#get_history)一致，如下：
 
 当获取单支股票(单只股票必须为字符串类型security='600570.SS'，不能用security=['600570.SS'])和单个或多个字段的时候，返回的是pandas.DataFrame对象，行索引是datetime.datetime对象，列索引是行情字段，为str类型。
 
@@ -2655,7 +2539,7 @@ get_price对于多股票和多字段不同场景下获取返回数据的规则�
 
 假如要对panel索引中的对象进行转换，比如将items索引由行情字段转换成股票代码，可以通过panel_info = panel_info.swapaxes("minor_axis", "items")的方法转换。
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -2697,11 +2581,11 @@ def handle_data(context, data):
 get_individual_entrust(stocks=None, data_count=50, start_pos=0, search_direction=1, is_dict=False)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取当日逐笔委托行情数据。
 
@@ -2711,7 +2595,7 @@ get_individual_entrust(stocks=None, data_count=50, start_pos=0, search_direction
 2. 逐笔委托，逐笔成交数据需开通level2行情才能获取到数据，否则无数据返回。
 3. 当策略入参is_dict为True时返回的数据类型为dict，返回dict类型数据的速度比(python3.11版本支持)DataFrame,(python3.5版本支持)Panel类型数据有大幅提升。
 
-##### 参数
+#### 参数
 
 stocks: 默认为当前股票池中代码列表(list[str])；
 
@@ -2723,9 +2607,9 @@ search_direction: 搜索方向(1向前，2向后)，默认为1(int)；
 
 is_dict: 返回类型（False-(python3.11版本支持)DataFrame,(python3.5版本支持)Panel; True-dict），默认为False；
 
-##### 返回
+#### 返回
 
-###### dict类型
+#### dict类型
 
 正常返回dict类型数据，异常时返回None(NoneType)。
 
@@ -2741,7 +2625,7 @@ is_dict: 返回类型（False-(python3.11版本支持)DataFrame,(python3.5版本
 
 ```
 
-###### 非dict类型
+#### 非dict类型
 
 默认返回(python3.11版本支持)DataFrame,(python3.5版本支持)Panel类型，入参is_dict为True时返回dict类型。
 
@@ -2771,7 +2655,7 @@ Minor_axis axis: 包含以下信息：
 - 1.(仅python3.11版本支持)DataFrame类型类型，异常时返回None(NoneType)
 - 2.(仅python3.5版本支持)正常返回Pandas.panel对象，异常时返回None(NoneType)
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -2806,11 +2690,11 @@ def handle_data(context, data):
 get_individual_transaction(stocks=None, data_count=50, start_pos=0, search_direction=1, is_dict=False)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取当日逐笔成交行情数据。
 
@@ -2820,7 +2704,7 @@ get_individual_transaction(stocks=None, data_count=50, start_pos=0, search_direc
 2. 逐笔委托，逐笔成交数据需开通level2行情才能获取到数据，否则无数据返回。
 3. 当策略入参is_dict为True时返回的数据类型为dict，返回dict类型数据的速度比(python3.11版本支持)DataFrame,(python3.5版本支持)Panel类型数据有大幅提升。
 
-##### 参数
+#### 参数
 
 stocks: 默认为当前股票池中代码列表(list[str])；
 
@@ -2832,9 +2716,9 @@ search_direction: 搜索方向(1向前，2向后)，默认为1(int)；使用1的
 
 is_dict: 返回类型（False-(python3.11版本支持)DataFrame,(python3.5版本支持)Panel; True-dict），默认为False；
 
-##### 返回
+#### 返回
 
-###### dict类型
+#### dict类型
 
 正常返回dict类型数据，异常时返回None(NoneType)。
 
@@ -2851,7 +2735,7 @@ is_dict: 返回类型（False-(python3.11版本支持)DataFrame,(python3.5版本
 
 ```
 
-###### 非dict类型
+#### 非dict类型
 
 默认返回(python3.11版本支持)DataFrame,(python3.5版本支持)Panel类型，入参is_dict为True时返回dict类型。
 
@@ -2885,11 +2769,10 @@ Minor_axis axis: 包含以下信息：
 - trans_flag: [成交标记](#成交标记)(str:numpy.int64)；
 - trans_identify_am: [盘后逐笔成交序号标识](#盘后逐笔成交序号标识)(str:numpy.int64)；
 - channel_num: 成交通道信息(str:numpy.int64)；
-
 - 1.(仅python3.11版本支持)DataFrame类型类型，异常时返回None(NoneType)
 - 2.(仅python3.5版本支持)正常返回Pandas.panel对象，异常时返回None(NoneType)
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -3061,13 +2944,11 @@ data_count: 数据条数，默认为100，最大为10000(int)；
 - hq_type_code: 类型代码(str:str)；
 - last_px: 最新价(str:float)；
 - px_change_rate: 涨跌幅(str:float)；
-
 - prod_code: 股票代码(str:str)；
 - prod_name: 证券名称(str:str)；
 - hq_type_code: 类型代码(str:str)；
 - last_px: 最新价(str:float)；
 - px_change_rate: 涨跌幅(str:float)；
-
 - prod_code: 行业代码(str:str)；
 - prod_name: 行业名称(str:str)；
 - hq_type_code: 行业板块代码(str:str)；
@@ -3247,7 +3128,6 @@ security : 单只股票代码或者一个由多只股票代码组成的列表，
 - '4' -- 非沪市必须现金替代；
 - '5' -- 非沪深退补现金替代；
 - '6' -- 非沪深必须现金替代；
-
 - code_num -- 成分券数量(str:float)；
 - cash_replace_flag -- 现金替代标志(str:str)；
 - replace_ratio -- 保证金率（溢价比率），允许现金替代标的此字段有效(str:float)；
@@ -3275,17 +3155,17 @@ def handle_data(context, data):
     log.info(stocks_info)
 ```
 
-#### get_ipo_stocks - 获取当日IPO申购标的
+### get_ipo_stocks - 获取当日IPO申购标的
 
 ```python
 get_ipo_stocks()
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数仅支持Ptrade客户端可用、仅在股票交易模块可用，对接jz_ufx不支持该函数
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取当日IPO申购标的信息
 
@@ -3293,7 +3173,7 @@ get_ipo_stocks()
 
 无
 
-##### 返回
+#### 返回
 
 正常返回一个dict类型对象，key为各个分类市场，value为市场对应的申购代码列表。异常返回空dict，如{}({str:[],str:[],...})。分类市场明细如下：
 
@@ -3307,7 +3187,7 @@ get_ipo_stocks()
 {'深证普通代码': ['002952.SZ', '072318.SZ'], '深证创业板代码': ['300765.SZ'], '上证普通代码': ['732116.SS', '732136.SS', '732367.SS', '732378.SS', '732380.SS', '732616.SS', '780086.SS', '780211.SS', '780860.SS', '718001.SS', '783012.SS', '783127.SS'], '可转债代码': ['718001.SS', '783012.SS', '783127.SS', '072318.SZ'], '上证科创板代码': ['787006.SS']}
 ```
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -3481,7 +3361,6 @@ security： 单只股票代码或者多只股票代码组成的列表，必填�
 - INIT -- 盘后固定价格启动前
 - ENDPT -- 盘后固定价格闭市阶段
 - POSSP -- 盘后固定价格停牌
-
 - bid_grp -- 委买档位，{'bid_grp': {1: [价格, 委托量,委托笔数,委托对列{}], 2: [价格, 委托量,委托笔数], 3: [价格, 委托量,委托笔数], 4: [价格, 委托量,委托笔数], 5: [价格, 委托量,委托笔数]}} ；
 - offer_grp -- 委卖档位，{'offer_grp': {1: [价格, 委托量,委托笔数,委托对列{}], 2: [价格, 委托量,委托笔数], 3: [价格, 委托量,委托笔数], 4: [价格, 委托量,委托笔数], 5: [价格, 委托量,委托笔数]}} ；
 - total_bid_turnover/total_offer_turnover,委买金额/委卖金额主推数据(tick数据中)不支持(值为0)，仅在线请求中支持；
@@ -3523,11 +3402,11 @@ def handle_data(context, data):
 get_trend_data(date=None, stocks=None, market=None)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在研究、回测、交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 获取集中竞价期间代码数据。
 
@@ -3538,7 +3417,7 @@ get_trend_data(date=None, stocks=None, market=None)
 
 获取失败时返回空dict{}
 
-##### 参数
+#### 参数
 
 date：日期(格式为：YYYYmmdd)(str)；
 
@@ -3546,7 +3425,7 @@ stocks：股票代码(str/list[str])；
 
 market：市场(str/list[str])
 
-##### 返回
+#### 返回
 
 正常返回一个dict类型数据，包含每只代码的信息
 
@@ -3559,7 +3438,7 @@ market：市场(str/list[str])
 - business_balance:总成交额(int)；
 - amount:持仓量(int)；
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -3576,8 +3455,6 @@ def initialize(context):
 ```
 
 ## 04-获取股票信息
-
-# 获取股票信息
 
 ### get_stock_name - 获取股票名称
 
@@ -3762,17 +3639,17 @@ def handle_data(context, data):
     log.info('筛选不是ST的股票列表: %s' % filter_stocks)
 ```
 
-#### get_underlying_code - 获取证券的关联代码
+### get_underlying_code - 获取证券的关联代码
 
 ```python
 get_underlying_code(symbols)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取证券的关联代码。
 
@@ -3780,11 +3657,11 @@ get_underlying_code(symbols)
 
 无
 
-##### 参数
+#### 参数
 
 symbols: 需要查询的代码(str/list)
 
-##### 返回
+#### 返回
 
 正常返回一个dict字典，里面包含需要查询的证券，关联类型和关联代码(dict{str:[int,str],...})，
 
@@ -3793,7 +3670,7 @@ symbols: 需要查询的代码(str/list)
 - underlying_type: [关联类型](#关联类型)(int)；
 - underlying_code: 关联代码(str)；
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -4008,7 +3885,7 @@ etf_code : 单支ETF代码，必传参数(str)
 
 #### 返回
 
-正常返回一个list类型字段，包含每只etf代码所对应的成分股。异常返回空list，如[](list[str,...])
+正常返回一个list类型字段，包含每只etf代码所对应的成分股。异常返回空list，如
 
 ```python
 ['600000.SS', '600010.SS', '600016.SS'] 
@@ -4104,19 +3981,19 @@ security：一支股票代码或者多只股票代码组成的list(list[str])
 
 table：财务数据表名，输入具体表名可查询对应表中信息(str)
 
-| 表名 | 包含内容 |
-| --- | --- |
-| valuation | 估值数据 |
-| balance_statement | 资产负债表 |
-| income_statement | 利润表 |
-| cashflow_statement | 现金流量表 |
-| growth_ability | 成长能力指标 |
-| profit_ability | 盈利能力指标 |
-| eps | 每股指标 |
-| operating_ability | 营运能力指标 |
+| 表名                  | 包含内容   |
+| ------------------- | ------ |
+| valuation           | 估值数据   |
+| balance_statement   | 资产负债表  |
+| income_statement    | 利润表    |
+| cashflow_statement  | 现金流量表  |
+| growth_ability      | 成长能力指标 |
+| profit_ability      | 盈利能力指标 |
+| eps                 | 每股指标   |
+| operating_ability   | 营运能力指标 |
 | debt_paying_ability | 偿债能力指标 |
 
-fields：指明数据结果集中所需输出业务字段，支持多个业务字段输出（list类型），如fields=['settlement_provi', 'client_provi'](list[str])；输出具体字段请参考 [ 财务数据的API接口说明](https://ptradeapi.com/hub/data/finance.html)
+fields：指明数据结果集中所需输出业务字段，支持多个业务字段输出（list类型），如fields=['settlement\_provi', 'client\_provi'](list\[str])；输出具体字段请参考 [ 财务数据的API接口说明](https://ptradeapi.com/hub/data/finance.html)
 
 date：查询日期，按日期查询模式，返回查询日期之前对应的财务数据，输入形式如'20170620'，回测中支持datetime.date时间格式输入，不能与start_year与end_year同时作用。回测中，支持按日期查询模式，不传入date默认取回测时的日期(str)；
 
@@ -4152,13 +4029,13 @@ merge_type：数据更新设置；相关财务数据信息会不断进行修正�
 
 1.按日期查询模式（date参数模式）返回数据类型为pandas.DataFrame类型，索引为股票代码，如get_fundamentals('600000.SS','balance_statement',date='20161201')将返回：
 
-|  | secu_abbr | end_date | publ_date | total_assets | …… | total_liability |
-| --- | --- | --- | --- | --- | --- | --- |
-| 600000.SS | 浦发银行 | 2016-09-30 | 2016-10-29 | 5.56e+12 | ...... | 5.20e+12 |
+|           | secu_abbr | end_date   | publ_date  | total_assets | ……     | total_liability |
+| --------- | --------- | ---------- | ---------- | ------------ | ------ | --------------- |
+| 600000.SS | 浦发银行      | 2016-09-30 | 2016-10-29 | 5.56e+12     | ...... | 5.20e+12        |
 
-2.按年份查询模式（start_year/end_year参数模式）返回数据类型为pandas.Panel类型，索引为股票代码，其中包含的DataFrame索引为返回股票对应会计日期（end_date），如get_fundamentals(['600000.SS', '600570.SS', '000002.SZ'], 'balance_statement', start_year='2016', end_year='2016')将返回： ![](../assets/get_fundamentals_1.png)
+2.按年份查询模式（start_year/end_year参数模式）返回数据类型为pandas.Panel类型，索引为股票代码，其中包含的DataFrame索引为返回股票对应会计日期（end_date），如get_fundamentals(['600000.SS', '600570.SS', '000002.SZ'], 'balance_statement', start_year='2016', end_year='2016')将返回：
 
-### 示例
+#### 示例
 
 ```python
 import time
@@ -4279,7 +4156,7 @@ get_etf_list()
 
 #### 返回
 
-正常返回一个list类型对象，包含所有ETF代码。异常返回空list，如[](list[str,...])。
+正常返回一个list类型对象，包含所有ETF代码。异常返回空list，如。
 
 ```python
 ['510010.SS', '510020.SS', '510030.SS', '510050.SS', '510060.SS', '510180.SS', '510300.SS', '510310.SS', '510330.SS', '511800.SS', '511810.SS', '511820.SS', '511830.SS', '511880.SS', '511990.SS', '512010.SS',
@@ -4302,8 +4179,6 @@ def handle_data(context, data):
 
 ## 05-获取其他信息
 
-# 获取其他信息
-
 ### get_trades_file – 获取对账数据文件
 
 ```python
@@ -4322,7 +4197,7 @@ get_trades_file(save_path='')
 
 1、长度不能超过256个字符；
 
-2、名称中不能出下如下字符：:?,@#$&();\"\'<>`~!%^*；
+2、名称中不能出下如下字符：:?,@#$&();"'<>\`~!%^*；
 
 #### 参数
 
@@ -4389,7 +4264,7 @@ convert_position_from_csv(path)
 
 1、长度不能超过256个字符；
 
-2、名称中不能出下如下字符：:?,@#$&();\"\'<>`~!%^*；
+2、名称中不能出下如下字符：:?,@#$&();"'<>\`~!%^*；
 
 #### 参数
 
@@ -4948,11 +4823,11 @@ def handle_data(context, data):
 get_lucky_info(start_date, end_date)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数仅在交易模块使用，对接jz_ufx不支持该函数
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取指定时间范围内的中签信息。
 
@@ -4960,13 +4835,13 @@ get_lucky_info(start_date, end_date)
 
 1. 为减小对柜台压力，该函数在股票交易模块中同一分钟内多次调用返回当前分钟首次查询的缓存数据。
 
-##### 参数
+#### 参数
 
 start_date：开始日期(str)，输入形式仅支持"YYYYmmdd"，如"20220928"。
 
 end_date：结束日期(str)，输入形式仅支持"YYYYmmdd"，如"20220929"。
 
-##### 返回
+#### 返回
 
 正常返回一个列表套字典数据，异常或无中签信息时返回一个空列表。
 
@@ -4976,7 +4851,7 @@ end_date：结束日期(str)，输入形式仅支持"YYYYmmdd"，如"20220929"�
 
 [{'stock_code': '371002.SZ', 'occur_amount': 10.0, 'business_price': 100.0, 'stock_name': '崧盛发债', 'init_date': 20220928}, ...]
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -4995,17 +4870,11 @@ def handle_data(context, data):
     pass
 ```
 
-## README
-
-# 策略API介绍
-
 ---
 
-# 08-交易相关函数
+# 07-交易相关函数
 
 ## 01-股票交易函数
-
-# 股票交易函数
 
 ### order-按数量买卖
 
@@ -5228,11 +5097,11 @@ def handle_data(context, data):
 order_market(security, amount, market_type, limit_price=None)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数仅在交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于使用多种市价类型进行委托
 
@@ -5243,7 +5112,7 @@ order_market(security, amount, market_type, limit_price=None)
 3. 该函数中market_type是必传字段，如不传入参数会出现报错。
 4. 该函数委托上证股票时limit_price是必传字段，如不传入参数会出现报错。
 
-##### 参数
+#### 参数
 
 security：股票代码(str)；
 
@@ -5383,7 +5252,7 @@ after_trading_order(security, amount, entrust_price)
 
 注意事项： 1、entrust_price为必传字段
 
-2、盘后固定价委托时间为9:30~11:30,13:00~15:30
+2、盘后固定价委托时间为9:30~~11:30,13:00~~15:30
 
 #### 参数
 
@@ -5504,7 +5373,7 @@ etf_code : 单支ETF代码，必传参数(str)
 
 amount : 下单篮子份数, 正数表示买入, 负数表示卖出，必传参数(int)
 
-price_style : 设定委托价位，可传入’B1’、’B2’、’B3’、’B4’、’B5’、’S1’、’S2’、’S3’、’S4’、’S5’、’new’，分别为买一~买五、卖一~卖五、最新价，默认为最新价(str)
+price_style : 设定委托价位，可传入’B1’、’B2’、’B3’、’B4’、’B5’、’S1’、’S2’、’S3’、’S4’、’S5’、’new’，分别为买一~~买五、卖一~~卖五、最新价，默认为最新价(str)
 
 position : 取值True和False，仅在篮子买入时使用。申购是否使用持仓替代，True为使用，该情况下篮子股票买入时使用已有的持仓部分；False为不使用。默认使用持仓替代(bool)
 
@@ -5618,17 +5487,17 @@ def handle_data(context, data):
 
 ```
 
-#### get_all_positions - 获取全部持仓信息
+### get_all_positions - 获取全部持仓信息
 
 ```python
 get_all_positions()
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数仅在交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取当前账户的持仓信息详情。
 
@@ -5639,11 +5508,11 @@ get_all_positions()
 3. 该接口返回当前账户所有的持仓信息，包含国债逆回购产生的新标准券、打新中签尚未上市等量化不支持标的的持仓。
 4. 为减小对柜台压力，该函数返回的是缓存的账户定时同步持仓查询数据。
 
-##### 参数
+#### 参数
 
 无。
 
-##### 返回
+#### 返回
 
 返回一个列表，包含不同标的字典类型的持仓信息。不同交易类型返回不同字段的持仓信息。
 
@@ -5652,7 +5521,7 @@ get_all_positions()
                             
 ```
 
-###### 股票
+#### 股票
 
 ```python
     exchange_type  <a href="#交易类别">交易类别</a>
@@ -5684,7 +5553,7 @@ get_all_positions()
     av_cost_price  摊薄成本价
 ```
 
-###### 融资融券
+#### 融资融券
 
 ```python
     exchange_type  <a href="#交易类别">交易类别</a>
@@ -5718,7 +5587,7 @@ get_all_positions()
     av_cost_price  摊薄成本价
 ```
 
-###### 期货
+#### 期货
 
 ```python
     futu_exch_type  <a href="#交易类别">交易类别</a>
@@ -5744,7 +5613,7 @@ get_all_positions()
     combinable_amount  可组合持仓数量
 ```
 
-###### 期权
+#### 期权
 
 ```python
     exchange_type  <a href="#交易类别">交易类别</a>
@@ -5778,7 +5647,7 @@ get_all_positions()
     opt_hedge_amount  对冲后持仓量
 ```
 
-###### 港股通
+#### 港股通
 
 ```python
     exchange_type  <a href="#交易类别">交易类别</a>
@@ -5806,11 +5675,11 @@ get_all_positions()
     profit_ratio  盈亏比例(%)
 ```
 
-###### 字段备注
+#### 字段备注
 
 - delist_date：默认为0。
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -5829,8 +5698,6 @@ def handle_data(context, data):
 ```
 
 ## 02-公共交易函数
-
-# 公共交易函数
 
 ### order_tick - tick行情触发买卖
 
@@ -5854,7 +5721,7 @@ sid：股票代码(str)；
 
 amount：交易数量，正数表示买入，负数表示卖出(int)
 
-priceGear：盘口档位，level1:1~5买档/-1~-5卖档，level2:1~10买档/-1~-10卖档(str)
+priceGear：盘口档位，level1:1~~5买档/-1~~-5卖档，level2:1~~10买档/-1~~-10卖档(str)
 
 limit_price：买卖限价，当输入参数中也包含priceGear时，下单价格以limit_price为主(float)；
 
@@ -5934,15 +5801,15 @@ cancel_order_ex(order_param)
 
 #### 接口说明
 
-该接口用于取消订单，根据[get_all_orders](#get_all_orders)返回列表中的单个字典取消订单。
+该接口用于取消订单，根据[get\_all\_orders](#get_all_orders)返回列表中的单个字典取消订单。
 
-注意事项： 该函数仅可撤[get_all_orders](#get_all_orders)函数返回的可撤状态订单。
+注意事项： 该函数仅可撤[get\_all\_orders](#get_all_orders)函数返回的可撤状态订单。
 
 账户多个交易运行时调用该函数会撤销其他交易产生的订单，可能对其他正在运行的交易策略产生影响。
 
 #### 参数
 
-order_param: [get_all_orders](#get_all_orders)函数返回列表的单个字典(dict)
+order_param: [get\_all\_orders](#get_all_orders)函数返回列表的单个字典(dict)
 
 #### 返回
 
@@ -6152,7 +6019,7 @@ get_all_orders(security=None)
 
 注意事项： 1、该函数返回账户当日在柜台的全部委托记录，不能查询策略中待报、未报状态的委托。
 
-2、该函数返回的可撤委托仅可通过[cancel_order_ex](#cancel_order_ex)函数进行撤单，且非本交易的委托进行撤单仅可通过本函数查询委托状态更新。 3、可以查询到手动下单的委托订单，但状态会有延时。和Ptrade代码马上下单，查询订单状态的延时一样，大概需要6s以上的时间更新状态
+2、该函数返回的可撤委托仅可通过[cancel\_order\_ex](#cancel_order_ex)函数进行撤单，且非本交易的委托进行撤单仅可通过本函数查询委托状态更新。 3、可以查询到手动下单的委托订单，但状态会有延时。和Ptrade代码马上下单，查询订单状态的延时一样，大概需要6s以上的时间更新状态
 
 #### 参数
 
@@ -6183,7 +6050,7 @@ def handle_data(context, data):
     log.info('当日全部订单：%s' % get_all_orders())
 ```
 
-### 返回数据示例
+#### 返回数据示例
 
 ```
 <code class="language-python"></code>[{'price': 135.777, 'entrust_no': '65313', 'filled_amount': 0, 'entrust_bs': 2, 'status': '6', 'symbol': '113601.SS', 'amount': -50, 'entrust_time': '2025-06-10 09:48:40'},
@@ -6278,19 +6145,13 @@ def handle_data(context, data):
 
 ```
 
-## README
-
-# 交易相关函数
-
 注意：代码精度位为3位小数的类型(后台已保护为3位)，如ETF、国债；代码精度为2位小数类型，需要在传参时限制价格参数的精度，如股票。
 
 ---
 
-# 09-融资融券专用函数
+# 08-融资融券专用函数
 
 ## 01-融资融券交易类函数
-
-# 融资融券交易类函数
 
 ### margin_trade - 担保品买卖
 
@@ -6598,8 +6459,6 @@ def handle_data(context, data):
 
 ## 02-融资融券查询类函数
 
-# 融资融券查询类函数
-
 ### get_margincash_stocks - 获取融资标的列表
 
 ```python
@@ -6732,7 +6591,6 @@ get_margin_contract()
 - 3 -- 客户自行归还；
 - 4 -- 手工了结；
 - 5 -- 未形成负债；
-
 - compact_type -- 合约类别，0-融资，1-融券，2-其他负债；；
 - compact_status -- 合约状态；
 
@@ -7115,7 +6973,7 @@ get_enslo_security_info(cash_group=None)
 
 该函数仅支持PTrade客户端可用，仅在两融交易模块可用。
 
-##### 接口说明
+#### 接口说明
 
 该接口用于获取融券信息。
 
@@ -7123,11 +6981,11 @@ get_enslo_security_info(cash_group=None)
 
 无
 
-##### 参数
+#### 参数
 
 cash_group：[两融头寸性质](#两融头寸性质)(int)，1为普通头寸，2为专项头寸，该字段不入参默认表示普通头寸；
 
-##### 返回
+#### 返回
 
 正常返回一个dict类型对象，key为股票代码，values为dict，包含返回的相关字段信息，如(dict[{}, {}])。异常返回None(NoneType)。
 
@@ -7196,7 +7054,7 @@ cash_group：[两融头寸性质](#两融头寸性质)(int)，1为普通头寸�
                             
 ```
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -7209,17 +7067,11 @@ def handle_data(context, data):
     log.info(h)
 ```
 
-## README
-
-# 融资融券专用函数
-
 ---
 
-# 10-期货专用函数
+# 09-期货专用函数
 
 ## 01-期货交易类函数
-
-# 期货交易类函数
 
 ### buy_open - 多开
 
@@ -7417,8 +7269,6 @@ def handle_data(context, data):
 
 ## 02-期货查询类函数
 
-# 期货查询类函数
-
 ### get_margin_rate- 获取用户设置的保证金比例
 
 ```python
@@ -7517,8 +7367,6 @@ def handle_data(context, data):
 
 ## 03-期货设置类函数
 
-# 期货设置类函数
-
 ### set_future_commission - 设置期货手续费
 
 ```python
@@ -7602,17 +7450,11 @@ def handle_data(context, data):
     buy_open(g.security, 10)
 ```
 
-## README
-
-# 期货专用函数
-
 ---
 
-# 11-计算函数
+# 10-计算函数
 
 ## 01-技术指标计算函数
-
-# 技术指标计算函数
 
 ### get_MACD - 异同移动平均线
 
@@ -7800,8 +7642,6 @@ def handle_data(context, data):
 
 ## 02-其他函数
 
-# 其他函数
-
 ### log-日志记录
 
 ```python
@@ -7953,9 +7793,9 @@ send_email(send_email_info, get_email_info, smtp_code, info='', path='', subject
 
 #### 参数
 
-send_email_info：发送方的邮箱地址，必填字段，如:50xxx00@qq.com(str)；
+send_email_info：发送方的邮箱地址，必填字段，如:<50xxx00@qq.com>(str)；
 
-get_email_info：接收方的邮箱地址，必填字段，如:[50xxx00@qq.com, 1xxx10@126.com](list[str]/str)；
+get_email_info：接收方的邮箱地址，必填字段，如:[50xxx00@qq.com, 1xxx10@126.com](list\[str]/str)；
 
 smtp_code：邮箱的smtp授权码，注意，不是邮箱密码，必填字段(str)；
 
@@ -8131,11 +7971,11 @@ def handle_data(context, data):
 get_frequency()
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在回测、交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于返回当前业务代码的周期，如在周期为分钟的情况下执行回测或交易，该函数返回minute；在周期为每日的情况下执行回测或交易，该函数返回daily。
 
@@ -8143,15 +7983,15 @@ get_frequency()
 
 无
 
-##### 参数
+#### 参数
 
 无
 
-##### 返回
+#### 返回
 
 周期为分钟返回minute，周期为每日返回daily(str)
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -8168,11 +8008,11 @@ def handle_data(context, data):
 get_business_type()
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在回测、交易模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于返回当前策略的业务类型。
 
@@ -8180,11 +8020,11 @@ get_business_type()
 
 无
 
-##### 参数
+#### 参数
 
 无
 
-##### 返回
+#### 返回
 
 策略业务类型(str)：
 
@@ -8194,7 +8034,7 @@ get_business_type()
 4. option -- 期权
 5. hks -- 港股通
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -8219,17 +8059,17 @@ def handle_data(context, data):
 
 ```
 
-#### get_current_kline_count-获取股票业务当前时间的分钟bar数量
+### get_current_kline_count-获取股票业务当前时间的分钟bar数量
 
 ```python
 get_current_kline_count()
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在回测、交易、研究模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口获取当前时间股票的k线根数。
 
@@ -8239,15 +8079,15 @@ get_current_kline_count()
 2. 研究中返回最新交易日当前时间的分钟bar数量，非交易日执行均返回0。
 3. 交易中返回最新交易日当前时间的分钟bar数量。
 
-##### 参数
+#### 参数
 
 无
 
-##### 返回
+#### 返回
 
 当前时间的分钟bar数量(int)
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -8263,11 +8103,11 @@ def handle_data(context, data):
 filter_stock_by_status(stocks, filter_type=["ST", "HALT", "DELISTING"], query_date=None)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在回测、交易、研究模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于过滤指定状态的股票代码。
 
@@ -8275,7 +8115,7 @@ filter_stock_by_status(stocks, filter_type=["ST", "HALT", "DELISTING"], query_da
 
 仅支持before_trading_start模块调用
 
-##### 参数
+#### 参数
 
 stocks: 例如 ['000001.SZ','000003.SZ']。该字段必须输入。(list[str]/str)；
 
@@ -8290,11 +8130,11 @@ filter_type: 支持以下四种类型属性的过滤条件，默认为["ST", "HA
 
 query_date: 格式为YYYYmmdd，默认为None,表示当前日期(回测为回测当前周期，研究与交易则取系统当前时间)(str)；
 
-##### 返回
+#### 返回
 
 股票列表（该列表已剔除符合任一指定状态的标的）(list)
 
-##### 示例
+#### 示例
 
 ```python
 def initialize(context):
@@ -8315,11 +8155,11 @@ def handle_data(context, data):
 check_strategy(strategy_content=None, strategy_path=None)
 ```
 
-##### 使用场景
+#### 使用场景
 
 该函数在研究模块可用
 
-##### 接口说明
+#### 接口说明
 
 该接口用于检查策略内容是否涉及升级过程中变动的API和Python库。
 
@@ -8330,13 +8170,13 @@ check_strategy(strategy_content=None, strategy_path=None)
 3. 如果传入strategy_path，需要将对应策略文件上传至研究，且必须是utf-8编码的文本文件。
 4. 如果日志打印策略内容涉及升级过程变动，需根据告警信息参考API接口说明调整策略内容。
 
-##### 参数
+#### 参数
 
 strategy_content: 策略内容(str)。
 
 strategy_path: 策略路径(str)。
 
-##### 返回
+#### 返回
 
 策略内容涉及升级过程中变动的API和Python库信息(list)。
 
@@ -8389,7 +8229,7 @@ strategy_path: 策略路径(str)。
                         
 ```
 
-##### 示例
+#### 示例
 
 ```python
 check_strategy(strategy_content="""
@@ -8556,8 +8396,6 @@ def handle_data(context, data):
 ```
 
 ## 03-对象
-
-# 对象
 
 ### g-全局对象
 
@@ -8825,8 +8663,6 @@ def handle_data(context, data):
 
 ## 04-数据字典
 
-# 数据字典
-
 ### status -- 委托状态
 
 - "0" -- 未报
@@ -9004,19 +8840,19 @@ def handle_data(context, data):
 - 3 -- 深证创业板代码
 - 4 -- 可转债代码
 
-#### cash_group -- 两融头寸性质
+### cash_group -- 两融头寸性质
 
 - 0 -- 核心头寸
 - 1 -- 普通业务头寸
 - 2 -- 专项业务头寸
 
-#### compact_type -- 合约类别
+### compact_type -- 合约类别
 
 - "0" -- 融资
 - "1" -- 融券
 - "2" -- 其他负债
 
-#### compact_status -- 合约状态
+### compact_status -- 合约状态
 
 - "0" -- 开仓未归还
 - "1" -- 部分归还
@@ -9025,7 +8861,7 @@ def handle_data(context, data):
 - "4" -- 手工了结
 - "5" -- 未形成负债
 
-#### underlying_type -- 关联类型
+### underlying_type -- 关联类型
 
 - 0 -- A股
 - 1 -- B股
@@ -9044,7 +8880,7 @@ def handle_data(context, data):
 - 14 -- 可转债关联关系正向-正股关联可转债
 - 15 -- 可转债关联关系反向-可转债关联正股
 
-#### real_type -- 成交类型
+### real_type -- 成交类型
 
 - "0" -- 买卖
 - "1" -- 查询
@@ -9055,23 +8891,17 @@ def handle_data(context, data):
 - "9" -- 信用
 - "G" -- 期权强制平仓
 
-#### real_status -- 成交状态
+### real_status -- 成交状态
 
 - "0" -- 成交
 - "2" -- 废单
 - "4" -- 确认
 
-## README
-
-# 计算函数
-
 ---
 
-# 12-策略示例
+# 11-策略示例
 
 ## 01-集合竞价追涨停策略
-
-# 集合竞价追涨停策略
 
 ```python
 def initialize(context):
@@ -9099,8 +8929,6 @@ def handle_data(context, data):
 ```
 
 ## 02-tick级别均线策略
-
-# tick级别均线策略
 
 ```python
 def initialize(context):
@@ -9162,8 +8990,6 @@ def handle_data(context, data):
 
 ## 03-双均线策略
 
-# 双均线策略
-
 ```python
 def initialize(context):
     # 初始化此策略
@@ -9207,8 +9033,6 @@ def handle_data(context, data):
 ```
 
 ## 04-融资融券双均线策略
-
-# 融资融券双均线策略
 
 ```python
 def initialize(context):
@@ -9260,8 +9084,6 @@ def handle_data(context, data):
 ```
 
 ## 05-macd策略
-
-# macd策略
 
 指数平滑均线函数，以price计算，可以选择收盘、开盘价等价格，N为时间周期，m用于计算平滑系数a=m/(N+1)，EXPMA1为前一日值
 
@@ -9340,8 +9162,6 @@ def handle_data(context, data):
 
 ## 06-盘后逆回购
 
-# 盘后逆回购
-
 盘后进行逆回购，只能使用run_daily 设定在3点之后执行，handle_data 无法在点之后运行
 
 ```python
@@ -9388,8 +9208,6 @@ def on_order_response(context, order_list):
 
 ## 07-固定时间申购新股新债
 
-# 固定时间申购新股新债
-
 比如固定在13:30 申购新股新债，包括创业板，科创板等
 
 ```python
@@ -9418,31 +9236,27 @@ def on_order_response(context, order_list):
 
 ## 08-可转债溢价率规模数据
 
-# 可转债溢价率规模数据
-
 由于ptrade内置数据没有可转债溢价率数据，所以需要调用外部数据，如果券商提供的ptrade不支持外网访问，这个是没有办法获取这个数据的
 
 目前支持外网访问的是国盛证券，笔者部署了一系列针对可转债的数据接口，支持的字段丰富，且是实时更新的数据。
 
-![可转债实时数据](../assets/bond_api.jpg)
-
-| 字段名 | 中文含义 | 类型 |
-| --- | --- | --- |
-| bond_nm | 可转债名称 | str |
-| bond_id | 可转债代码 | str，没有后缀 |
-| bond_nm | 可转债名称 | str |
-| price | 可转债价格 | float |
-| sincrease_rt | 正股涨幅 | float |
-| increase_rt | 可转债涨幅 | float |
-| curr_iss_amt | 可转债剩余规模(亿) | float |
-| pb | 市净率 | float |
-| list_dt | 可转债上市日期 | str |
-| convert_value | 转股价值 | float |
-| convert_price | 转股价 | float |
-| stock_id | 正股代码 | float |
-| ytm_rt | 到期收益率 | float |
-| year_left | 剩余年限 | float，null的为已公布强赎 |
-| rating_cd | 评级 | str |
+| 字段名           | 中文含义       | 类型                |
+| ------------- | ---------- | ----------------- |
+| bond_nm       | 可转债名称      | str               |
+| bond_id       | 可转债代码      | str，没有后缀          |
+| bond_nm       | 可转债名称      | str               |
+| price         | 可转债价格      | float             |
+| sincrease_rt  | 正股涨幅       | float             |
+| increase_rt   | 可转债涨幅      | float             |
+| curr_iss_amt  | 可转债剩余规模(亿) | float             |
+| pb            | 市净率        | float             |
+| list_dt       | 可转债上市日期    | str               |
+| convert_value | 转股价值       | float             |
+| convert_price | 转股价        | float             |
+| stock_id      | 正股代码       | float             |
+| ytm_rt        | 到期收益率      | float             |
+| year_left     | 剩余年限       | float，null的为已公布强赎 |
+| rating_cd     | 评级         | str               |
 
 ```python
 class Bond:
@@ -9477,41 +9291,21 @@ b_df = bond.get_bond()
         
 ```
 
-![dataframe格式的可转债](../assets/df-info.jpg) 因为数据已经封装好的，所以调用很方便。接口获取可关注公众号，回复：可转债接口
+因为数据已经封装好的，所以调用很方便。接口获取可关注公众号，回复：可转债接口
 
 ## 09-可转债强赎与数日子
 
-# 可转债强赎与数日子
-
-![强赎转债最后一个月的涨跌幅](../assets/redeem.jpeg)
-
 接口数据不仅可以在Ptrade里面调用，还可以做成微信推送等方式
 
-![强赎转债最后一个月的涨跌幅](../assets/redeem_info.png)
-
-相关文章： [一图告诉你 今年可转债退市前一个月的跌幅有多惨烈](https://mp.weixin.qq.com/s?__biz=MzIwNTE5NTEyNw==&mid=2247485793&idx=1&sn=1bb9d4e89400f8dcf4fb7b128c77e706&chksm=9735db79a042526fb77c52b949554fa1b4dc5b38eeaae980134cf4754cb276589ff39443e10a&token=1437292265&lang=zh_CN#rd)
+相关文章： [一图告诉你 今年可转债退市前一个月的跌幅有多惨烈](https://mp.weixin.qq.com/s?__biz=MzIwNTE5NTEyNw==\&mid=2247485793\&idx=1\&sn=1bb9d4e89400f8dcf4fb7b128c77e706\&chksm=9735db79a042526fb77c52b949554fa1b4dc5b38eeaae980134cf4754cb276589ff39443e10a\&token=1437292265\&lang=zh_CN#rd)
 
 上述的可转债接口数据同样提供了排除强赎的API接口，还可以根据参数，排除距离强赎满足条件X天的功能
 
 ## 10-可转债不下修转股价名单
 
-# 可转债不下修转股价名单
-
-返回的是最近公布了不下修转股价的可转债，字段如下：
-
-![不下修转债接口](../assets/not_change_price.jpg)
-
-## README
-
-# 策略示例
-
 ---
 
-# 13-常见问题QA
-
-## 13-常见问题QA
-
-# 常见问题QA
+# 12-常见问题QA
 
 Ptrade常见问题(不定期收集群友反馈的问题) [常见问题说明](https://ptradeapi.com/hub/data/qa_data.html)
 
@@ -9618,9 +9412,9 @@ class A:
 
 ### 11.Ptrade登录不上
 
-![](assets/ptrade_login.png) 1. 交易日晚上交割时间（不同券商交割时间不同，一般20~22点）, Ptrade登录不上（测试端或实盘端）；周五到周六系统维护结算，也无法登录
+1\. 交易日晚上交割时间（不同券商交割时间不同，一般20~22点）, Ptrade登录不上（测试端或实盘端）；周五到周六系统维护结算，也无法登录
 
-2. ptrade太久没有登录，导致旧版本文件无法更新。提示：同步连接超时或发生错误。解决办法：下载当前版本ptrade，下载最新版本的ptrade，重新按照最新版本即可
+1. ptrade太久没有登录，导致旧版本文件无法更新。提示：同步连接超时或发生错误。解决办法：下载当前版本ptrade，下载最新版本的ptrade，重新按照最新版本即可
 
 ### 12.2个策略A和B同时运行，A策略成交时触发的回调事件会被B策略捕获吗？
 
@@ -9628,231 +9422,209 @@ class A:
 
 ---
 
-# 14-支持的三方库
+# 13-支持的三方库
 
-## 14-支持的三方库
-
-# 支持的三方库
-
-| 序号 | 三方库名称 | 版本号 |
-| --- | --- | --- |
-| 1 | APScheduler | 3.3.1 |
-| 2 | arch | 3.2 |
-| 3 | bcolz | 1.2.1 |
-| 4 | beautifulsoup4 | 4.6.0 |
-| 5 | bleach | 1.5.0 |
-| 6 | boto | 2.43.0 |
-| 7 | Bottleneck | 1.0.0 |
-| 8 | bz2file | 0.98 |
-| 9 | cachetools | 3.1.0 |
-| 10 | click | 4.0 |
-| 11 | contextlib2 | 0.4.0 |
-| 12 | crypto | 1.4.1 |
-| 13 | cvxopt | 1.1.8 |
-| 14 | cx-Oracle | 8.0.1 |
-| 15 | cycler | 0.10.0 |
-| 16 | cyordereddict | 0.2.2 |
-| 17 | Cython | 0.22.1 |
-| 18 | decorator | 4.0.10 |
-| 19 | entrypoints | 0.2.2 |
-| 20 | fastcache | 1.0.2 |
-| 21 | gensim | 0.13.3 |
-| 22 | h5py | 2.6.0 |
-| 23 | hmmlearn | 0.2.0 |
-| 24 | html5lib | 0.9999999 |
-| 25 | ipykernel | 4.5.0 |
-| 26 | ipython | 5.1.0 |
-| 27 | ipython-genutils | 0.1.0 |
-| 28 | ipywidgets | 5.2.2 |
-| 29 | jieba | 0.38 |
-| 30 | Jinja2 | 2.8 |
-| 31 | jsonpickle | 1.0 |
-| 32 | jsonschema | 2.5.1 |
-| 33 | jupyter | 1.0.0 |
-| 34 | jupyter-client | 4.4.0 |
-| 35 | jupyter-console | 5.0.0 |
-| 36 | jupyter-core | 4.2.0 |
-| 37 | jupyter-kernel-gateway | 1.1.1 |
-| 38 | Keras | 2.3.1 |
-| 39 | Keras-Applications | 1.0.8 |
-| 40 | Keras-Preprocessing | 1.1.0 |
-| 41 | line-profiler | 2.1.2 |
-| 42 | Logbook | 1.4.3 |
-| 43 | lxml | 4.5.0 |
-| 44 | Markdown | 2.2.0 |
-| 45 | MarkupSafe | 0.23 |
-| 46 | matplotlib | 1.5.3 |
-| 47 | mistune | 0.7.3 |
-| 48 | Naked | 0.1.31 |
-| 49 | nbconvert | 4.2.0 |
-| 50 | nbformat | 4.1.0 |
-| 51 | networkx | 1.9.1 |
-| 52 | nose | 1.3.6 |
-| 53 | notebook | 4.2.3 |
-| 54 | numexpr | 2.6.1 |
-| 55 | numpy | 1.11.2 |
-| 56 | pandas | 0.23.4 |
-| 57 | patsy | 0.4.0 |
-| 58 | pexpect | 4.2.1 |
-| 59 | pickleshare | 0.7.4 |
-| 60 | pip | 9.0.1 |
-| 61 | pkgconfig | 1.0.0 |
-| 62 | prompt-toolkit | 1.0.8 |
-| 63 | protobuf | 3.3.0 |
-| 64 | ptvsd | 2.2.0 |
-| 65 | ptyprocess | 0.5.1 |
-| 66 | PyBrain | 0.3 |
-| 67 | pycrypto | 2.6.1 |
-| 68 | Pygments | 2.1.3 |
-| 69 | PyMySQL | 0.9.3 |
-| 70 | pyparsing | 2.1.10 |
-| 71 | python-dateutil | 2.7.5 |
-| 72 | pytz | 2015.4 |
-| 73 | PyWavelets | 0.4.0 |
-| 74 | PyYAML | 3.13 |
-| 75 | pyzmq | 16.1.0.dev0 |
-| 76 | qtconsole | 4.2.1 |
-| 77 | requests | 2.7.0 |
-| 78 | retrying | 1.3.3 |
-| 79 | scikit-learn | 0.18 |
-| 80 | scipy | 0.18.0 |
-| 81 | seaborn | 0.7.1 |
-| 82 | setuptools | 28.7.1 |
-| 83 | setuptools-scm | 3.1.0 |
-| 84 | shellescape | 3.4.1 |
-| 85 | simplegeneric | 0.8.1 |
-| 86 | simplejson | 3.17.0 |
-| 87 | six | 1.10.0 |
-| 88 | sklearn | 0.0 |
-| 89 | smart-open | 1.3.5 |
-| 90 | SQLAlchemy | 1.0.8 |
-| 91 | statsmodels | 0.10.2 |
-| 92 | TA-Lib | 0.4.10 |
-| 93 | tables | 3.3.0 |
-| 94 | tabulate | 0.7.5 |
-| 95 | tensorflow | 1.3.0rc1 |
-| 96 | tensorflow-tensorboard | 0.1.2 |
-| 97 | terminado | 0.6 |
-| 98 | Theano | 0.8.2 |
-| 99 | toolz | 0.7.4 |
-| 100 | tornado | 4.4.2 |
-| 101 | traitlets | 4.3.1 |
-| 102 | tushare | 1.2.48 |
-| 103 | tzlocal | 1.3 |
-| 104 | wcwidth | 0.1.7 |
-| 105 | Werkzeug | 0.12.2 |
-| 106 | wheel | 0.29.0 |
-| 107 | widgetsnbextension | 1.2.6 |
-| 108 | xcsc-tushare | 1.0.0 |
-| 109 | xgboost | 0.6a2 |
-| 110 | xlrd | 1.1.0 |
-| 111 | xlwt | 1.3.0 |
-| 112 | zipline | 0.8.3 |
+| 序号  | 三方库名称                  | 版本号         |
+| --- | ---------------------- | ----------- |
+| 1   | APScheduler            | 3.3.1       |
+| 2   | arch                   | 3.2         |
+| 3   | bcolz                  | 1.2.1       |
+| 4   | beautifulsoup4         | 4.6.0       |
+| 5   | bleach                 | 1.5.0       |
+| 6   | boto                   | 2.43.0      |
+| 7   | Bottleneck             | 1.0.0       |
+| 8   | bz2file                | 0.98        |
+| 9   | cachetools             | 3.1.0       |
+| 10  | click                  | 4.0         |
+| 11  | contextlib2            | 0.4.0       |
+| 12  | crypto                 | 1.4.1       |
+| 13  | cvxopt                 | 1.1.8       |
+| 14  | cx-Oracle              | 8.0.1       |
+| 15  | cycler                 | 0.10.0      |
+| 16  | cyordereddict          | 0.2.2       |
+| 17  | Cython                 | 0.22.1      |
+| 18  | decorator              | 4.0.10      |
+| 19  | entrypoints            | 0.2.2       |
+| 20  | fastcache              | 1.0.2       |
+| 21  | gensim                 | 0.13.3      |
+| 22  | h5py                   | 2.6.0       |
+| 23  | hmmlearn               | 0.2.0       |
+| 24  | html5lib               | 0.9999999   |
+| 25  | ipykernel              | 4.5.0       |
+| 26  | ipython                | 5.1.0       |
+| 27  | ipython-genutils       | 0.1.0       |
+| 28  | ipywidgets             | 5.2.2       |
+| 29  | jieba                  | 0.38        |
+| 30  | Jinja2                 | 2.8         |
+| 31  | jsonpickle             | 1.0         |
+| 32  | jsonschema             | 2.5.1       |
+| 33  | jupyter                | 1.0.0       |
+| 34  | jupyter-client         | 4.4.0       |
+| 35  | jupyter-console        | 5.0.0       |
+| 36  | jupyter-core           | 4.2.0       |
+| 37  | jupyter-kernel-gateway | 1.1.1       |
+| 38  | Keras                  | 2.3.1       |
+| 39  | Keras-Applications     | 1.0.8       |
+| 40  | Keras-Preprocessing    | 1.1.0       |
+| 41  | line-profiler          | 2.1.2       |
+| 42  | Logbook                | 1.4.3       |
+| 43  | lxml                   | 4.5.0       |
+| 44  | Markdown               | 2.2.0       |
+| 45  | MarkupSafe             | 0.23        |
+| 46  | matplotlib             | 1.5.3       |
+| 47  | mistune                | 0.7.3       |
+| 48  | Naked                  | 0.1.31      |
+| 49  | nbconvert              | 4.2.0       |
+| 50  | nbformat               | 4.1.0       |
+| 51  | networkx               | 1.9.1       |
+| 52  | nose                   | 1.3.6       |
+| 53  | notebook               | 4.2.3       |
+| 54  | numexpr                | 2.6.1       |
+| 55  | numpy                  | 1.11.2      |
+| 56  | pandas                 | 0.23.4      |
+| 57  | patsy                  | 0.4.0       |
+| 58  | pexpect                | 4.2.1       |
+| 59  | pickleshare            | 0.7.4       |
+| 60  | pip                    | 9.0.1       |
+| 61  | pkgconfig              | 1.0.0       |
+| 62  | prompt-toolkit         | 1.0.8       |
+| 63  | protobuf               | 3.3.0       |
+| 64  | ptvsd                  | 2.2.0       |
+| 65  | ptyprocess             | 0.5.1       |
+| 66  | PyBrain                | 0.3         |
+| 67  | pycrypto               | 2.6.1       |
+| 68  | Pygments               | 2.1.3       |
+| 69  | PyMySQL                | 0.9.3       |
+| 70  | pyparsing              | 2.1.10      |
+| 71  | python-dateutil        | 2.7.5       |
+| 72  | pytz                   | 2015.4      |
+| 73  | PyWavelets             | 0.4.0       |
+| 74  | PyYAML                 | 3.13        |
+| 75  | pyzmq                  | 16.1.0.dev0 |
+| 76  | qtconsole              | 4.2.1       |
+| 77  | requests               | 2.7.0       |
+| 78  | retrying               | 1.3.3       |
+| 79  | scikit-learn           | 0.18        |
+| 80  | scipy                  | 0.18.0      |
+| 81  | seaborn                | 0.7.1       |
+| 82  | setuptools             | 28.7.1      |
+| 83  | setuptools-scm         | 3.1.0       |
+| 84  | shellescape            | 3.4.1       |
+| 85  | simplegeneric          | 0.8.1       |
+| 86  | simplejson             | 3.17.0      |
+| 87  | six                    | 1.10.0      |
+| 88  | sklearn                | 0.0         |
+| 89  | smart-open             | 1.3.5       |
+| 90  | SQLAlchemy             | 1.0.8       |
+| 91  | statsmodels            | 0.10.2      |
+| 92  | TA-Lib                 | 0.4.10      |
+| 93  | tables                 | 3.3.0       |
+| 94  | tabulate               | 0.7.5       |
+| 95  | tensorflow             | 1.3.0rc1    |
+| 96  | tensorflow-tensorboard | 0.1.2       |
+| 97  | terminado              | 0.6         |
+| 98  | Theano                 | 0.8.2       |
+| 99  | toolz                  | 0.7.4       |
+| 100 | tornado                | 4.4.2       |
+| 101 | traitlets              | 4.3.1       |
+| 102 | tushare                | 1.2.48      |
+| 103 | tzlocal                | 1.3         |
+| 104 | wcwidth                | 0.1.7       |
+| 105 | Werkzeug               | 0.12.2      |
+| 106 | wheel                  | 0.29.0      |
+| 107 | widgetsnbextension     | 1.2.6       |
+| 108 | xcsc-tushare           | 1.0.0       |
+| 109 | xgboost                | 0.6a2       |
+| 110 | xlrd                   | 1.1.0       |
+| 111 | xlwt                   | 1.3.0       |
+| 112 | zipline                | 0.8.3       |
 
 ---
 
-# 15-接口版本变动
-
-## 15-接口版本变动
-
-# 接口版本变动
+# 14-接口版本变动
 
 当前版本：PBOXQT1.0V202202.00.005
 
-1. 
-2. 
-3. 
-4. 
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+9.
+10.
+11.
+12.
+13.
+14.
+15.
+16.
+17.
+18.
+19.
+20.
+21.
+22.
+23.
+24.
+25.
+26.
+27.
+28.
+29.
+30.
+31.
+32.
+33.
+34.
+35.
+36.
+37.
+38.
+39.
+40.
+41.
+42.
+43.
+44.
+45.
+46.
+47.
+48.
+49.
+50.
+51.
+52.
+53.
+54.
+55.
+56.
+57.
+58.
+59.
+60.
+61.
+62.
 
-1. 
-2. 
-3. 
-
-1. 
-2. 
-3. 
-
-1. 
-2. 
-3. 
-4. 
-
-1. 
-2. 
-3. 
-
-1. 
-2. 
-3. 
-4. 
-5. 
-6. 
-7. 
-8. 
-9. 
-10. 
-
-1. 
-2. 
-3. 
-4. 
-
-1. 
-2. 
-3. 
-4. 
-5. 
-6. 
-7. 
-8. 
-9. 
-
-1. 
-2. 
-3. 
-4. 
-5. 
-6. 
-
-1. 
-2. 
-3. 
-4. 
-5. 
-6. 
-7. 
-8. 
-9. 
-10. 
-11. 
-12. 
-13. 
-14. 
-15. 
-
-1. 
-
-| 变动版本 | 变动内容 |
-| --- | --- |
-| PBOXQT1.0V202101.03.000 | [on_order_response()](#on_order_response)主推信息中新增entrust_type、entrust_prop字段； 修复信用交易接口兼容问题；[get_price()](#get_price)、[get_history()](#get_history)支持周频(1w)行情获取；由于行情源不再更新维护，[get_fundamentals()](#get_fundamentals)接口去除share_change表； |
-| PBOXQT1.0V202101.04.000 | 修复[get_all_orders()](#get_all_orders)获取特定委托状态报错问题，status字段返回数据类型从int改为str； [on_order_response()](#on_order_response)、[on_trade_response()](#on_trade_response)支持获取非本策略交易的主推信息(需券商配置默认不推送)，且on_order_response推送非本策略交易的主推信息时不包含order_id字段； 相关功能优化； |
-| PBOXQT1.0V202101.05.000 | 信用账户支持[ipo_stocks_order()](#ipo_stocks_order)接口调用；由于行情源返回信息不包含，[get_fundamentals()](#get_fundamentals)获取growth_ability、profit_ability、eps、operating_ability、debt_paying_ability表不再返回company_type字段； 由于上交所债券业务规则变更，调用[debt_to_stock_order()](#debt_to_stock_order)接口对上海市场可转债进行转股操作时需传入可转债代码，不再传入转股代码； |
-| PBOXQT1.0V202101.06.000 | 新增[get_user_name()](#get_user_name)API接口，用于获取登录终端的资金账号；研究中[get_price()](#get_price)新增支持获取周线数据；[get_snapshot()](#get_snapshot)新增支持获取XBHS行业版块市场数据；[send_qywx()](#send_qywx)新增toparty(发送对象为部门)、touser(发送内容为个人)、totag(发送内容为分组)入参； |
-| PBOXQT1.0V202101.07.000 | [get_snapshot()](#get_snapshot)新增wavg_px(加权平均价)、px_exchange_rate(涨跌幅)出参； 可转债回测业务新增支持T+0；新增支持融资融券回测业务，[融资融券专用函数](#融资融券专用函数)中暂只支持[margin_trade()](#margin_trade)接口； |
-| PBOXQT1.0V202101.08.000 | [initialize](#initialize)对部分API接口调用进行限制，仅[initialize](#initialize)可调用接口说明中的API可在initialize函数内使用；[before_trading_start](#before_trading_start)和[after_trading_end](#after_trading_end)对两融委托API接口调用进行限制；修复仅单笔成交订单时调用get_trades()返回格式有误问题；修复交易场景中获取当日K线14:58、14:59分价格为0问题；[send_email()](#send_email)发送邮件信息新增path(附件路径)、subject(邮件主题)入参； 新增[get_cb_list()](#get_cb_list)获取可转债列表；新增[get_deliver()](#get_deliver)获取历史交割单信息；新增[get_fundjour()](#get_fundjour)获取历史资金流水信息；新增[get_research_path()](#get_research_path)获取研究路径；[get_market_detail()](#get_market_detail)新增支持在回测、交易场景中调用； |
-| PBOXQT1.0V202101.09.000 | [get_market_detail()](#get_market_detail)限制仅[before_trading_start](#before_trading_start)和[after_trading_end](#after_trading_end)中使用；[get_snapshot()](#get_snapshot)新增返回hsTimeStamp(快照时间戳)字段；对接L2行情买卖一档新增返回委托队列； [ipo_stocks_order()](#ipo_stocks_order)新增black_stocks(新股/债黑名单)入参； [on_order_response()](#on_order_response)新增返回error_info(错误信息)字段； |
-| PBOXQT1.0V202201.00.000 | [get_individual_transcation()](#get_individual_transcation)新增返回buy_no(叫买方编号)、sell_no(叫卖方编号)、trans_flag(成交标记)、trans_identify_am(盘后逐笔成交序号标识)、channel_num(成交通道信息)字段； [get_margin_contract()](#get_margin_contract)新增返回compact_interest(合约利息金额)、real_compact_interest(日间实时利息金额)、real_compact_balance(日间实时合约金额)、real_compact_amount(日间实时合约数量)字段； [get_price()](#get_price)、[get_history()](#get_history)新增支持：1月(mo)、1季度(1q)、1年(1y)频率行情获取； [set_commission()](#set_commission)中type字段新增支持传入"LOF"类型；[get_individual_entrust()](#get_individual_entrust)和[get_individual_transcation()](#get_individual_transcation)返回内容中hq_px字段值缩小1000倍，返回为真实价格； 新增支持期货日盘回测功能、期货日盘交易功能(对接UFT柜台)，期货API接口详见量化帮助文档[期货专用函数](#期货专用函数)模块； 新增[get_tick_direction()](#get_tick_direction)获取分时成交行情；新增[get_sort_msg()](#get_sort_msg)获取版块、行业的涨幅排名；新增[permission_test()](#permission_test)权限校验； |
-| PBOXQT1.0V202201.01.000 | 修复委托状态类型不一致问题，[get_orders()](#get_orders)、[get_all_orders()](#get_all_orders)以及[Order](#Order)对象中的委托状态字段数据类型从int统一为str；新增[get_trade_name()](#get_trade_name)获取交易名称；[tick_data](#tick_data)中可调用接口完善；研究中[get_stock_name()](#get_stock_name)、[get_stock_info()](#get_stock_info)新增支持获取可转债、ETF、LOF品种；[get_history()](#get_history)新增fill(填充类型)入参；[get_price()](#get_price)、[get_history()](#get_history)新增支持：5分钟(5m)、15分钟(15m)、30分钟(30m)、60分钟(60m)、120分钟(120m)频率行情获取； |
-| PBOXQT1.0V202202.00.000 | [log](#log)新增支持DEBUG级别日志记录；[get_price()](#get_price)、[get_history()](#get_history)新增返回preclose(昨收盘价)、high_limit(涨停价)、low_limit(跌停价)、unlimited(是否无涨跌停限制)字段； [get_snapshot()](#get_snapshot)新增返回total_bidqty(委买量)、total_offerqty(委卖量)、total_bid_turnover(委买金额)、total_offer_turnover(委卖金额)字段； [on_trade_response()](#on_trade_response)新增返回order_id(Order订单编号)字段； 当接到策略外交易产生的主推时(需券商配置默认不推送)，由于没有对应的Order对象，[on_order_response()](#on_order_response)、[on_trade_response()](#on_trade_response)中order_id字段赋值为""；[on_trade_response()](#on_trade_response)新增接收撤单的成交主推，详见接口说明注意事项； [tick_data](#tick_data)中可调用接口完善；弃用set_close_position_type()(设置期货平仓方式)、get_close_position_type()(获取期货平仓方式)API接口； 期货[Position对象](#Position)中删除close_position_type(平仓方式)字段；[sell_close()](#sell_close)、[buy_close()](#buy_close)新增close_today(平仓方式)入参；新增[get_MACD()](#get_MACD)异同移动平均线；新增[get_KDJ()](#get_KDJ)随机指标；新增[get_RSI()](#get_RSI)相对强弱指标；新增[get_CCI()](#get_CCI)顺势指标；新增[create_dir()](#create_dir)创建文件目录路径； |
-| PBOXQT1.0V202202.00.005 | [get_snapshot()](#get_snapshot)新增返回business_amount_in(内盘成交量)、business_amount_out(外盘成交量)字段； |
+| 变动版本                    | 变动内容                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PBOXQT1.0V202101.03.000 | [on\_order\_response()](#on_order_response)主推信息中新增entrust_type、entrust_prop字段； 修复信用交易接口兼容问题；[get\_price()](#get_price)、[get\_history()](#get_history)支持周频(1w)行情获取；由于行情源不再更新维护，[get\_fundamentals()](#get_fundamentals)接口去除share_change表；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| PBOXQT1.0V202101.04.000 | 修复[get\_all\_orders()](#get_all_orders)获取特定委托状态报错问题，status字段返回数据类型从int改为str； [on\_order\_response()](#on_order_response)、[on\_trade\_response()](#on_trade_response)支持获取非本策略交易的主推信息(需券商配置默认不推送)，且on_order_response推送非本策略交易的主推信息时不包含order_id字段； 相关功能优化；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| PBOXQT1.0V202101.05.000 | 信用账户支持[ipo\_stocks\_order()](#ipo_stocks_order)接口调用；由于行情源返回信息不包含，[get\_fundamentals()](#get_fundamentals)获取growth_ability、profit_ability、eps、operating_ability、debt_paying_ability表不再返回company_type字段； 由于上交所债券业务规则变更，调用[debt\_to\_stock\_order()](#debt_to_stock_order)接口对上海市场可转债进行转股操作时需传入可转债代码，不再传入转股代码；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| PBOXQT1.0V202101.06.000 | 新增[get\_user\_name()](#get_user_name)API接口，用于获取登录终端的资金账号；研究中[get\_price()](#get_price)新增支持获取周线数据；[get\_snapshot()](#get_snapshot)新增支持获取XBHS行业版块市场数据；[send\_qywx()](#send_qywx)新增toparty(发送对象为部门)、touser(发送内容为个人)、totag(发送内容为分组)入参；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| PBOXQT1.0V202101.07.000 | [get\_snapshot()](#get_snapshot)新增wavg_px(加权平均价)、px_exchange_rate(涨跌幅)出参； 可转债回测业务新增支持T+0；新增支持融资融券回测业务，[融资融券专用函数](#融资融券专用函数)中暂只支持[margin\_trade()](#margin_trade)接口；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| PBOXQT1.0V202101.08.000 | [initialize](#initialize)对部分API接口调用进行限制，仅[initialize](#initialize)可调用接口说明中的API可在initialize函数内使用；[before\_trading\_start](#before_trading_start)和[after\_trading\_end](#after_trading_end)对两融委托API接口调用进行限制；修复仅单笔成交订单时调用get_trades()返回格式有误问题；修复交易场景中获取当日K线14:58、14:59分价格为0问题；[send\_email()](#send_email)发送邮件信息新增path(附件路径)、subject(邮件主题)入参； 新增[get\_cb\_list()](#get_cb_list)获取可转债列表；新增[get\_deliver()](#get_deliver)获取历史交割单信息；新增[get\_fundjour()](#get_fundjour)获取历史资金流水信息；新增[get\_research\_path()](#get_research_path)获取研究路径；[get\_market\_detail()](#get_market_detail)新增支持在回测、交易场景中调用；                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| PBOXQT1.0V202101.09.000 | [get\_market\_detail()](#get_market_detail)限制仅[before\_trading\_start](#before_trading_start)和[after\_trading\_end](#after_trading_end)中使用；[get\_snapshot()](#get_snapshot)新增返回hsTimeStamp(快照时间戳)字段；对接L2行情买卖一档新增返回委托队列； [ipo\_stocks\_order()](#ipo_stocks_order)新增black_stocks(新股/债黑名单)入参； [on\_order\_response()](#on_order_response)新增返回error_info(错误信息)字段；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| PBOXQT1.0V202201.00.000 | [get\_individual\_transcation()](#get_individual_transcation)新增返回buy_no(叫买方编号)、sell_no(叫卖方编号)、trans_flag(成交标记)、trans_identify_am(盘后逐笔成交序号标识)、channel_num(成交通道信息)字段； [get\_margin\_contract()](#get_margin_contract)新增返回compact_interest(合约利息金额)、real_compact_interest(日间实时利息金额)、real_compact_balance(日间实时合约金额)、real_compact_amount(日间实时合约数量)字段； [get\_price()](#get_price)、[get\_history()](#get_history)新增支持：1月(mo)、1季度(1q)、1年(1y)频率行情获取； [set\_commission()](#set_commission)中type字段新增支持传入"LOF"类型；[get\_individual\_entrust()](#get_individual_entrust)和[get\_individual\_transcation()](#get_individual_transcation)返回内容中hq_px字段值缩小1000倍，返回为真实价格； 新增支持期货日盘回测功能、期货日盘交易功能(对接UFT柜台)，期货API接口详见量化帮助文档[期货专用函数](#期货专用函数)模块； 新增[get\_tick\_direction()](#get_tick_direction)获取分时成交行情；新增[get\_sort\_msg()](#get_sort_msg)获取版块、行业的涨幅排名；新增[permission\_test()](#permission_test)权限校验；                                                                                                                                     |
+| PBOXQT1.0V202201.01.000 | 修复委托状态类型不一致问题，[get\_orders()](#get_orders)、[get\_all\_orders()](#get_all_orders)以及[Order](#Order)对象中的委托状态字段数据类型从int统一为str；新增[get\_trade\_name()](#get_trade_name)获取交易名称；[tick\_data](#tick_data)中可调用接口完善；研究中[get\_stock\_name()](#get_stock_name)、[get\_stock\_info()](#get_stock_info)新增支持获取可转债、ETF、LOF品种；[get\_history()](#get_history)新增fill(填充类型)入参；[get\_price()](#get_price)、[get\_history()](#get_history)新增支持：5分钟(5m)、15分钟(15m)、30分钟(30m)、60分钟(60m)、120分钟(120m)频率行情获取；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| PBOXQT1.0V202202.00.000 | [log](#log)新增支持DEBUG级别日志记录；[get\_price()](#get_price)、[get\_history()](#get_history)新增返回preclose(昨收盘价)、high_limit(涨停价)、low_limit(跌停价)、unlimited(是否无涨跌停限制)字段； [get\_snapshot()](#get_snapshot)新增返回total_bidqty(委买量)、total_offerqty(委卖量)、total_bid_turnover(委买金额)、total_offer_turnover(委卖金额)字段； [on\_trade\_response()](#on_trade_response)新增返回order_id(Order订单编号)字段； 当接到策略外交易产生的主推时(需券商配置默认不推送)，由于没有对应的Order对象，[on\_order\_response()](#on_order_response)、[on\_trade\_response()](#on_trade_response)中order_id字段赋值为""；[on\_trade\_response()](#on_trade_response)新增接收撤单的成交主推，详见接口说明注意事项； [tick\_data](#tick_data)中可调用接口完善；弃用set_close_position_type()(设置期货平仓方式)、get_close_position_type()(获取期货平仓方式)API接口； 期货[Position对象](#Position)中删除close_position_type(平仓方式)字段；[sell\_close()](#sell_close)、[buy\_close()](#buy_close)新增close_today(平仓方式)入参；新增[get\_MACD()](#get_MACD)异同移动平均线；新增[get\_KDJ()](#get_KDJ)随机指标；新增[get\_RSI()](#get_RSI)相对强弱指标；新增[get\_CCI()](#get_CCI)顺势指标；新增[create\_dir()](#create_dir)创建文件目录路径； |
+| PBOXQT1.0V202202.00.005 | [get\_snapshot()](#get_snapshot)新增返回business_amount_in(内盘成交量)、business_amount_out(外盘成交量)字段；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
 ---
 
-# 16-知识星球
-
-## 16-知识星球
-
-# 知识星球
+# 15-知识星球
 
 欢迎加入量化交易知识星球，获取更多量化交易知识。
 
@@ -9860,37 +9632,30 @@ class A:
 
 我也加了不少量化群，实际里面真心讨论技术和解答代码的寥寥无几。所以建的知识星球专注于量化实盘领域，分享现成的经过实盘考验的Ptrade或者QMT代码，和解答各种疑难杂症
 
-![量化交易实盘知识星球](assets/f088492c7da0ce8b90cbdb7aafe3b191.png)
-
 备案号：[粤ICP备2022044957号-2](https://beian.miit.gov.cn/)
 
 ---
 
-# README
-
-## README
-
-# Ptrade API 文档
+# 附录-站点目录
 
 爬取自 <https://ptradeapi.com>（抓取时间见文件时间戳），已转换为 Markdown。
 
 ## 目录
 
-- [Ptrade API文档](01-Ptrade API文档.md)
+- \[Ptrade API文档\](01-Ptrade API文档.md)
 - [必看-快速了解Ptrade](02-必看-快速了解Ptrade/README.md)
-- [视频教程](03-视频教程.md)
-- [快速入门](04-快速入门/README.md)
-- [开始写策略](05-开始写策略/README.md)
-- [策略引擎简介](06-策略引擎简介/README.md)
-- [策略API介绍](07-策略API介绍/README.md)
-- [交易相关函数](08-交易相关函数/README.md)
-- [融资融券专用函数](09-融资融券专用函数/README.md)
-- [期货专用函数](10-期货专用函数/README.md)
-- [计算函数](11-计算函数/README.md)
-- [策略示例](12-策略示例/README.md)
-- [常见问题QA](13-常见问题QA.md)
-- [支持的三方库](14-支持的三方库.md)
-- [接口版本变动](15-接口版本变动.md)
-- [知识星球](16-知识星球.md)
+- [快速入门](03-快速入门/README.md)
+- [开始写策略](04-开始写策略/README.md)
+- [策略引擎简介](05-策略引擎简介/README.md)
+- [策略API介绍](06-策略API介绍/README.md)
+- [交易相关函数](07-交易相关函数/README.md)
+- [融资融券专用函数](08-融资融券专用函数/README.md)
+- [期货专用函数](09-期货专用函数/README.md)
+- [计算函数](10-计算函数/README.md)
+- [策略示例](11-策略示例/README.md)
+- [常见问题QA](12-常见问题QA.md)
+- [支持的三方库](13-支持的三方库.md)
+- [接口版本变动](14-接口版本变动.md)
+- [知识星球](15-知识星球.md)
 
 ---
