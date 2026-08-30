@@ -55,6 +55,7 @@ public class UserProviderConfigEntity {
   private Double temperature;
 
   @Column(nullable = false)
+  @Builder.Default
   private boolean enabled = true;
 
   @Column(name = "created_at", nullable = false)
