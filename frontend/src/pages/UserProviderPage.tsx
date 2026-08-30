@@ -39,8 +39,9 @@ function ProviderConfigForm({
   onCancel: () => void;
 }) {
   const [apiKey, setApiKey] = useState('');
-  const [baseUrl, setBaseUrl] = useState(provider.hasOwnConfig ? provider.baseUrl : '');
-  const [model, setModel] = useState(provider.hasOwnConfig ? provider.model : '');
+  // 内置 Provider 预填全局默认值,用户可直接确认或覆盖
+  const [baseUrl, setBaseUrl] = useState(provider.baseUrl ?? '');
+  const [model, setModel] = useState(provider.model ?? '');
   const [temperature, setTemperature] = useState('');
   const [showApiKey, setShowApiKey] = useState(false);
   const [saving, setSaving] = useState(false);
