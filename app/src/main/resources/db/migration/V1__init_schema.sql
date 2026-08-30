@@ -1,6 +1,4 @@
 -- QuantMore 初始表结构
--- 在 interview-guide 迁移基础上裁剪：删除面试/简历/语音/题库相关表
-
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;
 
