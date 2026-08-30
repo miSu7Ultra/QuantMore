@@ -117,16 +117,20 @@ class LlmProviderConfigServiceTest {
 
         @Test
         @DisplayName("GLM base-url 测试连接不应重复拼接 /v1")
-        void buildConnectivityUrlsAvoidsDoubleVersionForGlm() throws Exception {
-            List<String> urls = invokeConnectivityUrls("https://open.bigmodel.cn/api/coding/paas/v4");
+        void buildConnectivityUrlsAvoidsDoubleVersionForGlm() {
+            ProviderConnectivityTester tester = new ProviderConnectivityTester();
+
+            List<String> urls = tester.buildConnectivityTestUrls("https://open.bigmodel.cn/api/coding/paas/v4");
 
             assertEquals(List.of("https://open.bigmodel.cn/api/coding/paas/v4/chat/completions"), urls);
         }
 
         @Test
         @DisplayName("测试连接请求体不再强制携带 temperature")
-        void connectivityRequestBodyOmitsTemperature() throws Exception {
-            Map<String, Object> body = invokeConnectivityRequestBody("kimi-latest");
+        void connectivityRequestBodyOmitsTemperature() {
+            ProviderConnectivityTester tester = new ProviderConnectivityTester();
+
+            Map<String, Object> body = tester.buildConnectivityTestRequestBody("kimi-latest");
 
             assertEquals("kimi-latest", body.get("model"));
             assertEquals(1, body.get("max_tokens"));
@@ -426,18 +430,6 @@ class LlmProviderConfigServiceTest {
         config.setEmbeddingModel(embeddingModel);
         return config;
     }
-
-    @SuppressWarnings("unchecked")
-    private List<String> invokeConnectivityUrls(String baseUrl)
-        throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Method method = LlmProviderConfigService.class.getDeclaredMethod(
-            "buildConnectivityTestUrls",
-            String.class
-        );
-        method.setAccessible(true);
-        return (List<String>) method.invoke(service, baseUrl);
-    }
-
     private void invokeMethod(Object target, String methodName, Object... args)
         throws Exception {
         Class<?>[] paramTypes = new Class<?>[args.length];
@@ -447,16 +439,5 @@ class LlmProviderConfigServiceTest {
         Method method = LlmProviderConfigService.class.getDeclaredMethod(methodName, paramTypes);
         method.setAccessible(true);
         method.invoke(target, args);
-    }
-
-    @SuppressWarnings("unchecked")
-    private Map<String, Object> invokeConnectivityRequestBody(String model)
-        throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Method method = LlmProviderConfigService.class.getDeclaredMethod(
-            "buildConnectivityTestRequestBody",
-            String.class
-        );
-        method.setAccessible(true);
-        return (Map<String, Object>) method.invoke(service, model);
     }
 }

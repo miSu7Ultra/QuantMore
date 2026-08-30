@@ -1,6 +1,5 @@
 package com.quantmore.modules.llmprovider.service;
 
-import com.quantmore.common.ai.ApiPathResolver;
 import com.quantmore.common.ai.LlmProviderRegistry;
 import com.quantmore.common.config.LlmProviderProperties;
 import com.quantmore.common.config.LlmProviderProperties.ProviderConfig;
@@ -17,26 +16,17 @@ import com.quantmore.modules.llmprovider.repository.LlmGlobalSettingRepository;
 import com.quantmore.modules.llmprovider.repository.LlmProviderRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
-import org.springframework.boot.http.client.HttpClientSettings;
-import org.springframework.boot.http.client.InetAddressFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClientResponseException;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URI;
-import java.time.Duration;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +45,7 @@ public class LlmProviderConfigService {
   private final LlmProviderRepository providerRepository;
   private final LlmGlobalSettingRepository globalSettingRepository;
   private final ApiKeyEncryptionService encryptionService;
+  private final ProviderConnectivityTester connectivityTester;
   private final String yamlPath;
   private final String envPath;
   private final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
@@ -73,12 +64,14 @@ public class LlmProviderConfigService {
       LlmProviderRegistry registry,
       LlmProviderRepository providerRepository,
       LlmGlobalSettingRepository globalSettingRepository,
-      ApiKeyEncryptionService encryptionService) {
+      ApiKeyEncryptionService encryptionService,
+      ProviderConnectivityTester connectivityTester) {
     this.properties = properties;
     this.registry = registry;
     this.providerRepository = providerRepository;
     this.globalSettingRepository = globalSettingRepository;
     this.encryptionService = encryptionService;
+    this.connectivityTester = connectivityTester;
     this.yamlPath = properties.getConfigYamlPath();
     this.envPath = properties.getConfigEnvPath();
   }
@@ -86,7 +79,7 @@ public class LlmProviderConfigService {
   public LlmProviderConfigService(
       LlmProviderProperties properties,
       LlmProviderRegistry registry) {
-    this(properties, registry, null, null, null);
+    this(properties, registry, null, null, null, null);
   }
 
   @PostConstruct
@@ -220,7 +213,7 @@ public class LlmProviderConfigService {
       ProviderRuntimeConfig config = isDatabaseBacked()
           ? getProviderRuntimeConfigOrThrow(id)
           : toRuntimeConfig(getLegacyProviderConfigOrThrow(id));
-      return doTestProvider(config, id);
+      return connectivityTester.test(id, config.baseUrl(), config.apiKey(), config.model());
     } finally {
       rwLock.readLock().unlock();
     }
@@ -388,11 +381,12 @@ public class LlmProviderConfigService {
         throw new BusinessException(ErrorCode.BAD_REQUEST,
             "Provider '" + providerId + "' 不支持 Embedding，不能设为默认向量服务");
       }
-      validateEmbeddingConfig(
-          providerId,
-          true,
-          embeddingModel,
-          resolveEmbeddingDimensions(provider.getEmbeddingDimensions()));
+      Integer dimensions = resolveEmbeddingDimensions(provider.getEmbeddingDimensions());
+      validateEmbeddingConfig(providerId, true, embeddingModel, dimensions);
+      if (dimensions == null || dimensions != 1024) {
+        throw new BusinessException(ErrorCode.BAD_REQUEST,
+            "向量维度必须为 1024，否则与现有向量索引不兼容（当前: " + dimensions + "）");
+      }
       LlmGlobalSettingEntity setting = getGlobalSettingOrThrow();
       setting.setDefaultEmbeddingProviderId(providerId);
       globalSettingRepository.save(setting);
@@ -565,40 +559,6 @@ public class LlmProviderConfigService {
     return apiKey.substring(0, 3) + "***" + apiKey.substring(apiKey.length() - 3);
   }
 
-  private String abbreviate(String text) {
-    if (text == null || text.isBlank()) {
-      return "[no body]";
-    }
-    String normalized = text.replaceAll("\\s+", " ").trim();
-    if (normalized.length() <= 200) {
-      return normalized;
-    }
-    return normalized.substring(0, 200) + "...";
-  }
-
-  private List<String> buildConnectivityTestUrls(String baseUrl) {
-    String normalizedBaseUrl = ApiPathResolver.stripTrailingSlashes(baseUrl);
-    LinkedHashSet<String> candidateUrls = new LinkedHashSet<>();
-
-    candidateUrls.add(normalizedBaseUrl + "/chat/completions");
-    if (!ApiPathResolver.baseUrlContainsVersion(normalizedBaseUrl)) {
-      candidateUrls.add(normalizedBaseUrl + "/v1/chat/completions");
-    }
-
-    return List.copyOf(candidateUrls);
-  }
-
-  private Map<String, Object> buildConnectivityTestRequestBody(String model) {
-    Map<String, Object> requestBody = new LinkedHashMap<>();
-    requestBody.put("model", model);
-    requestBody.put("messages", List.of(Map.of(
-        "role", "user",
-        "content", "Reply with OK only."
-    )));
-    requestBody.put("max_tokens", 1);
-    return requestBody;
-  }
-
   private String trimOrNull(String value) {
     if (value == null) {
       return null;
@@ -660,94 +620,6 @@ public class LlmProviderConfigService {
 
   private String toEnvKey(String providerId) {
     return "PROVIDER_" + providerId.toUpperCase().replace("-", "_") + "_API_KEY";
-  }
-
-  // ===== Provider test logic (called under read lock) =====
-
-  private ProviderTestResult doTestProvider(ProviderRuntimeConfig config, String id) {
-    try {
-      HttpClientSettings settings = HttpClientSettings.defaults()
-          .withConnectTimeout(Duration.ofSeconds(5))
-          .withReadTimeout(Duration.ofSeconds(10))
-          .withInetAddressFilter(
-              InetAddressFilter.externalAddresses()
-                  .or(InetAddressFilter.adapt(InetAddress::isLoopbackAddress))
-                  .or("198.18.0.0/15"));
-
-      RestClient restClient = RestClient.builder()
-          .defaultHeader("Authorization", "Bearer " + config.apiKey())
-          .requestFactory(ClientHttpRequestFactoryBuilder.jdk().build(settings))
-          .build();
-
-      Map<String, Object> requestBody = buildConnectivityTestRequestBody(config.model());
-
-      List<String> candidateUrls = buildConnectivityTestUrls(config.baseUrl());
-      String lastFailureMessage = "Unknown error";
-
-      for (String targetUrl : candidateUrls) {
-        try {
-          restClient.post()
-              .uri(URI.create(targetUrl))
-              .body(requestBody)
-              .retrieve()
-              .toEntity(String.class);
-          log.info("Provider connectivity test succeeded: providerId={}, baseUrl={}, targetUrl={}, model={}",
-              id, config.baseUrl(), targetUrl, config.model());
-          return ProviderTestResult.builder()
-              .success(true)
-              .message("连接成功")
-              .model(config.model())
-              .build();
-        } catch (RestClientResponseException e) {
-          String responseBody = abbreviate(e.getResponseBodyAsString());
-          lastFailureMessage = String.format(
-              "HTTP %s on %s, body=%s",
-              e.getStatusCode().value(),
-              targetUrl,
-              responseBody
-          );
-          log.warn(
-              "Provider connectivity test failed with response: providerId={}, baseUrl={}, targetUrl={}, model={}, status={}, body={}",
-              id,
-              config.baseUrl(),
-              targetUrl,
-              config.model(),
-              e.getStatusCode().value(),
-              responseBody,
-              e
-          );
-        } catch (Exception e) {
-          lastFailureMessage = String.format(
-              "%s on %s: %s",
-              e.getClass().getSimpleName(),
-              targetUrl,
-              e.getMessage()
-          );
-          log.warn(
-              "Provider connectivity test failed: providerId={}, baseUrl={}, targetUrl={}, model={}, error={}",
-              id,
-              config.baseUrl(),
-              targetUrl,
-              config.model(),
-              e.getMessage(),
-              e
-          );
-        }
-      }
-      return ProviderTestResult.builder()
-          .success(false)
-          .message("连接失败: " + lastFailureMessage)
-          .model(config.model())
-          .build();
-    } catch (Exception e) {
-      log.warn("Provider connectivity test setup failed: providerId={}, baseUrl={}, model={}, error={}",
-          id, config.baseUrl(), config.model(), e.getMessage(), e);
-      return ProviderTestResult.builder()
-          .success(false)
-          .message("连接失败: " + e.getMessage())
-          .model(config.model())
-          .build();
-    }
   }
 
   // ===== YAML text editing (preserves comments & formatting) =====

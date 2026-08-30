@@ -8,9 +8,13 @@ import com.quantmore.common.exception.BusinessException;
 import com.quantmore.common.exception.ErrorCode;
 import com.quantmore.modules.llmprovider.model.LlmGlobalSettingEntity;
 import com.quantmore.modules.llmprovider.model.LlmProviderEntity;
+import com.quantmore.modules.llmprovider.model.UserProviderConfigEntity;
 import com.quantmore.modules.llmprovider.repository.LlmGlobalSettingRepository;
 import com.quantmore.modules.llmprovider.repository.LlmProviderRepository;
+import com.quantmore.modules.llmprovider.repository.UserProviderRepository;
 import com.quantmore.modules.llmprovider.service.ApiKeyEncryptionService;
+import com.quantmore.modules.user.model.UserEntity;
+import com.quantmore.modules.user.repository.UserRepository;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -51,6 +55,8 @@ public class LlmProviderRegistry {
     private final LlmProviderRepository providerRepository;
     private final LlmGlobalSettingRepository globalSettingRepository;
     private final ApiKeyEncryptionService encryptionService;
+    private final UserProviderRepository userProviderRepository;
+    private final UserRepository userRepository;
 
     private final ToolCallingManager toolCallingManager;
     private final ObservationRegistry observationRegistry;
@@ -69,20 +75,24 @@ public class LlmProviderRegistry {
             LlmGlobalSettingRepository globalSettingRepository,
             ApiKeyEncryptionService encryptionService,
             @Autowired(required = false) ToolCallingManager toolCallingManager,
-            @Autowired(required = false) ObservationRegistry observationRegistry) {
+            @Autowired(required = false) ObservationRegistry observationRegistry,
+            @Autowired(required = false) UserProviderRepository userProviderRepository,
+            @Autowired(required = false) UserRepository userRepository) {
         this.properties = properties;
         this.providerRepository = providerRepository;
         this.globalSettingRepository = globalSettingRepository;
         this.encryptionService = encryptionService;
         this.toolCallingManager = toolCallingManager;
         this.observationRegistry = observationRegistry;
+        this.userProviderRepository = userProviderRepository;
+        this.userRepository = userRepository;
     }
 
     public LlmProviderRegistry(
             LlmProviderProperties properties,
             ToolCallingManager toolCallingManager,
             ObservationRegistry observationRegistry) {
-        this(properties, null, null, null, toolCallingManager, observationRegistry);
+        this(properties, null, null, null, toolCallingManager, observationRegistry, null, null);
     }
 
     /**
@@ -98,6 +108,26 @@ public class LlmProviderRegistry {
             log.info("[LlmProviderRegistry] Creating new client for provider: {}", id);
             return createChatClient(id);
         });
+    }
+
+    /**
+     * 获取指定用户视角的 ChatClient。
+     * 解析优先级：用户配置行（enabled 且有 Key）覆盖全局内置行；未知 providerId 视为用户自定义。
+     */
+    public ChatClient getChatClientForUser(Long userId, String providerId) {
+        String resolvedId = resolveProviderId(providerId);
+        String cacheKey = "user:" + userId + ":" + resolvedId;
+        return clientCache.computeIfAbsent(cacheKey, key -> {
+            log.info("[LlmProviderRegistry] Creating new user client: userId={}, provider={}", userId, resolvedId);
+            return createChatClient(resolveUserProviderOrThrow(userId, resolvedId), cacheKey);
+        });
+    }
+
+    /**
+     * 获取用户的默认 ChatClient：用户自设默认 provider，否则全局默认。
+     */
+    public ChatClient getDefaultChatClientForUser(Long userId) {
+        return getChatClientForUser(userId, resolveDefaultProviderIdForUser(userId));
     }
 
     /**
@@ -157,37 +187,53 @@ public class LlmProviderRegistry {
     }
 
     private ChatClient createChatClient(String providerId) {
-        OpenAiChatModel chatModel = getChatModel(providerId);
+        return createChatClient(providerId, providerId);
+    }
+
+    private ChatClient createChatClient(String providerId, String cacheKey) {
+        ProviderSnapshot snapshot = loadProviderOrThrow(providerId);
+        return createChatClient(snapshot, cacheKey);
+    }
+
+    private ChatClient createChatClient(ProviderSnapshot snapshot, String cacheKey) {
+        OpenAiChatModel chatModel = getChatModel(snapshot, cacheKey);
 
         ChatClient.Builder builder = ChatClient.builder(chatModel);
-        List<Advisor> advisors = buildDefaultAdvisors(providerId);
+        List<Advisor> advisors = buildDefaultAdvisors(snapshot.id());
         if (!advisors.isEmpty()) {
             builder.defaultAdvisors(advisors);
-            log.info("[LlmProviderRegistry] Applied {} advisors for provider {}", advisors.size(), providerId);
+            log.info("[LlmProviderRegistry] Applied {} advisors for provider {}", advisors.size(), snapshot.id());
         }
 
         return builder.build();
     }
 
     private ChatClient createPlainChatClient(String providerId) {
-        OpenAiChatModel chatModel = getChatModel(providerId);
+        // 与默认客户端共享 provider 级 ChatModel 缓存：缓存命中时不重复加载 Provider 配置
+        OpenAiChatModel chatModel = getChatModel(providerId, providerId);
         ChatClient.Builder builder = ChatClient.builder(chatModel);
         buildSafeGuardAdvisor().ifPresent(advisor -> builder.defaultAdvisors(List.of(advisor)));
         log.info("[LlmProviderRegistry] Created plain ChatClient (no tools) for {}", providerId);
         return builder.build();
     }
 
-    private OpenAiChatModel getChatModel(String providerId) {
-        return chatModelCache.computeIfAbsent(providerId, id -> {
-            log.info("[LlmProviderRegistry] Creating new ChatModel for provider: {}", id);
-            return buildChatModel(id);
+    private OpenAiChatModel getChatModel(String providerId, String cacheKey) {
+        return chatModelCache.computeIfAbsent(cacheKey, key -> {
+            log.info("[LlmProviderRegistry] Creating new ChatModel for key: {}", key);
+            return buildChatModel(loadProviderOrThrow(providerId));
         });
     }
 
-    private OpenAiChatModel buildChatModel(String providerId) {
-        ProviderSnapshot config = loadProviderOrThrow(providerId);
+    private OpenAiChatModel getChatModel(ProviderSnapshot snapshot, String cacheKey) {
+        return chatModelCache.computeIfAbsent(cacheKey, key -> {
+            log.info("[LlmProviderRegistry] Creating new ChatModel for key: {}", key);
+            return buildChatModel(snapshot);
+        });
+    }
+
+    private OpenAiChatModel buildChatModel(ProviderSnapshot config) {
         log.info("[LlmProviderRegistry] Building ChatModel - Provider: {}, BaseUrl: {}, Model: {}",
-                 providerId, config.baseUrl(), config.model());
+                 config.id(), config.baseUrl(), config.model());
 
         OpenAIClient openAiClient = ApiPathResolver.buildOpenAiClient(config.baseUrl(), config.apiKey());
 
@@ -322,6 +368,64 @@ public class LlmProviderRegistry {
                 : properties.getDefaultProvider());
     }
 
+    /**
+     * 用户默认聊天 provider：优先 users.default_provider_id，否则全局默认。
+     */
+    String resolveDefaultProviderIdForUser(Long userId) {
+        if (userRepository != null) {
+            return userRepository.findById(userId)
+                .map(UserEntity::getDefaultProviderId)
+                .filter(id -> !isBlank(id))
+                .orElseGet(this::resolveDefaultChatProviderId);
+        }
+        return resolveDefaultChatProviderId();
+    }
+
+    /**
+     * 解析用户视角的 provider 运行配置。
+     * 用户配置行（enabled 且 Key 非空）覆盖全局内置行；未知 providerId 视为用户自定义（须有 baseUrl+model）。
+     */
+    public ProviderSnapshot resolveUserProviderOrThrow(Long userId, String providerId) {
+        UserProviderConfigEntity userConfig = userProviderRepository != null
+            ? userProviderRepository.findByUserIdAndProviderId(userId, providerId).orElse(null)
+            : null;
+        boolean userActive = userConfig != null && userConfig.isEnabled()
+            && !isBlank(decryptUserApiKey(userConfig));
+        if (!userActive) {
+            return loadProviderOrThrow(providerId);
+        }
+        LlmProviderEntity global = providerRepository != null
+            ? providerRepository.findById(providerId).orElse(null)
+            : null;
+        String baseUrl = !isBlank(userConfig.getBaseUrl()) ? userConfig.getBaseUrl()
+            : (global != null ? global.getBaseUrl() : null);
+        String model = !isBlank(userConfig.getModel()) ? userConfig.getModel()
+            : (global != null ? global.getModel() : null);
+        if (isBlank(baseUrl) || isBlank(model)) {
+            throw new IllegalArgumentException(
+                "用户自定义 Provider '" + providerId + "' 必须配置 baseUrl 与 model");
+        }
+        Double temperature = userConfig.getTemperature() != null ? userConfig.getTemperature()
+            : (global != null ? global.getTemperature() : null);
+        return new ProviderSnapshot(
+            providerId,
+            baseUrl,
+            decryptUserApiKey(userConfig),
+            model,
+            global != null ? global.getEmbeddingModel() : null,
+            global != null ? global.getEmbeddingDimensions() : null,
+            global != null && global.isSupportsEmbedding(),
+            temperature
+        );
+    }
+
+    private String decryptUserApiKey(UserProviderConfigEntity entity) {
+        if (encryptionService == null) {
+            throw new IllegalStateException("ApiKeyEncryptionService 未初始化，无法解密用户 Provider 配置");
+        }
+        return encryptionService.decrypt(entity.getApiKeyNonce(), entity.getApiKeyCiphertext());
+    }
+
     private ProviderSnapshot loadProviderOrThrow(String providerId) {
         if (providerRepository == null) {
             return loadProviderFromPropertiesOrThrow(providerId);
@@ -382,7 +486,7 @@ public class LlmProviderRegistry {
             || lower.startsWith("ernie");
     }
 
-    private record ProviderSnapshot(
+    public record ProviderSnapshot(
         String id,
         String baseUrl,
         String apiKey,
