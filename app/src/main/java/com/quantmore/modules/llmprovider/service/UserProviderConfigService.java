@@ -6,6 +6,7 @@ import com.quantmore.common.exception.ErrorCode;
 import com.quantmore.modules.llmprovider.dto.ProviderTestResult;
 import com.quantmore.modules.llmprovider.dto.UserProviderDTO;
 import com.quantmore.modules.llmprovider.dto.UserProviderUpsertRequest;
+import com.quantmore.modules.llmprovider.model.LlmProviderEntity;
 import com.quantmore.modules.llmprovider.model.UserProviderConfigEntity;
 import com.quantmore.modules.llmprovider.repository.LlmProviderRepository;
 import com.quantmore.modules.llmprovider.repository.UserProviderRepository;
@@ -50,17 +51,21 @@ public class UserProviderConfigService {
     List<UserProviderDTO> result = new ArrayList<>();
     for (var global : llmProviderRepository.findAll()) {
       UserProviderConfigEntity own = ownConfigs.remove(global.getId());
+      boolean ownUsable = own != null && own.isEnabled() && !isBlank(decrypt(own));
+      boolean globalUsable = global.isEnabled() && !isBlank(decrypt(global));
       result.add(toDto(global.getId(), global.getBaseUrl(),
           own != null ? own.getModel() : global.getModel(),
           own != null ? mask(decrypt(own)) : null,
           own != null, false,
           own != null ? own.isEnabled() : global.isEnabled(),
           global.isSupportsEmbedding(),
+          ownUsable || globalUsable,
           global.getId().equals(defaultProviderId)));
     }
     // 剩余 = 用户自定义 Provider（不在全局表中）
     ownConfigs.forEach((id, own) -> result.add(toDto(id, own.getBaseUrl(), own.getModel(),
         mask(decrypt(own)), true, true, own.isEnabled(), false,
+        own.isEnabled() && !isBlank(decrypt(own)),
         id.equals(defaultProviderId))));
     return result;
   }
@@ -170,6 +175,7 @@ public class UserProviderConfigService {
       boolean custom,
       boolean enabled,
       boolean supportsEmbedding,
+      boolean available,
       boolean defaultChatProvider) {
     return UserProviderDTO.builder()
         .id(id)
@@ -180,12 +186,21 @@ public class UserProviderConfigService {
         .custom(custom)
         .enabled(enabled)
         .supportsEmbedding(supportsEmbedding)
+        .available(available)
         .defaultChatProvider(defaultChatProvider)
         .build();
   }
 
   private String decrypt(UserProviderConfigEntity entity) {
     return encryptionService.decrypt(entity.getApiKeyNonce(), entity.getApiKeyCiphertext());
+  }
+
+  private String decrypt(LlmProviderEntity entity) {
+    return encryptionService.decrypt(entity.getApiKeyNonce(), entity.getApiKeyCiphertext());
+  }
+
+  private boolean isBlank(String value) {
+    return value == null || value.isBlank();
   }
 
   private String mask(String apiKey) {

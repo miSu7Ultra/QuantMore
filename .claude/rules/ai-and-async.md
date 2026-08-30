@@ -14,15 +14,14 @@ paths:
 ## LLM Providers
 
 - Provider 配置来自 `app.ai.providers.{providerId}` 和默认 `app.ai.default-provider`。
-- ChatClient 获取统一使用 `LlmProviderRegistry.getChatClientOrDefault(provider)`。
+- ChatClient 获取统一使用 `LlmProviderRegistry`；用户场景使用 `getChatClientForUser` / `getDefaultChatClientForUser`。
 - Provider 连通性测试要限制超时，并防止访问内网或特殊地址。
 - Spring AI 2.0.0 代码优先使用非 deprecated API。
 
-## Structured Output
+## Prompts
 
-- 结构化输出统一使用 `StructuredOutputInvoker` 封装重试。
-- 不要在业务 Service 里复制 JSON 修复、重试和解析逻辑。
-- Prompt 模板存放在 `resources/prompts/`，使用 StringTemplate `.st`。
+- Prompt 模板存放在 `resources/prompts/`，使用 `{placeholder}` 占位符（Spring AI PromptTemplate）。
+- 提示词必须包含反注入指令（`PromptSecurityConstants`）。
 
 ## Rate Limit
 

@@ -45,7 +45,7 @@ public class PromptSanitizer {
 
     // 分隔符伪造：匹配项目中 .st 模板使用的静态分隔符
     private static final Pattern DELIMITER_INJECTION_PATTERN = Pattern.compile(
-        "---(?:简历|文档|问答)内容(?:开始|结束)---"
+        "---(?:文档|问答)内容(?:开始|结束)---"
     );
 
     // XML 边界标签伪造：防止攻击者构造 <data-boundary...> 来提前关闭包裹

@@ -34,19 +34,19 @@ assert_rejects() {
   fi
 }
 
-assert_accepts "valid-feature" $'feat: 新增面试题导入\n\n- 增加题库文件解析流程\n- 补充导入失败的提示信息'
+assert_accepts "valid-feature" $'feat: 新增策略模板\n\n- 增加策略模板解析流程\n- 补充解析失败的提示信息'
 assert_accepts "valid-scope" $'fix(question): 修复题目导入失败\n\n- 兼容空标签的题目数据'
 assert_accepts "generated-merge" "Merge branch 'main'"
-assert_accepts "generated-revert" 'Revert "feat: 新增面试题导入"'
-assert_accepts "generated-fixup" "fixup! feat: 新增面试题导入"
-assert_accepts "generated-squash" "squash! feat: 新增面试题导入"
-assert_accepts "generated-amend" "amend! feat: 新增面试题导入"
+assert_accepts "generated-revert" 'Revert "feat: 新增策略模板"'
+assert_accepts "generated-fixup" "fixup! feat: 新增策略模板"
+assert_accepts "generated-squash" "squash! feat: 新增策略模板"
+assert_accepts "generated-amend" "amend! feat: 新增策略模板"
 
-assert_rejects "english-subject" $'feat: add interview question import\n\n- 增加题库导入流程'
-assert_rejects "unsupported-type" $'feature: 增加面试题导入\n\n- 增加题库导入流程'
-assert_rejects "missing-body" "feat: 增加面试题导入"
-assert_rejects "missing-blank-line" $'feat: 增加面试题导入\n- 增加题库文件解析流程'
-assert_rejects "non-bullet-body" $'feat: 增加面试题导入\n\n增加题库文件解析流程'
-assert_rejects "english-bullet" $'feat: 增加面试题导入\n\n- add question import'
+assert_rejects "english-subject" $'feat: add strategy template import\n\n- 增加策略模板流程'
+assert_rejects "unsupported-type" $'feature: 增加策略模板\n\n- 增加策略模板流程'
+assert_rejects "missing-body" "feat: 增加策略模板"
+assert_rejects "missing-blank-line" $'feat: 增加策略模板\n- 增加策略模板解析流程'
+assert_rejects "non-bullet-body" $'feat: 增加策略模板\n\n增加策略模板解析流程'
+assert_rejects "english-bullet" $'feat: 增加策略模板\n\n- add strategy template import'
 
 echo "PASS: commit-msg Hook 格式校验通过"

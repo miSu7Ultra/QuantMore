@@ -15,6 +15,8 @@ export interface UserProviderItem {
   custom: boolean;
   enabled: boolean;
   supportsEmbedding: boolean;
+  /** 是否可直接用于生成（用户已配 Key 或全局内置已有 Key） */
+  available: boolean;
   /** 是否为该用户的默认聊天模型 */
   defaultChatProvider: boolean;
 }

@@ -40,7 +40,7 @@ class TextCleaningServiceTest {
         @DisplayName("清理图片文件名行")
         void testRemoveImageFilenameLines() {
             String input = """
-                简历内容
+                文档内容
                 image001.png
                 image123.jpg
                 image99.jpeg
@@ -54,7 +54,7 @@ class TextCleaningServiceTest {
             assertFalse(result.contains("image123.jpg"));
             assertFalse(result.contains("image99.jpeg"));
             assertFalse(result.contains("image1.gif"));
-            assertTrue(result.contains("简历内容"));
+            assertTrue(result.contains("文档内容"));
             assertTrue(result.contains("更多内容"));
         }
 
@@ -192,7 +192,7 @@ class TextCleaningServiceTest {
         @DisplayName("综合清理测试")
         void testComprehensiveCleaning() {
             String input = """
-                个人简历
+                技术文档
                 ============
 
 
@@ -209,7 +209,7 @@ class TextCleaningServiceTest {
 
             String result = textCleaningService.cleanText(input);
 
-            assertTrue(result.contains("个人简历"));
+            assertTrue(result.contains("技术文档"));
             assertTrue(result.contains("姓名：张三"));
             assertTrue(result.contains("技能：Java"));
             assertFalse(result.contains("============"));

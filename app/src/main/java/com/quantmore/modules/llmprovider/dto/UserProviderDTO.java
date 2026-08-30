@@ -17,6 +17,8 @@ public record UserProviderDTO(
     boolean custom,
     boolean enabled,
     boolean supportsEmbedding,
+    // 是否可直接用于生成（用户已配 Key 或全局内置已有 Key）
+    boolean available,
     // 是否为该用户的默认聊天模型
     boolean defaultChatProvider
 ) {

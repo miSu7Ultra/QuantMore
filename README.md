@@ -2,7 +2,6 @@
 
 输入自然语言，产出可运行的 PTrade 策略代码。基于用户自上传的 PTrade 知识库做检索增强生成（RAG），支持多用户、多模型。
 
-> 本项目基于 [interview-guide](https://github.com/)（JavaGuide 作者的 AI 面试官平台）裁剪改造，保留其 AGPL-3.0 许可证。个人本机使用无义务；若日后公开分发，需保持开源。
 
 ## 功能
 
@@ -67,4 +66,4 @@ cd frontend && pnpm run build       # 前端
 
 ## 许可证
 
-AGPL-3.0（源自 interview-guide）
+AGPL-3.0

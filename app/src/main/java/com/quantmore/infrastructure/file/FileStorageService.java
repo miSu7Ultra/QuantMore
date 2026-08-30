@@ -51,14 +51,14 @@ public class FileStorageService {
     }
 
     /**
-     * 上传简历文件
+     * 上传知识库文件
      */
     public String uploadResume(MultipartFile file) {
         return uploadFile(file, "resumes");
     }
 
     /**
-     * 删除简历文件
+     * 删除知识库文件
      */
     public void deleteResume(String fileKey) {
         deleteFile(fileKey);

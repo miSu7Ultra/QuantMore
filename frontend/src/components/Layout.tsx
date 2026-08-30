@@ -82,18 +82,18 @@ export default function Layout() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800">
+    <div className="flex min-h-screen">
       {/* 左侧边栏 */}
-      <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-700 fixed h-screen left-0 top-0 z-50 flex flex-col">
+      <aside className="w-64 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl border-r border-slate-200/60 dark:border-cyan-400/10 fixed h-screen left-0 top-0 z-50 flex flex-col">
         {/* Logo */}
         <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
           <Link to={ROUTES.knowledgebase} className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 via-cyan-500 to-accent-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-cyan-500/40 ring-1 ring-cyan-300/30">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-base font-bold text-slate-800 dark:text-white tracking-tight block">QuantMore · 量化助手</span>
-              <span className="text-xs text-slate-400 dark:text-slate-500">量化策略代码生成平台</span>
+              <span className="text-base font-bold text-slate-800 dark:text-white tracking-tight block glow-title">QuantMore · 量化助手</span>
+              <span className="tech-label">量化策略代码生成平台</span>
             </div>
           </Link>
         </div>
@@ -102,7 +102,7 @@ export default function Layout() {
         <div className="px-4 pb-2">
           <button
             onClick={toggleTheme}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-slate-100/70 dark:bg-slate-900/70 border border-slate-200/50 dark:border-slate-700/50 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800/80 hover:border-cyan-400/30 transition-all"
           >
             {theme === 'dark' ? (
               <>
@@ -124,7 +124,7 @@ export default function Layout() {
             {navGroups.map((group) => (
               <div key={group.id}>
                 <div className="px-3 mb-2">
-                  <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  <span className="tech-label">
                     {group.title}
                   </span>
                 </div>
@@ -138,13 +138,13 @@ export default function Layout() {
                         to={item.path}
                         className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200
                           ${active
-                            ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
+                            ? 'bg-cyan-500/10 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 shadow-[0_0_18px_-6px_rgba(6,182,212,0.5)]'
                             : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                           }`}
                       >
                         <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors
                           ${active
-                            ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400'
+                            ? 'bg-cyan-500/15 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-300'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 group-hover:text-slate-700 dark:group-hover:text-white'
                           }`}
                         >
@@ -174,7 +174,7 @@ export default function Layout() {
         <div className="p-4 border-t border-slate-100 dark:border-slate-700">
           {user ? (
             <div className="px-2 py-2 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-500 to-accent-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                 {user.username.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">

@@ -25,7 +25,7 @@ import ConfirmDialog from '../components/ConfirmDialog';
 
 /** 可设为用户默认模型的 Provider：已配置自己的 Key，或内置且全局可用 */
 function isDefaultSelectable(provider: UserProviderItem): boolean {
-  return provider.hasOwnConfig || (!provider.custom && provider.enabled);
+  return provider.available;
 }
 
 /** Provider 行内配置表单 */

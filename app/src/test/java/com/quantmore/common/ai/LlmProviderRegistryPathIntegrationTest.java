@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 时，不会再被拼成 {@code .../v1/v1/chat/completions}（Spring AI OpenAiApi 的默认行为）。
  *
  * <p>真实场景下：UI 上点 "测试连接" 走的是 {@link com.quantmore.modules.llmprovider
- * .service.LlmProviderConfigService#testProvider}（自己拼路径，所以 OK），但模拟面试
+ * .service.LlmProviderConfigService#testProvider}（自己拼路径，所以 OK），但其他调用
  * 调用走 {@link LlmProviderRegistry} → Spring AI {@code OpenAiApi}，之前会 404。
  */
 @DisplayName("LlmProviderRegistry 真实 HTTP 路径回归")

@@ -11,8 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * QuantMore - PTrade 策略代码生成平台主应用
- * 智能AI面试官平台 - 主启动类
+ * QuantMore 量化策略代码生成平台 - 主启动类
  */
 @EnableScheduling
 @SpringBootApplication(exclude = {

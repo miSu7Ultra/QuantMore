@@ -380,7 +380,7 @@ class LlmProviderConfigServiceTest {
                 app:
                   ai:
                     default-provider: dashscope
-                  voice-interview:
+                  legacy-module:
                     qwen:
                       asr:
                         model: qwen3-asr-flash-realtime

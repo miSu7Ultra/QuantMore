@@ -31,7 +31,7 @@ class DocumentParseIntegrationTest {
     }
 
     @Test
-    @DisplayName("集成测试 - 解析 TXT 格式简历")
+    @DisplayName("集成测试 - 解析 TXT 格式文档")
     void testParseTxtResume() throws IOException {
         // Given: 从测试资源加载文件
         InputStream inputStream = getClass().getResourceAsStream("/test-files/sample-resume.txt");
@@ -80,7 +80,7 @@ class DocumentParseIntegrationTest {
     }
 
     @Test
-    @DisplayName("集成测试 - 解析 Markdown 格式简历")
+    @DisplayName("集成测试 - 解析 Markdown 格式文档")
     void testParseMarkdownResume() throws IOException {
         // Given: 从测试资源加载 Markdown 文件
         InputStream inputStream = getClass().getResourceAsStream("/test-files/sample-resume.md");
@@ -188,7 +188,7 @@ class DocumentParseIntegrationTest {
     void testTextCleaningIntegration() {
         // Given: 包含需要清理的内容
         String dirtyContent = """
-            个人简历
+            技术文档
             ============
             
             
@@ -306,7 +306,7 @@ class DocumentParseIntegrationTest {
     void testLargeFilePerformance() {
         // Given: 生成大文本（约 50KB）
         StringBuilder largeContent = new StringBuilder();
-        largeContent.append("个人简历\n\n");
+        largeContent.append("技术文档\n\n");
 
         for (int i = 0; i < 100; i++) {
             largeContent.append("工作经历 ").append(i).append("\n");
@@ -330,7 +330,7 @@ class DocumentParseIntegrationTest {
         // Then: 验证解析成功
         assertNotNull(result);
         assertFalse(result.isEmpty());
-        assertTrue(result.contains("个人简历"));
+        assertTrue(result.contains("技术文档"));
         assertTrue(result.contains("工作经历"));
     }
 

@@ -47,7 +47,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-transparent dark:bg-transparent">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -56,11 +56,11 @@ export default function LoginPage() {
       >
         {/* 品牌区 */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary-500/30 mb-4">
+          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-cyan-400 via-cyan-500 to-accent-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-cyan-500/40 ring-1 ring-cyan-300/30 mb-4">
             <Sparkles className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">
-            QuantMore · PTrade 策略助手
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-white tracking-tight glow-title">
+            QuantMore · 量化助手
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">登录后继续使用策略生成与知识库问答</p>
         </div>

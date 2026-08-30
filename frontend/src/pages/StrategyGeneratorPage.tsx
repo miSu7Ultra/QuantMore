@@ -53,8 +53,8 @@ export default function StrategyGeneratorPage() {
         ]);
         setKnowledgeBases(kbList);
 
-        // 只展示用户已配置 Key 的模型，默认选中用户默认模型
-        const configured = providerList.filter(p => p.hasOwnConfig);
+        // 只展示可直接使用的模型（用户已配 Key 或全局内置已有 Key），默认选中用户默认模型
+        const configured = providerList.filter(p => p.available);
         setConfiguredProviders(configured);
         const defaultProvider = configured.find(p => p.defaultChatProvider);
         if (defaultProvider) {

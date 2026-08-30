@@ -156,7 +156,7 @@ public class LlmProviderRegistry {
     }
 
     /**
-     * 获取不带 SkillsTool 的 ChatClient，用于结构化输出场景（出题、简历评分等）。
+     * 获取不带 SkillsTool 的 ChatClient，用于结构化输出场景。
      * 这些场景要求模型一次性返回可解析 JSON，不应混入工具调用消息。
      */
     public ChatClient getPlainChatClient(String providerId) {

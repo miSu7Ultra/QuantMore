@@ -35,7 +35,7 @@ public class KnowledgeBaseEntity {
     @Column(nullable = false)
     private String name;
 
-    // 分类/分组（如"Java面试"、"项目文档"等）
+    // 分类/分组（如"策略示例"、"API文档"等）
     @Column(length = 100)
     private String category;
 

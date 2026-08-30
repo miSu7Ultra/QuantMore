@@ -53,7 +53,7 @@ class DocumentParseServiceTest {
     @DisplayName("解析简单文本文件 - TXT")
     void testParseTxtFile() throws Exception {
         // Given: 准备一个简单的 TXT 文件
-        String content = "这是一份简历\n姓名：张三\n技能：Java、Python";
+        String content = "这是一份文档\n姓名：张三\n技能：Java、Python";
         MultipartFile file = new MockMultipartFile(
             "file",
             "resume.txt",
@@ -76,7 +76,7 @@ class DocumentParseServiceTest {
     void testParseMarkdownFile() throws Exception {
         // Given: Markdown 内容
         String content = """
-            # 个人简历
+            # 技术文档
             
             ## 基本信息
             - 姓名：李四
@@ -98,7 +98,7 @@ class DocumentParseServiceTest {
 
         // Then
         assertNotNull(result);
-        assertTrue(result.contains("个人简历"));
+        assertTrue(result.contains("技术文档"));
         assertTrue(result.contains("李四"));
         assertTrue(result.contains("高级工程师"));
     }
@@ -192,11 +192,11 @@ class DocumentParseServiceTest {
     }
 
     @Test
-    @DisplayName("解析中文简历内容")
+    @DisplayName("解析中文文档内容")
     void testParseChineseResume() throws Exception {
-        // Given: 中文简历
+        // Given: 中文文档
         String content = """
-            个人简历
+            技术文档
             
             姓名：王五
             性别：男
@@ -223,7 +223,7 @@ class DocumentParseServiceTest {
         
         MultipartFile file = new MockMultipartFile(
             "file",
-            "王五_简历.txt",
+            "文档示例.txt",
             "text/plain",
             content.getBytes(StandardCharsets.UTF_8)
         );
@@ -246,7 +246,7 @@ class DocumentParseServiceTest {
         // Given
         String storageKey = "resumes/test-resume.txt";
         String originalFilename = "test-resume.txt";
-        String content = "简历内容";
+        String content = "文档内容";
         byte[] fileBytes = content.getBytes(StandardCharsets.UTF_8);
         
         when(fileStorageService.downloadFile(storageKey)).thenReturn(fileBytes);
@@ -368,7 +368,7 @@ class DocumentParseServiceTest {
         // Given: 创建临时文件
         Path testFile = tempDir.resolve("test-resume.txt");
         String content = """
-            张三的简历
+            张三的文档
             ============
             
             教育背景
