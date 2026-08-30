@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Sparkles,
   Sun,
+  Upload,
 } from 'lucide-react';
 import {useTheme} from '../hooks/useTheme';
 import {ROUTES} from '../constants/routes';
@@ -45,6 +46,7 @@ export default function Layout() {
       title: '知识库',
       items: [
         { id: 'kb-manage', path: ROUTES.knowledgebase, label: '知识库管理', icon: Database, description: '管理知识文档' },
+        { id: 'kb-upload', path: ROUTES.knowledgebaseUpload, label: '上传知识库', icon: Upload, description: '上传文档并向量化' },
         { id: 'chat', path: ROUTES.knowledgebaseChat, label: '问答助手', icon: MessageSquare, description: '基于知识库问答' },
       ],
     },
@@ -90,8 +92,8 @@ export default function Layout() {
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-base font-bold text-slate-800 dark:text-white tracking-tight block">QuantMore · PTrade 助手</span>
-              <span className="text-xs text-slate-400 dark:text-slate-500">PTrade 策略代码生成平台</span>
+              <span className="text-base font-bold text-slate-800 dark:text-white tracking-tight block">QuantMore · 量化助手</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500">量化策略代码生成平台</span>
             </div>
           </Link>
         </div>

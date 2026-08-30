@@ -17,12 +17,14 @@ import {
   RefreshCw,
   Search,
   Trash2,
+  Upload,
   X,
 } from 'lucide-react';
 import {knowledgeBaseApi, KnowledgeBaseItem, KnowledgeBaseStats, SortOption, VectorStatus,} from '../api/knowledgebase';
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
 
 interface KnowledgeBaseManagePageProps {
+  onUpload: () => void;
   onChat: () => void;
 }
 
@@ -110,7 +112,7 @@ function StatCard({
   );
 }
 
-export default function KnowledgeBaseManagePage({ onChat }: KnowledgeBaseManagePageProps) {
+export default function KnowledgeBaseManagePage({ onUpload, onChat }: KnowledgeBaseManagePageProps) {
   const [stats, setStats] = useState<KnowledgeBaseStats | null>(null);
   const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBaseItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -297,6 +299,13 @@ export default function KnowledgeBaseManagePage({ onChat }: KnowledgeBaseManageP
         </div>
         <div className="flex gap-3">
           <button
+            onClick={onUpload}
+            className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
+          >
+            <Upload className="w-4 h-4" />
+            上传知识库
+          </button>
+          <button
             onClick={onChat}
             className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
           >
@@ -398,7 +407,13 @@ export default function KnowledgeBaseManagePage({ onChat }: KnowledgeBaseManageP
         ) : knowledgeBases.length === 0 ? (
           <div className="text-center py-20">
             <HardDrive className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-              <p className="text-slate-500 dark:text-slate-400">暂无知识库，请等待管理员导入文档</p>
+              <p className="text-slate-500 dark:text-slate-400">暂无知识库</p>
+            <button
+              onClick={onUpload}
+              className="mt-4 text-primary-500 hover:text-primary-600"
+            >
+              上传第一个知识库
+            </button>
           </div>
         ) : (
           <table className="w-full">

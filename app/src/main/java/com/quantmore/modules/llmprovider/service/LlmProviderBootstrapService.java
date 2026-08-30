@@ -112,7 +112,7 @@ public class LlmProviderBootstrapService {
     }
     String defaultChatProvider = resolveExistingProvider(
         properties.getDefaultProvider(),
-        providerRepository.findAll().stream().findFirst().map(LlmProviderEntity::getId).orElse("dashscope")
+        providerRepository.findAll().stream().findFirst().map(LlmProviderEntity::getId).orElse("qwen")
     );
     String configuredEmbeddingProvider = !isBlank(properties.getDefaultEmbeddingProvider())
         ? properties.getDefaultEmbeddingProvider()

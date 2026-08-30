@@ -125,7 +125,7 @@ class LlmProviderRegistryTest {
     @DisplayName("Successfully get default ChatClient")
     void testGetDefaultChatClient() {
         // Given
-        String defaultProviderId = "dashscope";
+        String defaultProviderId = "qwen";
         ProviderConfig config = new ProviderConfig();
         config.setBaseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1");
         config.setApiKey("dashscope-key");
@@ -189,10 +189,10 @@ class LlmProviderRegistryTest {
             explicitConfig.setModel("kimi-latest");
 
             providers = new HashMap<>();
-            providers.put("dashscope", defaultConfig);
+            providers.put("qwen", defaultConfig);
             providers.put("kimi", explicitConfig);
 
-            lenient().when(properties.getDefaultProvider()).thenReturn("dashscope");
+            lenient().when(properties.getDefaultProvider()).thenReturn("qwen");
             when(properties.getProviders()).thenReturn(providers);
         }
 
@@ -212,7 +212,7 @@ class LlmProviderRegistryTest {
             ChatClient client = registry.getChatClientOrDefault(null);
 
             assertNotNull(client);
-            assertSame(client, registry.getChatClient("dashscope"));
+            assertSame(client, registry.getChatClient("qwen"));
         }
 
         @Test
@@ -221,7 +221,7 @@ class LlmProviderRegistryTest {
             ChatClient client = registry.getChatClientOrDefault("   ");
 
             assertNotNull(client);
-            assertSame(client, registry.getChatClient("dashscope"));
+            assertSame(client, registry.getChatClient("qwen"));
         }
 
         @Test
@@ -230,7 +230,7 @@ class LlmProviderRegistryTest {
             ChatClient client = registry.getChatClientOrDefault("default");
 
             assertNotNull(client);
-            assertSame(client, registry.getChatClient("dashscope"));
+            assertSame(client, registry.getChatClient("qwen"));
         }
     }
 

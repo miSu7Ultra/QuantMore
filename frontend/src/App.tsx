@@ -8,6 +8,7 @@ import { AuthProvider, RequireAuth } from './AuthContext';
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const KnowledgeBaseManagePage = lazy(() => import('./pages/KnowledgeBaseManagePage'));
+const KnowledgeBaseUploadPage = lazy(() => import('./pages/KnowledgeBaseUploadPage'));
 const KnowledgeBaseQueryPage = lazy(() => import('./pages/KnowledgeBaseQueryPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const UserProviderPage = lazy(() => import('./pages/UserProviderPage'));
@@ -25,11 +26,30 @@ const Loading = () => (
 function KnowledgeBaseManagePageWrapper() {
   const navigate = useNavigate();
 
+  const handleUpload = () => {
+    navigate(ROUTES.knowledgebaseUpload);
+  };
+
   const handleChat = () => {
     navigate(ROUTES.knowledgebaseChat);
   };
 
-  return <KnowledgeBaseManagePage onChat={handleChat} />;
+  return <KnowledgeBaseManagePage onUpload={handleUpload} onChat={handleChat} />;
+}
+
+// 知识库上传页面包装器
+function KnowledgeBaseUploadPageWrapper() {
+  const navigate = useNavigate();
+
+  const handleUploadComplete = () => {
+    navigate(ROUTES.knowledgebase);
+  };
+
+  const handleBack = () => {
+    navigate(ROUTES.knowledgebase);
+  };
+
+  return <KnowledgeBaseUploadPage onUploadComplete={handleUploadComplete} onBack={handleBack} />;
 }
 
 // 知识库问答页面包装器
@@ -40,7 +60,11 @@ function KnowledgeBaseQueryPageWrapper() {
     navigate(ROUTES.knowledgebase);
   };
 
-  return <KnowledgeBaseQueryPage onBack={handleBack} />;
+  const handleUpload = () => {
+    navigate(ROUTES.knowledgebaseUpload);
+  };
+
+  return <KnowledgeBaseQueryPage onBack={handleBack} onUpload={handleUpload} />;
 }
 
 function App() {
@@ -67,6 +91,9 @@ function App() {
 
               {/* 知识库管理 */}
               <Route path="knowledgebase" element={<KnowledgeBaseManagePageWrapper />} />
+
+              {/* 知识库上传 */}
+              <Route path="knowledgebase/upload" element={<KnowledgeBaseUploadPageWrapper />} />
 
               {/* 问答助手（知识库聊天） */}
               <Route path="knowledgebase/chat" element={<KnowledgeBaseQueryPageWrapper />} />

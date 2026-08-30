@@ -44,18 +44,14 @@ app:
     secret: test-jwt-secret-for-quantmore-tests-0123456789
     expiration-days: 7
   ai:
-    default-provider: dashscope
+    default-provider: qwen
     security:
       api-key-encryption-key: test-provider-api-key-encryption-key
     providers:
-      dashscope:
+      qwen:
         base-url: https://dashscope.aliyuncs.com/compatible-mode
         api-key: test-api-key
         model: qwen3.5-flash
-      lmstudio:
-        base-url: http://localhost:1234
-        api-key: lm-studio
-        model: qwen2.5-7b-instruct
     rag:
       rewrite:
         enabled: true

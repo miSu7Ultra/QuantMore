@@ -102,8 +102,8 @@ app:
     top-k: ${APP_GENERATOR_TOPK:8}
     min-score: ${APP_GENERATOR_MIN_SCORE:0.18}
   ai:
-    default-provider: dashscope
-    default-embedding-provider: dashscope
+    default-provider: qwen
+    default-embedding-provider: qwen
     embedding-dimensions: ${APP_AI_EMBEDDING_DIMENSIONS:1024}
     security:
       api-key-encryption-key: ${APP_AI_CONFIG_ENCRYPTION_KEY:}
@@ -114,18 +114,13 @@ app:
     config-yaml-path: ${APP_AI_CONFIG_YAML_PATH:${user.home}/.quantmore/llm-providers.yml}
     config-env-path: ${APP_AI_CONFIG_ENV_PATH:${user.home}/.quantmore/llm-providers.env}
     providers:
-      dashscope:
+      qwen:
         base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
         api-key: ${AI_BAILIAN_API_KEY}
         model: ${AI_MODEL:qwen3.5-flash}
         embedding-model: text-embedding-v4
         embedding-dimensions: 1024
         supports-embedding: true
-      lmstudio:
-        base-url: http://localhost:1234
-        api-key: ${PROVIDER_LMSTUDIO_API_KEY:lm-studio}
-        model: qwen2.5-7b-instruct
-        supports-embedding: false
       # ===== 预设 Provider（填完 API Key 后即可使用）=====
       # Moonshot AI / Kimi（OpenAI 兼容） https://platform.moonshot.cn/
       kimi:

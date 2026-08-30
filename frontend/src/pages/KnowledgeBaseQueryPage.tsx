@@ -12,6 +12,7 @@ import {ChevronLeft, ChevronRight, Edit, MessageSquare, Pin, Plus, Trash2,} from
 
 interface KnowledgeBaseQueryPageProps {
   onBack: () => void;
+  onUpload: () => void;
 }
 
 interface Message {
@@ -27,7 +28,7 @@ interface CategoryGroup {
   isExpanded: boolean;
 }
 
-export default function KnowledgeBaseQueryPage({ onBack }: KnowledgeBaseQueryPageProps) {
+export default function KnowledgeBaseQueryPage({ onBack, onUpload }: KnowledgeBaseQueryPageProps) {
   // 知识库状态
   const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBaseItem[]>([]);
   const [selectedKbIds, setSelectedKbIds] = useState<Set<number>>(new Set());
@@ -366,6 +367,14 @@ export default function KnowledgeBaseQueryPage({ onBack }: KnowledgeBaseQueryPag
         </div>
         <div className="flex gap-3">
           <motion.button
+            onClick={onUpload}
+            className="px-4 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-sm"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            上传知识库
+          </motion.button>
+          <motion.button
             onClick={onBack}
             className="px-4 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-sm"
             whileHover={{ scale: 1.02 }}
@@ -681,7 +690,9 @@ export default function KnowledgeBaseQueryPage({ onBack }: KnowledgeBaseQueryPag
                       <div className="text-center py-6 text-slate-500 dark:text-slate-400">
                       <p className="mb-2 text-sm">{searchKeyword ? '未找到' : '暂无知识库'}</p>
                       {!searchKeyword && (
-                        <span className="text-primary-500 font-medium text-sm">请联系管理员导入文档</span>
+                        <button onClick={onUpload} className="text-primary-500 hover:text-primary-600 font-medium text-sm">
+                          立即上传
+                        </button>
                       )}
                     </div>
                   ) : (

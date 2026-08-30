@@ -23,7 +23,7 @@ const PROVIDER_PRESETS: Record<string, {
   embeddingDimensions?: number;
   supportsEmbedding: boolean;
 }> = {
-  dashscope: {
+  qwen: {
     baseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
     models: [
       { value: 'qwen3.6-flash', label: 'Qwen3.6 Flash — 最新旗舰' },
@@ -36,7 +36,7 @@ const PROVIDER_PRESETS: Record<string, {
       { value: 'qwq-32b', label: 'QwQ-32B — 推理专用' },
     ],
     embeddingModels: [
-      { value: 'text-embedding-v3', label: 'text-embedding-v3 — 推荐' },
+      { value: 'text-embedding-v4', label: 'text-embedding-v4 — 推荐' },
     ],
     embeddingDimensions: 1024,
     supportsEmbedding: true,
@@ -726,7 +726,7 @@ export default function SettingsPage() {
                         }
                       }}
                       disabled={!!editingProvider}
-                      placeholder="例如: dashscope, deepseek, glm, kimi"
+                      placeholder="例如: qwen, deepseek, glm, kimi"
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600
                         bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white
                         placeholder:text-slate-400 focus:outline-none focus:ring-2

@@ -51,7 +51,7 @@ public class LlmProviderConfigService {
   private final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
 
   private static final Map<String, String> RECOMMENDED_EMBEDDING_MODELS = Map.of(
-      "dashscope", "text-embedding-v3",
+      "qwen", "text-embedding-v4",
       "glm", "embedding-3",
       "zhipu", "embedding-3",
       "baidu", "Embedding-V1",

@@ -1,4 +1,4 @@
-# QuantMore · PTrade 策略代码生成平台
+# QuantMore · 量化策略代码生成平台
 
 输入自然语言，产出可运行的 PTrade 策略代码。基于用户自上传的 PTrade 知识库做检索增强生成（RAG），支持多用户、多模型。
 

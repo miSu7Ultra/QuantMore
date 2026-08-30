@@ -61,7 +61,7 @@ public class LlmProviderRegistry {
     private final ToolCallingManager toolCallingManager;
     private final ObservationRegistry observationRegistry;
     private static final Map<String, String> RECOMMENDED_EMBEDDING_MODELS = Map.of(
-        "dashscope", "text-embedding-v3",
+        "qwen", "text-embedding-v4",
         "glm", "embedding-3",
         "zhipu", "embedding-3",
         "baidu", "Embedding-V1",
@@ -99,7 +99,7 @@ public class LlmProviderRegistry {
      * Get a ChatClient for the specified provider ID.
      * If the client is not in the cache, it will be created based on the provider's configuration.
      *
-     * @param providerId The ID of the provider (e.g., "dashscope", "lmstudio")
+     * @param providerId The ID of the provider (e.g., "qwen", "deepseek")
      * @return A ChatClient instance
      * @throws IllegalArgumentException if the providerId is unknown
      */
