@@ -28,8 +28,47 @@ public class LlmProviderBootstrapService {
   public void seedProvidersIfNecessary() {
     if (providerRepository.count() == 0) {
       seedProviders();
+    } else {
+      refreshBuiltinKeysFromConfig();
     }
     ensureGlobalSetting();
+  }
+
+  /**
+   * 内置 Provider 的 Key 若仍为空或占位符（首次启动时 env 未配置），
+   * 用当前 env 配置刷新，避免用户在 .env 补 Key 后重启不生效。
+   * 管理员在界面上手动设置的 Key 不会被覆盖。
+   */
+  private void refreshBuiltinKeysFromConfig() {
+    Map<String, ProviderConfig> providers = properties.getProviders();
+    if (providers == null || providers.isEmpty()) {
+      return;
+    }
+    int refreshed = 0;
+    for (Map.Entry<String, ProviderConfig> entry : providers.entrySet()) {
+      ProviderConfig config = entry.getValue();
+      if (config == null || isBlank(config.getApiKey())) {
+        continue;
+      }
+      LlmProviderEntity existing = providerRepository.findById(entry.getKey()).orElse(null);
+      if (existing == null || !existing.isBuiltin()) {
+        continue;
+      }
+      String storedKey = encryptionService.decrypt(
+          existing.getApiKeyNonce(), existing.getApiKeyCiphertext());
+      if (!isBlank(storedKey) && !storedKey.startsWith("your_")) {
+        continue; // 已是真实 Key，不动
+      }
+      ApiKeyEncryptionService.EncryptedValue encrypted = encryptionService.encrypt(config.getApiKey());
+      existing.setApiKeyNonce(encrypted.nonce());
+      existing.setApiKeyCiphertext(encrypted.ciphertext());
+      providerRepository.save(existing);
+      refreshed++;
+      log.info("已从 env 刷新内置 Provider Key: id={}", entry.getKey());
+    }
+    if (refreshed > 0) {
+      log.info("刷新了 {} 个内置 Provider 的 Key", refreshed);
+    }
   }
 
   private void seedProviders() {
