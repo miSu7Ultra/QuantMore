@@ -1,6 +1,8 @@
 package com.quantmore.modules.knowledgebase.seed;
 
+import com.quantmore.infrastructure.file.FileHashService;
 import com.quantmore.modules.knowledgebase.repository.KnowledgeBaseRepository;
+import com.quantmore.modules.knowledgebase.service.KnowledgeBaseDeleteService;
 import com.quantmore.modules.knowledgebase.service.KnowledgeBaseUploadService;
 import com.quantmore.modules.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -24,12 +26,14 @@ class LocalKbSeedRunnerTest {
   @Mock private UserRepository userRepository;
   @Mock private KnowledgeBaseUploadService uploadService;
   @Mock private KnowledgeBaseRepository knowledgeBaseRepository;
+  @Mock private KnowledgeBaseDeleteService deleteService;
+  @Mock private FileHashService fileHashService;
 
   @TempDir Path tempDir;
 
   private LocalKbSeedRunner newRunner(String seedDir) {
     LocalKbSeedRunner runner = new LocalKbSeedRunner(
-        userRepository, uploadService, knowledgeBaseRepository);
+        userRepository, uploadService, knowledgeBaseRepository, deleteService, fileHashService);
     runner.seedDir = seedDir;
     return runner;
   }

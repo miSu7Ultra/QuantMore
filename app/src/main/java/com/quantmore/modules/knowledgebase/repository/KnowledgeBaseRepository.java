@@ -31,6 +31,11 @@ public interface KnowledgeBaseRepository extends JpaRepository<KnowledgeBaseEnti
      */
     Optional<KnowledgeBaseEntity> findByFileHashAndOwnerIdIsNull(String fileHash);
 
+    /**
+     * 按名称查找公共知识库（种子同步用）
+     */
+    Optional<KnowledgeBaseEntity> findByOwnerIdIsNullAndName(String name);
+
     // ==================== 全局查询（管理员/系统使用） ====================
 
     /**

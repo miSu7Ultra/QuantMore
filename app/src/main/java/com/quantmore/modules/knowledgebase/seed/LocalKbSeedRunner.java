@@ -1,7 +1,10 @@
 package com.quantmore.modules.knowledgebase.seed;
 
+import com.quantmore.infrastructure.file.FileHashService;
+import com.quantmore.modules.knowledgebase.model.KnowledgeBaseEntity;
 import com.quantmore.modules.knowledgebase.model.VectorStatus;
 import com.quantmore.modules.knowledgebase.repository.KnowledgeBaseRepository;
+import com.quantmore.modules.knowledgebase.service.KnowledgeBaseDeleteService;
 import com.quantmore.modules.knowledgebase.service.KnowledgeBaseUploadService;
 import com.quantmore.modules.user.model.UserEntity;
 import com.quantmore.modules.user.model.UserRole;
@@ -44,6 +47,8 @@ public class LocalKbSeedRunner implements CommandLineRunner {
   private final UserRepository userRepository;
   private final KnowledgeBaseUploadService uploadService;
   private final KnowledgeBaseRepository knowledgeBaseRepository;
+  private final KnowledgeBaseDeleteService deleteService;
+  private final FileHashService fileHashService;
 
   @Value("${APP_SEED_KB_DIR:}")
   String seedDir;
@@ -68,12 +73,16 @@ public class LocalKbSeedRunner implements CommandLineRunner {
 
     int imported = 0;
     int duplicated = 0;
+    int replaced = 0;
     int revectorized = 0;
     int failed = 0;
     for (Map.Entry<String, List<Path>> entry : units.entrySet()) {
       String unitName = entry.getKey();
       try {
         MultipartFile multipart = toCombinedMarkdown(unitName, entry.getValue());
+        if (replaceIfContentChanged(unitName, multipart, admin)) {
+          replaced++;
+        }
         Map<String, Object> result = uploadService.uploadKnowledgeBase(
             multipart, unitName, unitName, "PUBLIC", admin.getId(), true);
         if (Boolean.TRUE.equals(result.get("duplicate"))) {
@@ -96,8 +105,26 @@ public class LocalKbSeedRunner implements CommandLineRunner {
         log.error("种子导入失败: {}", unitName, e);
       }
     }
-    log.info("种子导入汇总: 新增={}, 重复={}, 自动重向量化={}, 失败={}",
-        imported, duplicated, revectorized, failed);
+    log.info("种子导入汇总: 新增={}, 重复={}, 替换={}, 自动重向量化={}, 失败={}",
+        imported, duplicated, replaced, revectorized, failed);
+  }
+
+  /**
+   * 内容同步：同名公共知识库存在但内容哈希不同时，删除旧单元以便重新导入
+   */
+  private boolean replaceIfContentChanged(String unitName, MultipartFile multipart, UserEntity admin) {
+    KnowledgeBaseEntity existing = knowledgeBaseRepository.findByOwnerIdIsNullAndName(unitName)
+        .orElse(null);
+    if (existing == null) {
+      return false;
+    }
+    String newHash = fileHashService.calculateHash(multipart);
+    if (newHash.equals(existing.getFileHash())) {
+      return false;
+    }
+    deleteService.deleteKnowledgeBase(existing.getId(), admin.getId(), true);
+    log.info("种子同步: {} 内容已变更，已删除旧单元(kbId={})，将重新导入", unitName, existing.getId());
+    return true;
   }
 
   @SuppressWarnings("unchecked")
