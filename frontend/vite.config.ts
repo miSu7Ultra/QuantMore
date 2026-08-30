@@ -1,7 +1,5 @@
 import {defineConfig, loadEnv} from 'vite'
 import react from '@vitejs/plugin-react'
-import wasm from 'vite-plugin-wasm'
-import topLevelAwait from 'vite-plugin-top-level-await'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -10,8 +8,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      wasm(),
-      topLevelAwait(),
       react(),
     ],
     build: {
@@ -34,13 +30,6 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
         },
       },
-      // 忽略 @ricky0123/vad-web 的 sourcemap 警告
-      sourcemapIgnoreList: (relativeSourcePath) => {
-        return relativeSourcePath.includes('node_modules/.pnpm/@ricky0123+vad-web');
-      },
-    },
-    optimizeDeps: {
-      // No need to optimize vad-web since we load it via script tag
     },
   }
 });

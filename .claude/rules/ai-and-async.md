@@ -1,10 +1,10 @@
 ---
 paths:
-  - "app/src/main/java/interview/guide/common/ai/**/*.java"
-  - "app/src/main/java/interview/guide/common/annotation/**/*.java"
-  - "app/src/main/java/interview/guide/common/aspect/**/*.java"
-  - "app/src/main/java/interview/guide/common/async/**/*.java"
-  - "app/src/main/java/interview/guide/modules/**/listener/**/*.java"
+  - "app/src/main/java/com/quantmore/common/ai/**/*.java"
+  - "app/src/main/java/com/quantmore/common/annotation/**/*.java"
+  - "app/src/main/java/com/quantmore/common/aspect/**/*.java"
+  - "app/src/main/java/com/quantmore/common/async/**/*.java"
+  - "app/src/main/java/com/quantmore/modules/**/listener/**/*.java"
   - "app/src/main/resources/prompts/**/*.st"
   - "app/src/main/resources/scripts/**/*.lua"
 ---

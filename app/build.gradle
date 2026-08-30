@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.spring.dependency.management)
 }
 
-group = 'com.interview'
+group = 'com.quantmore'
 version = '0.0.1-SNAPSHOT'
 
 repositories {
@@ -26,7 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-flyway'
 
     // PostgreSQL
@@ -36,15 +36,10 @@ dependencies {
     // H2 Database for testing
     testRuntimeOnly 'com.h2database:h2'
 
-    // spring-ai-agent-utils BOM (version alignment)
-    implementation platform(libs.spring.ai.agent.utils.bom)
-
     // Spring AI 2.0 - OpenAI兼容模式 (阿里云DashScope)
     implementation "org.springframework.ai:spring-ai-starter-model-openai:${libs.versions.springAi.get()}"
     // Spring AI 2.0 - PostgreSQL Vector Store (pgvector)
     implementation "org.springframework.ai:spring-ai-starter-vector-store-pgvector:${libs.versions.springAi.get()}"
-    // spring-ai-agent-utils core library
-    implementation libs.spring.ai.agent.utils
 
     // Apache Tika for document parsing (PDF, DOCX, TXT)
     implementation libs.tika.core
@@ -56,6 +51,11 @@ dependencies {
     // Pinyin4j - 汉字转拼音
     implementation libs.pinyin4j
 
+    // JWT - jjwt 0.12.x
+    implementation libs.jjwt.api
+    runtimeOnly libs.jjwt.impl
+    runtimeOnly libs.jjwt.jackson
+
     // SpringDoc OpenAPI - Swagger接口文档
     implementation libs.springdoc
 
@@ -64,15 +64,6 @@ dependencies {
 
     // Prometheus metrics endpoint for Actuator
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-
-    // PDF导出 - iText 8
-    implementation "com.itextpdf:itext-core:${libs.versions.itext.get()}"
-    implementation "com.itextpdf:font-asian:${libs.versions.itext.get()}"
-
-    // Aliyun DashScope SDK for Qwen3 ASR/TTS (replaces NLS SDK)
-    implementation('com.alibaba:dashscope-sdk-java:2.22.7') {
-        exclude group: 'org.slf4j', module: 'slf4j-simple' // 使用 Spring Boot 的 Logback
-    }
 
     // Jakarta annotation for Java 21+ (replaces javax.annotation)
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
@@ -88,6 +79,8 @@ dependencies {
 
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Boot 4 模块化：MockMvc 测试切片移入独立 starter
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testImplementation libs.junit.jupiter
     testImplementation platform('org.testcontainers:testcontainers-bom:2.0.5')
     testImplementation 'org.testcontainers:testcontainers'

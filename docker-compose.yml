@@ -13,18 +13,18 @@ services:
   postgres:
     # 使用带有 pgvector 插件的 PostgreSQL 16 镜像
     image: pgvector/pgvector:pg16
-    container_name: interview-postgres
+    container_name: quantmore-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      POSTGRES_DB: interview_guide
+      POSTGRES_DB: quantmore
     volumes:
       # 数据持久化：确保容器重启或删除后，数据库数据不丢失
       - postgres_data:/var/lib/postgresql/data
       # 初始化脚本：容器首次启动时会自动执行 /docker-entrypoint-initdb.d/ 下的 .sql 文件
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
+      - "5433:5432"
     # 健康检查：
     # 后端服务(app)需要等待数据库完全启动并准备好连接后才能启动。
     # 这里通过 pg_isready 命令检测数据库状态。
@@ -46,9 +46,9 @@ services:
   # =========================================
   redis:
     image: redis:7
-    container_name: interview-redis
+    container_name: quantmore-redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -71,15 +71,15 @@ services:
   # =========================================
   minio:
     image: minio/minio
-    container_name: interview-minio
+    container_name: quantmore-minio
     # 启动命令：指定数据目录和控制台地址
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9002:9000"
+      - "9003:9001"
     volumes:
       - minio_data:/data
     healthcheck:
@@ -109,11 +109,11 @@ services:
       set -eu;
       /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin &&
       (
-        /usr/bin/mc ls myminio/interview-guide > /dev/null 2>&1 ||
-        /usr/bin/mc mb myminio/interview-guide
+        /usr/bin/mc ls myminio/quantmore > /dev/null 2>&1 ||
+        /usr/bin/mc mb myminio/quantmore
       ) &&
-      /usr/bin/mc anonymous set public myminio/interview-guide &&
-      /usr/bin/mc ls myminio/interview-guide
+      /usr/bin/mc anonymous set public myminio/quantmore &&
+      /usr/bin/mc ls myminio/quantmore
       "
 
   # =========================================
@@ -127,7 +127,7 @@ services:
     build:
       context: .
       dockerfile: app/Dockerfile
-    container_name: interview-app
+    container_name: quantmore-app
     # 依赖管理：确保基础设施准备好后再启动后端
     depends_on:
       postgres:
@@ -143,7 +143,7 @@ services:
       # 使用服务名 'postgres' 作为主机名，Docker 内部 DNS 会自动解析
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_DB: interview_guide
+      POSTGRES_DB: quantmore
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       
@@ -156,7 +156,7 @@ services:
       APP_STORAGE_ENDPOINT: http://minio:9000
       APP_STORAGE_ACCESS_KEY: minioadmin
       APP_STORAGE_SECRET_KEY: minioadmin
-      APP_STORAGE_BUCKET: interview-guide
+      APP_STORAGE_BUCKET: quantmore
       APP_STORAGE_REGION: us-east-1
       
       # === AI 模型配置 (必须配置) ===
@@ -165,9 +165,8 @@ services:
       AI_MODEL: ${AI_MODEL:-qwen3.5-flash}
       APP_AI_CONFIG_ENCRYPTION_KEY: ${APP_AI_CONFIG_ENCRYPTION_KEY}
 
-      # === 面试参数配置 ===
-      APP_INTERVIEW_FOLLOW_UP_COUNT: ${APP_INTERVIEW_FOLLOW_UP_COUNT:-1}
-      APP_INTERVIEW_EVALUATION_BATCH_SIZE: ${APP_INTERVIEW_EVALUATION_BATCH_SIZE:-8}
+      # === 安全配置 ===
+      APP_JWT_SECRET: ${APP_JWT_SECRET}
     ports:
       - "8080:8080"
 
@@ -180,7 +179,7 @@ services:
   # =========================================
   frontend:
     build: ./frontend
-    container_name: interview-frontend
+    container_name: quantmore-frontend
     depends_on:
       - app
     ports:
