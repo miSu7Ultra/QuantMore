@@ -30,11 +30,11 @@ public class KnowledgeBaseDeleteService {
     private final TransactionalExecutor transactionalExecutor;
     
     /**
-     * 删除知识库
-     * 包括：RAG会话关联、向量数据、RustFS文件、数据库记录
+     * 删除知识库（owner 或管理员）
+     * 包括：RAG会话关联、向量数据、MinIO文件、数据库记录
      */
-    public void deleteKnowledgeBase(Long id) {
-        String storageKey = transactionalExecutor.call(() -> deleteKnowledgeBaseRecords(id));
+    public void deleteKnowledgeBase(Long id, Long userId, boolean isAdmin) {
+        String storageKey = transactionalExecutor.call(() -> deleteKnowledgeBaseRecords(id, userId, isAdmin));
 
         vectorService.deleteByKnowledgeBaseId(id);
 
@@ -42,7 +42,7 @@ public class KnowledgeBaseDeleteService {
             storageService.deleteKnowledgeBase(storageKey);
         } catch (Exception e) {
             log.warn(
-                "知识库数据库记录已删除，但RustFS文件清理失败，可后续按storageKey补偿: kbId={}, storageKey={}, error={}",
+                "知识库数据库记录已删除，但MinIO文件清理失败，可后续按storageKey补偿: kbId={}, storageKey={}, error={}",
                 id, storageKey, e.getMessage(), e
             );
         }
@@ -50,10 +50,13 @@ public class KnowledgeBaseDeleteService {
         log.info("知识库已删除: id={}", id);
     }
 
-    private String deleteKnowledgeBaseRecords(Long id) {
-        // 1. 获取知识库信息
+    private String deleteKnowledgeBaseRecords(Long id, Long userId, boolean isAdmin) {
+        // 1. 获取知识库信息并校验归属
         KnowledgeBaseEntity kb = knowledgeBaseRepository.findById(id)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "知识库不存在"));
+        if (!isAdmin && !userId.equals(kb.getOwnerId())) {
+            throw new BusinessException(ErrorCode.KNOWLEDGE_BASE_FORBIDDEN, "无权删除该知识库");
+        }
         String storageKey = kb.getStorageKey();
         
         // 2. 删除所有RAG会话中的知识库关联（必须先删除关联，否则外键约束会阻止删除）

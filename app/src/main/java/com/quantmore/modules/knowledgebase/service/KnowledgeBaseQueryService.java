@@ -6,6 +6,10 @@ import com.quantmore.common.exception.BusinessException;
 import com.quantmore.common.exception.ErrorCode;
 import com.quantmore.modules.knowledgebase.model.QueryRequest;
 import com.quantmore.modules.knowledgebase.model.QueryResponse;
+import com.quantmore.modules.knowledgebase.repository.KnowledgeBaseRepository;
+import com.quantmore.modules.user.model.UserPrincipal;
+import com.quantmore.modules.user.model.UserRole;
+import com.quantmore.modules.user.service.CurrentUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -44,6 +48,8 @@ public class KnowledgeBaseQueryService {
     private final KnowledgeBaseVectorService vectorService;
     private final KnowledgeBaseListService listService;
     private final KnowledgeBaseCountService countService;
+    private final KnowledgeBaseRepository knowledgeBaseRepository;
+    private final CurrentUserService currentUserService;
     private final PromptTemplate systemPromptTemplate;
     private final PromptTemplate userPromptTemplate;
     private final PromptTemplate rewritePromptTemplate;
@@ -60,12 +66,16 @@ public class KnowledgeBaseQueryService {
             KnowledgeBaseVectorService vectorService,
             KnowledgeBaseListService listService,
             KnowledgeBaseCountService countService,
+            KnowledgeBaseRepository knowledgeBaseRepository,
+            CurrentUserService currentUserService,
             KnowledgeBaseQueryProperties queryProperties,
             ResourceLoader resourceLoader) throws IOException {
         this.llmProviderRegistry = llmProviderRegistry;
         this.vectorService = vectorService;
         this.listService = listService;
         this.countService = countService;
+        this.knowledgeBaseRepository = knowledgeBaseRepository;
+        this.currentUserService = currentUserService;
         this.systemPromptTemplate = new PromptTemplate(
             resourceLoader.getResource(queryProperties.getSystemPromptPath())
                 .getContentAsString(StandardCharsets.UTF_8)
@@ -85,6 +95,22 @@ public class KnowledgeBaseQueryService {
         this.topkLong = queryProperties.getSearch().getTopkLong();
         this.minScoreShort = queryProperties.getSearch().getMinScoreShort();
         this.minScoreDefault = queryProperties.getSearch().getMinScoreDefault();
+    }
+
+    /**
+     * 校验请求的知识库对当前用户可见（管理员跳过）
+     */
+    private void validateKbVisibility(List<Long> kbIds) {
+        UserPrincipal user = currentUserService.get();
+        if (user.role() == UserRole.ADMIN) {
+            return;
+        }
+        for (Long kbId : kbIds) {
+            if (!knowledgeBaseRepository.isVisibleToUser(kbId, user.id())) {
+                throw new BusinessException(ErrorCode.KNOWLEDGE_BASE_FORBIDDEN,
+                    "知识库不可见或不存在: " + kbId);
+            }
+        }
     }
 
     private ChatClient getChatClient() {
@@ -114,6 +140,8 @@ public class KnowledgeBaseQueryService {
         if (knowledgeBaseIds == null || knowledgeBaseIds.isEmpty() || normalizeQuestion(question).isBlank()) {
             return NO_RESULT_RESPONSE;
         }
+
+        validateKbVisibility(knowledgeBaseIds);
 
         countService.updateQuestionCounts(knowledgeBaseIds);
 
@@ -207,6 +235,8 @@ public class KnowledgeBaseQueryService {
         if (knowledgeBaseIds == null || knowledgeBaseIds.isEmpty() || normalizeQuestion(question).isBlank()) {
             return Flux.just(NO_RESULT_RESPONSE);
         }
+
+        validateKbVisibility(knowledgeBaseIds);
 
         try {
             // 1. 验证知识库是否存在并更新问题计数

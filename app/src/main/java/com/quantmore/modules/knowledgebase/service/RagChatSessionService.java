@@ -4,6 +4,7 @@ import com.quantmore.common.exception.BusinessException;
 import com.quantmore.common.exception.ErrorCode;
 import com.quantmore.infrastructure.mapper.KnowledgeBaseMapper;
 import com.quantmore.infrastructure.mapper.RagChatMapper;
+import com.quantmore.modules.knowledgebase.model.KbVisibility;
 import com.quantmore.modules.knowledgebase.model.KnowledgeBaseEntity;
 import com.quantmore.modules.knowledgebase.model.KnowledgeBaseListItemDTO;
 import com.quantmore.modules.knowledgebase.model.RagChatDTO.CreateSessionRequest;
@@ -15,6 +16,9 @@ import com.quantmore.modules.knowledgebase.model.RagChatSessionEntity;
 import com.quantmore.modules.knowledgebase.repository.KnowledgeBaseRepository;
 import com.quantmore.modules.knowledgebase.repository.RagChatMessageRepository;
 import com.quantmore.modules.knowledgebase.repository.RagChatSessionRepository;
+import com.quantmore.modules.user.model.UserPrincipal;
+import com.quantmore.modules.user.model.UserRole;
+import com.quantmore.modules.user.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -44,22 +48,33 @@ public class RagChatSessionService {
     private final RagChatMapper ragChatMapper;
     private final KnowledgeBaseMapper knowledgeBaseMapper;
     private final KnowledgeBaseQueryProperties queryProperties;
+    private final CurrentUserService currentUserService;
 
     /**
-     * 创建新会话
+     * 创建新会话（校验知识库可见性，会话归属当前用户）
      */
     @Transactional
     public SessionDTO createSession(CreateSessionRequest request) {
-        // 验证知识库存在
+        UserPrincipal user = currentUserService.get();
+        // 验证知识库存在且对当前用户可见
         List<KnowledgeBaseEntity> knowledgeBases = knowledgeBaseRepository
             .findAllById(request.knowledgeBaseIds());
 
         if (knowledgeBases.size() != request.knowledgeBaseIds().size()) {
             throw new BusinessException(ErrorCode.NOT_FOUND, "部分知识库不存在");
         }
+        if (user.role() != UserRole.ADMIN) {
+            for (KnowledgeBaseEntity kb : knowledgeBases) {
+                if (kb.getVisibility() == KbVisibility.PRIVATE && !user.id().equals(kb.getOwnerId())) {
+                    throw new BusinessException(ErrorCode.KNOWLEDGE_BASE_FORBIDDEN,
+                        "知识库不可见或不存在: " + kb.getId());
+                }
+            }
+        }
 
         // 创建会话
         RagChatSessionEntity session = new RagChatSessionEntity();
+        session.setUserId(user.id());
         session.setTitle(request.title() != null && !request.title().isBlank()
             ? request.title()
             : generateTitle(knowledgeBases));
@@ -67,16 +82,17 @@ public class RagChatSessionService {
 
         session = sessionRepository.save(session);
 
-        log.info("创建 RAG 聊天会话: id={}, title={}", session.getId(), session.getTitle());
+        log.info("创建 RAG 聊天会话: id={}, title={}, userId={}", session.getId(), session.getTitle(), user.id());
 
         return ragChatMapper.toSessionDTO(session);
     }
 
     /**
-     * 获取会话列表
+     * 获取会话列表（仅当前用户）
      */
     public List<SessionListItemDTO> listSessions() {
-        return sessionRepository.findAllOrderByPinnedAndUpdatedAtDesc()
+        return sessionRepository.findAllByUserIdOrderByPinnedAndUpdatedAtDesc(
+                currentUserService.get().id())
             .stream()
             .map(ragChatMapper::toSessionListItemDTO)
             .toList();
@@ -91,6 +107,7 @@ public class RagChatSessionService {
         RagChatSessionEntity session = sessionRepository
             .findByIdWithKnowledgeBases(sessionId)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "会话不存在"));
+        assertOwnership(session);
 
         // 再单独加载消息（避免笛卡尔积）
         List<RagChatMessageEntity> messages = messageRepository
@@ -113,6 +130,7 @@ public class RagChatSessionService {
     public Long prepareStreamMessage(Long sessionId, String question) {
         RagChatSessionEntity session = sessionRepository.findByIdWithKnowledgeBases(sessionId)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "会话不存在"));
+        assertOwnership(session);
 
         // 获取当前消息数量作为起始顺序
         int nextOrder = session.getMessageCount();
@@ -151,6 +169,7 @@ public class RagChatSessionService {
     public void completeStreamMessage(Long messageId, String content) {
         RagChatMessageEntity message = messageRepository.findById(messageId)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "消息不存在"));
+        assertOwnership(message.getSession());
 
         message.setContent(content);
         message.setCompleted(true);
@@ -165,6 +184,7 @@ public class RagChatSessionService {
     public Flux<String> getStreamAnswer(Long sessionId, String question) {
         RagChatSessionEntity session = sessionRepository.findByIdWithKnowledgeBases(sessionId)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "会话不存在"));
+        assertOwnership(session);
 
         List<Long> kbIds = session.getKnowledgeBaseIds();
         List<Message> history = queryProperties.getHistory().isEnabled()
@@ -181,6 +201,7 @@ public class RagChatSessionService {
     public void updateSessionTitle(Long sessionId, String title) {
         RagChatSessionEntity session = sessionRepository.findById(sessionId)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "会话不存在"));
+        assertOwnership(session);
 
         session.setTitle(title);
         sessionRepository.save(session);
@@ -195,6 +216,7 @@ public class RagChatSessionService {
     public void togglePin(Long sessionId) {
         RagChatSessionEntity session = sessionRepository.findById(sessionId)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "会话不存在"));
+        assertOwnership(session);
 
         // 处理 null 值（兼容旧数据）
         Boolean currentPinned = session.getIsPinned() != null ? session.getIsPinned() : false;
@@ -211,9 +233,22 @@ public class RagChatSessionService {
     public void updateSessionKnowledgeBases(Long sessionId, List<Long> knowledgeBaseIds) {
         RagChatSessionEntity session = sessionRepository.findById(sessionId)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "会话不存在"));
+        assertOwnership(session);
 
+        UserPrincipal user = currentUserService.get();
         List<KnowledgeBaseEntity> knowledgeBases = knowledgeBaseRepository
             .findAllById(knowledgeBaseIds);
+        if (knowledgeBases.size() != knowledgeBaseIds.size()) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "部分知识库不存在");
+        }
+        if (user.role() != UserRole.ADMIN) {
+            for (KnowledgeBaseEntity kb : knowledgeBases) {
+                if (kb.getVisibility() == KbVisibility.PRIVATE && !user.id().equals(kb.getOwnerId())) {
+                    throw new BusinessException(ErrorCode.KNOWLEDGE_BASE_FORBIDDEN,
+                        "知识库不可见或不存在: " + kb.getId());
+                }
+            }
+        }
 
         session.setKnowledgeBases(new HashSet<>(knowledgeBases));
         sessionRepository.save(session);
@@ -226,15 +261,28 @@ public class RagChatSessionService {
      */
     @Transactional
     public void deleteSession(Long sessionId) {
-        if (!sessionRepository.existsById(sessionId)) {
-            throw new BusinessException(ErrorCode.NOT_FOUND, "会话不存在");
-        }
+        RagChatSessionEntity session = sessionRepository.findById(sessionId)
+            .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "会话不存在"));
+        assertOwnership(session);
         sessionRepository.deleteById(sessionId);
 
         log.info("删除会话: sessionId={}", sessionId);
     }
 
     // ========== 私有方法 ==========
+
+    /**
+     * 会话归属校验：仅 owner 或管理员
+     */
+    private void assertOwnership(RagChatSessionEntity session) {
+        UserPrincipal user = currentUserService.get();
+        if (user.role() == UserRole.ADMIN) {
+            return;
+        }
+        if (!user.id().equals(session.getUserId())) {
+            throw new BusinessException(ErrorCode.FORBIDDEN, "无权访问该会话");
+        }
+    }
 
     /**
      * 加载会话中最近的历史消息作为多轮上下文。

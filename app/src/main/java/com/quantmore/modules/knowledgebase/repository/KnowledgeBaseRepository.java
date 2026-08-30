@@ -3,50 +3,40 @@ package com.quantmore.modules.knowledgebase.repository;
 import com.quantmore.modules.knowledgebase.model.KnowledgeBaseEntity;
 import com.quantmore.modules.knowledgebase.model.VectorStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import jakarta.persistence.LockModeType;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * 知识库Repository
+ * 可见性规则：PUBLIC（owner 为 NULL）全员可见，PRIVATE 仅 owner 可见；
+ * 「可见」查询以 findVisible* / isVisibleToUser 方法表达，管理员场景由 Service 选择全局方法。
  */
 @Repository
 public interface KnowledgeBaseRepository extends JpaRepository<KnowledgeBaseEntity, Long> {
 
-    /**
-     * 根据文件哈希查找知识库（用于去重）
-     */
-    Optional<KnowledgeBaseEntity> findByFileHash(String fileHash);
+    // ==================== 按 owner 范围去重 ====================
 
     /**
-     * 锁定知识库行，用于串行化同一知识库的题目生成状态迁移。
+     * 私有知识库去重：同一用户下相同哈希视为重复
      */
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT k FROM KnowledgeBaseEntity k WHERE k.id = :id")
-    Optional<KnowledgeBaseEntity> findByIdForUpdate(@Param("id") Long id);
+    Optional<KnowledgeBaseEntity> findByOwnerIdAndFileHash(Long ownerId, String fileHash);
 
     /**
-     * 检查文件哈希是否存在
+     * 公共知识库去重：公共范围内相同哈希视为重复
      */
-    boolean existsByFileHash(String fileHash);
+    Optional<KnowledgeBaseEntity> findByFileHashAndOwnerIdIsNull(String fileHash);
+
+    // ==================== 全局查询（管理员/系统使用） ====================
 
     /**
      * 按上传时间倒序查找所有知识库
      */
     List<KnowledgeBaseEntity> findAllByOrderByUploadedAtDesc();
-
-    /**
-     * 获取所有不同的分类
-     */
-    @Query("SELECT DISTINCT k.category FROM KnowledgeBaseEntity k WHERE k.category IS NOT NULL ORDER BY k.category")
-    List<String> findAllCategories();
 
     /**
      * 根据分类查找知识库
@@ -59,38 +49,60 @@ public interface KnowledgeBaseRepository extends JpaRepository<KnowledgeBaseEnti
     List<KnowledgeBaseEntity> findByCategoryIsNullOrderByUploadedAtDesc();
 
     /**
+     * 按向量化状态查找知识库（按上传时间倒序）
+     */
+    List<KnowledgeBaseEntity> findByVectorStatusOrderByUploadedAtDesc(VectorStatus vectorStatus);
+
+    /**
      * 按名称或文件名模糊搜索（不区分大小写）
      */
     @Query("SELECT k FROM KnowledgeBaseEntity k WHERE LOWER(k.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(k.originalFilename) LIKE LOWER(CONCAT('%', :keyword, '%')) ORDER BY k.uploadedAt DESC")
     List<KnowledgeBaseEntity> searchByKeyword(@Param("keyword") String keyword);
 
     /**
-     * 按文件大小排序
+     * 获取所有不同的分类
      */
-    List<KnowledgeBaseEntity> findAllByOrderByFileSizeDesc();
+    @Query("SELECT DISTINCT k.category FROM KnowledgeBaseEntity k WHERE k.category IS NOT NULL ORDER BY k.category")
+    List<String> findAllCategories();
 
-    /**
-     * 按访问次数排序
-     */
-    List<KnowledgeBaseEntity> findAllByOrderByAccessCountDesc();
+    // ==================== 可见性范围查询 ====================
 
-    /**
-     * 按提问次数排序
-     */
-    List<KnowledgeBaseEntity> findAllByOrderByQuestionCountDesc();
+    @Query("SELECT k FROM KnowledgeBaseEntity k WHERE k.visibility = 'PUBLIC' OR k.ownerId = :userId ORDER BY k.uploadedAt DESC")
+    List<KnowledgeBaseEntity> findVisibleOrderByUploadedAtDesc(@Param("userId") Long userId);
 
-    // ==================== 批量更新 ====================
+    @Query("SELECT k FROM KnowledgeBaseEntity k WHERE (k.visibility = 'PUBLIC' OR k.ownerId = :userId) AND k.vectorStatus = :status ORDER BY k.uploadedAt DESC")
+    List<KnowledgeBaseEntity> findVisibleByVectorStatusOrderByUploadedAtDesc(
+        @Param("userId") Long userId, @Param("status") VectorStatus status);
 
-    /**
-     * 批量增加知识库提问计数
-     * @param ids 知识库ID列表
-     * @return 更新的行数
-     */
-    @Modifying
-    @Query("UPDATE KnowledgeBaseEntity k SET k.questionCount = k.questionCount + 1 WHERE k.id IN :ids")
-    int incrementQuestionCountBatch(@Param("ids") List<Long> ids);
+    @Query("SELECT k FROM KnowledgeBaseEntity k WHERE (k.visibility = 'PUBLIC' OR k.ownerId = :userId) AND k.category = :category ORDER BY k.uploadedAt DESC")
+    List<KnowledgeBaseEntity> findVisibleByCategoryOrderByUploadedAtDesc(
+        @Param("userId") Long userId, @Param("category") String category);
 
-    // ==================== 统计查询 ====================
+    @Query("SELECT k FROM KnowledgeBaseEntity k WHERE (k.visibility = 'PUBLIC' OR k.ownerId = :userId) AND k.category IS NULL ORDER BY k.uploadedAt DESC")
+    List<KnowledgeBaseEntity> findVisibleUncategorizedOrderByUploadedAtDesc(@Param("userId") Long userId);
+
+    @Query("SELECT k FROM KnowledgeBaseEntity k WHERE (k.visibility = 'PUBLIC' OR k.ownerId = :userId) AND (LOWER(k.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(k.originalFilename) LIKE LOWER(CONCAT('%', :keyword, '%'))) ORDER BY k.uploadedAt DESC")
+    List<KnowledgeBaseEntity> searchVisibleByKeyword(
+        @Param("userId") Long userId, @Param("keyword") String keyword);
+
+    @Query("SELECT DISTINCT k.category FROM KnowledgeBaseEntity k WHERE k.category IS NOT NULL AND (k.visibility = 'PUBLIC' OR k.ownerId = :userId) ORDER BY k.category")
+    List<String> findVisibleCategories(@Param("userId") Long userId);
+
+    @Query("SELECT COUNT(k) > 0 FROM KnowledgeBaseEntity k WHERE k.id = :id AND (k.visibility = 'PUBLIC' OR k.ownerId = :userId)")
+    boolean isVisibleToUser(@Param("id") Long id, @Param("userId") Long userId);
+
+    // ==================== 可见性范围统计 ====================
+
+    @Query("SELECT COUNT(k) FROM KnowledgeBaseEntity k WHERE k.visibility = 'PUBLIC' OR k.ownerId = :userId")
+    long countVisible(@Param("userId") Long userId);
+
+    @Query("SELECT COUNT(k) FROM KnowledgeBaseEntity k WHERE (k.visibility = 'PUBLIC' OR k.ownerId = :userId) AND k.vectorStatus = :status")
+    long countVisibleByVectorStatus(@Param("userId") Long userId, @Param("status") VectorStatus status);
+
+    @Query("SELECT COALESCE(SUM(k.accessCount), 0) FROM KnowledgeBaseEntity k WHERE k.visibility = 'PUBLIC' OR k.ownerId = :userId")
+    long sumVisibleAccessCount(@Param("userId") Long userId);
+
+    // ==================== 全局统计 ====================
 
     /**
      * 统计总提问次数
@@ -109,8 +121,14 @@ public interface KnowledgeBaseRepository extends JpaRepository<KnowledgeBaseEnti
      */
     long countByVectorStatus(VectorStatus vectorStatus);
 
+    // ==================== 批量更新 ====================
+
     /**
-     * 按向量化状态查找知识库（按上传时间倒序）
+     * 批量增加知识库提问计数
+     * @param ids 知识库ID列表
+     * @return 更新的行数
      */
-    List<KnowledgeBaseEntity> findByVectorStatusOrderByUploadedAtDesc(VectorStatus vectorStatus);
+    @Modifying
+    @Query("UPDATE KnowledgeBaseEntity k SET k.questionCount = k.questionCount + 1 WHERE k.id IN :ids")
+    int incrementQuestionCountBatch(@Param("ids") List<Long> ids);
 }

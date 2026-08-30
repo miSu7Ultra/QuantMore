@@ -9,8 +9,9 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "knowledge_bases", indexes = {
-    @Index(name = "idx_kb_hash", columnList = "fileHash", unique = true),
-    @Index(name = "idx_kb_category", columnList = "category")
+    @Index(name = "idx_kb_category", columnList = "category"),
+    @Index(name = "idx_kb_owner_visibility", columnList = "ownerId, visibility"),
+    @Index(name = "idx_kb_owner_file_hash", columnList = "ownerId, fileHash")
 })
 public class KnowledgeBaseEntity {
 
@@ -18,9 +19,17 @@ public class KnowledgeBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 文件内容的SHA-256哈希值，用于去重
-    @Column(nullable = false, unique = true, length = 64)
+    // 文件内容的SHA-256哈希值，用于去重（按 owner 范围去重，不再全局唯一）
+    @Column(nullable = false, length = 64)
     private String fileHash;
+
+    // 上传者；NULL 表示公共知识库（管理员上传）
+    private Long ownerId;
+
+    // 可见性：PUBLIC 全员可见 / PRIVATE 仅上传者可见
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private KbVisibility visibility = KbVisibility.PRIVATE;
 
     // 知识库名称（用户自定义或从文件名提取）
     @Column(nullable = false)
@@ -95,6 +104,22 @@ public class KnowledgeBaseEntity {
     
     public void setFileHash(String fileHash) {
         this.fileHash = fileHash;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public KbVisibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(KbVisibility visibility) {
+        this.visibility = visibility;
     }
     
     public String getName() {

@@ -11,6 +11,9 @@ import com.quantmore.modules.knowledgebase.service.KnowledgeBaseDeleteService;
 import com.quantmore.modules.knowledgebase.service.KnowledgeBaseListService;
 import com.quantmore.modules.knowledgebase.service.KnowledgeBaseQueryService;
 import com.quantmore.modules.knowledgebase.service.KnowledgeBaseUploadService;
+import com.quantmore.modules.user.model.UserPrincipal;
+import com.quantmore.modules.user.model.UserRole;
+import com.quantmore.modules.user.service.CurrentUserService;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +50,15 @@ public class KnowledgeBaseController {
     private final KnowledgeBaseQueryService queryService;
     private final KnowledgeBaseListService listService;
     private final KnowledgeBaseDeleteService deleteService;
+    private final CurrentUserService currentUserService;
+
+    private UserPrincipal currentUser() {
+        return currentUserService.get();
+    }
+
+    private boolean isAdmin() {
+        return currentUser().role() == UserRole.ADMIN;
+    }
 
     /**
      * 获取所有知识库列表
@@ -83,7 +95,7 @@ public class KnowledgeBaseController {
      */
     @DeleteMapping("/api/knowledgebase/{id}")
     public Result<Void> deleteKnowledgeBase(@PathVariable Long id) {
-        deleteService.deleteKnowledgeBase(id);
+        deleteService.deleteKnowledgeBase(id, currentUser().id(), isAdmin());
         return Result.success(null);
     }
 
@@ -155,8 +167,10 @@ public class KnowledgeBaseController {
     public Result<Map<String, Object>> uploadKnowledgeBase(
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "category", required = false) String category) {
-        return Result.success(uploadService.uploadKnowledgeBase(file, name, category));
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "visibility", required = false) String visibility) {
+        return Result.success(uploadService.uploadKnowledgeBase(
+            file, name, category, visibility, currentUser().id(), isAdmin()));
     }
 
     /**
@@ -210,7 +224,7 @@ public class KnowledgeBaseController {
     @RateLimit(dimension = RateLimit.Dimension.GLOBAL, count = 2)
     @RateLimit(dimension = RateLimit.Dimension.IP, count = 2)
     public Result<Void> revectorize(@PathVariable Long id) {
-        uploadService.revectorize(id);
+        uploadService.revectorize(id, currentUser().id(), isAdmin());
         return Result.success(null);
     }
 

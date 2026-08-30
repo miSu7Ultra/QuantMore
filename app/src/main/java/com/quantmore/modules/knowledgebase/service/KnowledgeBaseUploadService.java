@@ -6,6 +6,7 @@ import com.quantmore.infrastructure.file.FileHashService;
 import com.quantmore.infrastructure.file.FileStorageService;
 import com.quantmore.infrastructure.file.FileValidationService;
 import com.quantmore.modules.knowledgebase.listener.VectorizeStreamProducer;
+import com.quantmore.modules.knowledgebase.model.KbVisibility;
 import com.quantmore.modules.knowledgebase.model.KnowledgeBaseEntity;
 import com.quantmore.modules.knowledgebase.model.VectorStatus;
 import com.quantmore.modules.knowledgebase.repository.KnowledgeBaseRepository;
@@ -43,24 +44,36 @@ public class KnowledgeBaseUploadService {
      * @param file 知识库文件
      * @param name 知识库名称（可选，如果为空则从文件名提取）
      * @param category 分类（可选）
+     * @param visibility 可见性（仅管理员可传 PUBLIC，普通用户强制 PRIVATE）
+     * @param userId 当前用户（管理员传 PUBLIC 时为 NULL owner）
+     * @param isAdmin 当前用户是否为管理员
      * @return 上传结果和存储信息（包含duplicate字段，表示是否为重复上传）
      */
-    public Map<String, Object> uploadKnowledgeBase(MultipartFile file, String name, String category) {
+    public Map<String, Object> uploadKnowledgeBase(MultipartFile file, String name, String category,
+                                                   String visibility, Long userId, boolean isAdmin) {
+        // 0. 可见性解析：普通用户强制 PRIVATE
+        boolean isPublic = isAdmin && "PUBLIC".equalsIgnoreCase(visibility);
+        KbVisibility kbVisibility = isPublic ? KbVisibility.PUBLIC : KbVisibility.PRIVATE;
+        Long ownerId = isPublic ? null : userId;
+
         // 1. 验证文件
         fileValidationService.validateFile(file, MAX_FILE_SIZE, "知识库");
 
         String fileName = file.getOriginalFilename();
-        log.info("收到知识库上传请求: {}, 大小: {} bytes, category: {}", fileName, file.getSize(), category);
+        log.info("收到知识库上传请求: {}, 大小: {} bytes, category: {}, visibility: {}",
+            fileName, file.getSize(), category, kbVisibility);
 
         // 2. 验证文件类型
         String contentType = parseService.detectContentType(file);
         validateContentType(contentType, fileName);
 
-        // 3. 检查知识库是否已存在（去重）
+        // 3. 按 owner 范围检查知识库是否已存在（去重，避免跨用户信息泄露）
         String fileHash = fileHashService.calculateHash(file);
-        Optional<KnowledgeBaseEntity> existingKb = knowledgeBaseRepository.findByFileHash(fileHash);
+        Optional<KnowledgeBaseEntity> existingKb = isPublic
+            ? knowledgeBaseRepository.findByFileHashAndOwnerIdIsNull(fileHash)
+            : knowledgeBaseRepository.findByOwnerIdAndFileHash(ownerId, fileHash);
         if (existingKb.isPresent()) {
-            log.info("检测到重复知识库: hash={}", fileHash);
+            log.info("检测到重复知识库: hash={}, scope={}", fileHash, kbVisibility);
             return persistenceService.handleDuplicateKnowledgeBase(existingKb.get(), fileHash);
         }
 
@@ -70,13 +83,14 @@ public class KnowledgeBaseUploadService {
             throw new BusinessException(ErrorCode.INTERNAL_ERROR, "无法从文件中提取文本内容，请确保文件格式正确");
         }
 
-        // 5. 保存文件到RustFS
+        // 5. 保存文件到MinIO
         String fileKey = storageService.uploadKnowledgeBase(file);
         String fileUrl = storageService.getFileUrl(fileKey);
-        log.info("知识库已存储到RustFS: {}", fileKey);
+        log.info("知识库已存储到MinIO: {}", fileKey);
 
         // 6. 保存知识库元数据到数据库（状态为 PENDING）
-        KnowledgeBaseEntity savedKb = persistenceService.saveKnowledgeBase(file, name, category, fileKey, fileUrl, fileHash);
+        KnowledgeBaseEntity savedKb = persistenceService.saveKnowledgeBase(
+            file, name, category, fileKey, fileUrl, fileHash, ownerId, kbVisibility);
 
         // 7. 发送向量化任务到 Redis Stream（异步处理）
         vectorizeStreamProducer.sendVectorizeTask(savedKb.getId(), content);
@@ -91,7 +105,8 @@ public class KnowledgeBaseUploadService {
                 "category", savedKb.getCategory() != null ? savedKb.getCategory() : "",
                 "fileSize", savedKb.getFileSize(),
                 "contentLength", content.length(),
-                "vectorStatus", VectorStatus.PENDING.name()
+                "vectorStatus", VectorStatus.PENDING.name(),
+                "visibility", kbVisibility.name()
             ),
             "storage", Map.of(
                 "fileKey", fileKey,
@@ -116,13 +131,18 @@ public class KnowledgeBaseUploadService {
     
     /**
      * 重新向量化知识库（手动重试）
-     * 从 RustFS 重新下载文件并发送向量化任务
+     * 从 MinIO 重新下载文件并发送向量化任务
      *
      * @param kbId 知识库ID
+     * @param userId 当前用户
+     * @param isAdmin 当前用户是否为管理员
      */
-    public void revectorize(Long kbId) {
+    public void revectorize(Long kbId, Long userId, boolean isAdmin) {
         KnowledgeBaseEntity kb = knowledgeBaseRepository.findById(kbId)
             .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "知识库不存在"));
+        if (!isAdmin && !userId.equals(kb.getOwnerId())) {
+            throw new BusinessException(ErrorCode.KNOWLEDGE_BASE_FORBIDDEN, "无权操作该知识库");
+        }
 
         log.info("开始重新向量化知识库: kbId={}, name={}", kbId, kb.getName());
 

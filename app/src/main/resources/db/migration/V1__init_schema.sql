@@ -43,15 +43,18 @@ CREATE TABLE knowledge_bases (
   last_accessed_at TIMESTAMP(6),
   name VARCHAR(255) NOT NULL,
   original_filename VARCHAR(255) NOT NULL,
+  owner_id BIGINT,
   question_count INTEGER,
   storage_key VARCHAR(500),
   storage_url VARCHAR(1000),
   uploaded_at TIMESTAMP(6) NOT NULL,
   vector_error VARCHAR(500),
   vector_status VARCHAR(20),
+  visibility VARCHAR(20) NOT NULL DEFAULT 'PRIVATE',
   CONSTRAINT knowledge_bases_vector_status_check
     CHECK (vector_status IN ('PENDING', 'PROCESSING', 'COMPLETED', 'FAILED')),
-  CONSTRAINT idx_kb_hash UNIQUE (file_hash)
+  CONSTRAINT kb_visibility_check CHECK (visibility IN ('PUBLIC','PRIVATE')),
+  CONSTRAINT fk_kb_owner FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
 CREATE TABLE llm_global_setting (
@@ -86,8 +89,10 @@ CREATE TABLE rag_chat_sessions (
   status VARCHAR(20),
   title VARCHAR(255) NOT NULL,
   updated_at TIMESTAMP(6),
+  user_id BIGINT NOT NULL,
   CONSTRAINT rag_chat_sessions_status_check
-    CHECK (status IN ('ACTIVE', 'ARCHIVED'))
+    CHECK (status IN ('ACTIVE', 'ARCHIVED')),
+  CONSTRAINT fk_rag_session_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE rag_chat_messages (
@@ -124,6 +129,12 @@ CREATE TABLE vector_store (
 
 CREATE INDEX idx_kb_category
   ON knowledge_bases (category);
+CREATE INDEX idx_kb_owner_visibility
+  ON knowledge_bases (owner_id, visibility);
+CREATE INDEX idx_kb_owner_file_hash
+  ON knowledge_bases (owner_id, file_hash);
+CREATE INDEX idx_rag_session_user
+  ON rag_chat_sessions (user_id);
 CREATE INDEX idx_rag_message_order
   ON rag_chat_messages (session_id, message_order);
 CREATE INDEX idx_rag_message_session
