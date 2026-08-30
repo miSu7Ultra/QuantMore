@@ -12,7 +12,6 @@ import {
   ShieldCheck,
   Sparkles,
   Sun,
-  Upload,
 } from 'lucide-react';
 import {useTheme} from '../hooks/useTheme';
 import {ROUTES} from '../constants/routes';
@@ -46,7 +45,6 @@ export default function Layout() {
       title: '知识库',
       items: [
         { id: 'kb-manage', path: ROUTES.knowledgebase, label: '知识库管理', icon: Database, description: '管理知识文档' },
-        { id: 'kb-upload', path: ROUTES.knowledgebaseUpload, label: '上传知识库', icon: Upload, description: '上传文档并向量化' },
         { id: 'chat', path: ROUTES.knowledgebaseChat, label: '问答助手', icon: MessageSquare, description: '基于知识库问答' },
       ],
     },

@@ -1,5 +1,7 @@
 package com.quantmore.modules.knowledgebase.seed;
 
+import com.quantmore.modules.knowledgebase.model.VectorStatus;
+import com.quantmore.modules.knowledgebase.repository.KnowledgeBaseRepository;
 import com.quantmore.modules.knowledgebase.service.KnowledgeBaseUploadService;
 import com.quantmore.modules.user.model.UserEntity;
 import com.quantmore.modules.user.model.UserRole;
@@ -14,15 +16,23 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
- * 本地知识库种子导入：启动时若设置了 APP_SEED_KB_DIR，递归导入目录下的 Markdown 文件
- * 为公共知识库（仅管理员执行，靠文件哈希幂等，向量化走既有 Redis Stream 异步完成）。
+ * 本地知识库种子导入：启动时若设置了 APP_SEED_KB_DIR，按子目录切割导入 Markdown 文档
+ * 为公共知识库（仅管理员执行，靠内容哈希幂等，向量化走既有 Redis Stream 异步完成）。
+ *
+ * 切割规则：
+ * - 每个顶层子目录 = 一个知识库单元（目录内所有 md 按文件名排序合并，名称 = 目录名）
+ * - 根目录下的每个 md 文件 = 一个独立知识库单元
+ * - 跳过 assets/ 等资源目录
  *
  * 用法：APP_SEED_KB_DIR=/path/to/docs ./gradlew :app:bootRun
  */
@@ -33,9 +43,10 @@ public class LocalKbSeedRunner implements CommandLineRunner {
 
   private final UserRepository userRepository;
   private final KnowledgeBaseUploadService uploadService;
+  private final KnowledgeBaseRepository knowledgeBaseRepository;
 
   @Value("${APP_SEED_KB_DIR:}")
-  private String seedDir;
+  String seedDir;
 
   @Override
   public void run(String... args) throws Exception {
@@ -51,58 +62,118 @@ public class LocalKbSeedRunner implements CommandLineRunner {
         .orElseThrow(() -> new IllegalStateException(
             "APP_SEED_KB_DIR 已设置但系统中没有管理员用户，请先注册首个用户(自动成为 ADMIN)"));
 
-    List<Path> mdFiles = collectMarkdownFiles(root);
-    log.info("开始种子导入: dir={}, 文件数={}, 管理员={}", seedDir, mdFiles.size(), admin.getUsername());
+    Map<String, List<Path>> units = groupBySubdirectory(root);
+    log.info("开始种子导入: dir={}, 知识库单元数={}, 管理员={}",
+        seedDir, units.size(), admin.getUsername());
 
     int imported = 0;
     int duplicated = 0;
+    int revectorized = 0;
     int failed = 0;
-    for (Path file : mdFiles) {
+    for (Map.Entry<String, List<Path>> entry : units.entrySet()) {
+      String unitName = entry.getKey();
       try {
-        String name = stripExtension(file.getFileName().toString());
-        String category = file.getParent() != null && !file.getParent().equals(root)
-            ? file.getParent().getFileName().toString()
-            : null;
-        MultipartFile multipart = toMultipartFile(file);
+        MultipartFile multipart = toCombinedMarkdown(unitName, entry.getValue());
         Map<String, Object> result = uploadService.uploadKnowledgeBase(
-            multipart, name, category, "PUBLIC", admin.getId(), true);
+            multipart, unitName, unitName, "PUBLIC", admin.getId(), true);
         if (Boolean.TRUE.equals(result.get("duplicate"))) {
           duplicated++;
-          log.info("种子导入跳过(重复): {}", file);
+          // 自愈：内容未变但之前向量化失败（如 API Key 未配置）时自动重新向量化
+          Long kbId = extractKbId(result);
+          if (kbId != null && shouldRevectorize(kbId)) {
+            uploadService.revectorize(kbId, admin.getId(), true);
+            revectorized++;
+            log.info("种子导入: {} 已存在但向量化失败，已自动重新向量化", unitName);
+          } else {
+            log.info("种子导入跳过(重复): {}", unitName);
+          }
         } else {
           imported++;
-          log.info("种子导入完成: {}", file);
+          log.info("种子导入完成: {} ({} 个文件)", unitName, entry.getValue().size());
         }
       } catch (Exception e) {
         failed++;
-        log.error("种子导入失败: {}", file, e);
+        log.error("种子导入失败: {}", unitName, e);
       }
     }
-    log.info("种子导入汇总: 新增={}, 重复={}, 失败={}", imported, duplicated, failed);
+    log.info("种子导入汇总: 新增={}, 重复={}, 自动重向量化={}, 失败={}",
+        imported, duplicated, revectorized, failed);
   }
 
-  private List<Path> collectMarkdownFiles(Path root) throws IOException {
-    try (var stream = Files.walk(root)) {
+  @SuppressWarnings("unchecked")
+  private Long extractKbId(Map<String, Object> result) {
+    Object kb = result.get("knowledgeBase");
+    if (kb instanceof Map<?, ?> kbMap) {
+      Object id = kbMap.get("id");
+      return id instanceof Number number ? number.longValue() : null;
+    }
+    return null;
+  }
+
+  private boolean shouldRevectorize(Long kbId) {
+    return knowledgeBaseRepository.findById(kbId)
+        .map(kb -> kb.getVectorStatus() == VectorStatus.FAILED)
+        .orElse(false);
+  }
+
+  /**
+   * 按顶层子目录分组：目录 → 目录内所有 md；根目录文件 → 各自成组
+   */
+  Map<String, List<Path>> groupBySubdirectory(Path root) throws IOException {
+    Map<String, List<Path>> units = new LinkedHashMap<>();
+    try (Stream<Path> stream = Files.walk(root, 1)) {
+      List<Path> entries = stream
+          .filter(p -> !p.equals(root))
+          .filter(p -> !p.getFileName().toString().equals("assets"))
+          .sorted(Comparator.comparing(Path::toString))
+          .toList();
+      for (Path entry : entries) {
+        if (Files.isDirectory(entry)) {
+          List<Path> mdFiles = collectMarkdownFiles(entry);
+          if (!mdFiles.isEmpty()) {
+            units.put(entry.getFileName().toString(), mdFiles);
+          }
+        } else if (entry.getFileName().toString().endsWith(".md")) {
+          units.put(stripExtension(entry.getFileName().toString()), List.of(entry));
+        }
+      }
+    }
+    return units;
+  }
+
+  private List<Path> collectMarkdownFiles(Path dir) throws IOException {
+    try (Stream<Path> stream = Files.walk(dir)) {
       return stream
           .filter(Files::isRegularFile)
           .filter(p -> p.getFileName().toString().endsWith(".md"))
-          .filter(p -> !p.toString().contains("/assets/"))
           .sorted(Comparator.comparing(Path::toString))
           .toList();
     }
   }
 
-  private MultipartFile toMultipartFile(Path file) throws IOException {
-    byte[] bytes = Files.readAllBytes(file);
-    String fileName = file.getFileName().toString();
-    String contentType = Files.probeContentType(file);
-    return new PathMultipartFile(fileName, contentType != null ? contentType : "text/markdown", bytes);
+  /**
+   * 将一个单元内的多个 md 合并为单个 MultipartFile（文件名 = 单元名.md），
+   * 各文件之间以 Markdown 分隔线 + 原文件名标题分隔，保证内容哈希稳定可幂等
+   */
+  private MultipartFile toCombinedMarkdown(String unitName, List<Path> files) throws IOException {
+    StringBuilder sb = new StringBuilder();
+    for (Path file : files) {
+      sb.append("\n\n---\n\n# ").append(stripExtension(file.getFileName().toString())).append("\n\n");
+      sb.append(Files.readString(file, StandardCharsets.UTF_8));
+    }
+    return new BytesMultipartFile(unitName + ".md", "text/markdown",
+        sb.toString().getBytes(StandardCharsets.UTF_8));
+  }
+
+  private String stripExtension(String fileName) {
+    int dot = fileName.lastIndexOf('.');
+    return dot > 0 ? fileName.substring(0, dot) : fileName;
   }
 
   /**
    * 最小化的 MultipartFile 实现（避免在 main 依赖 spring-test）
    */
-  private record PathMultipartFile(String name, String contentType, byte[] bytes)
+  private record BytesMultipartFile(String name, String contentType, byte[] bytes)
       implements MultipartFile {
 
     @Override
@@ -144,10 +215,5 @@ public class LocalKbSeedRunner implements CommandLineRunner {
     public void transferTo(File dest) throws IOException, IllegalStateException {
       Files.write(dest.toPath(), bytes);
     }
-  }
-
-  private String stripExtension(String fileName) {
-    int dot = fileName.lastIndexOf('.');
-    return dot > 0 ? fileName.substring(0, dot) : fileName;
   }
 }

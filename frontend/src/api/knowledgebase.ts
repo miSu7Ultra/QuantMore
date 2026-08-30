@@ -40,20 +40,7 @@ export interface KnowledgeBaseStats {
 
 export type SortOption = 'time' | 'size' | 'access' | 'question';
 
-export interface UploadKnowledgeBaseResponse {
-  knowledgeBase: {
-    id: number;
-    name: string;
-    category: string;
-    fileSize: number;
-    contentLength: number;
-  };
-  storage: {
-    fileKey: string;
-    fileUrl: string;
-  };
-  duplicate: boolean;
-}
+
 
 export interface QueryRequest {
   knowledgeBaseIds: number[];  // 支持多个知识库
@@ -67,25 +54,6 @@ export interface QueryResponse {
 }
 
 export const knowledgeBaseApi = {
-  /**
-   * 上传知识库文件
-   * @param visibility 可见性（PUBLIC / PRIVATE），仅管理员可上传公共知识库
-   */
-  async uploadKnowledgeBase(file: File, name?: string, category?: string, visibility?: KbVisibility): Promise<UploadKnowledgeBaseResponse> {
-    const formData = new FormData();
-    formData.append('file', file);
-    if (name) {
-      formData.append('name', name);
-    }
-    if (category) {
-      formData.append('category', category);
-    }
-    if (visibility) {
-      formData.append('visibility', visibility);
-    }
-    return request.upload<UploadKnowledgeBaseResponse>('/api/knowledgebase/upload', formData);
-  },
-
   /**
    * 下载知识库文件
    */
