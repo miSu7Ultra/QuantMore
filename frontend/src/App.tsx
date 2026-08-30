@@ -3,12 +3,18 @@ import Layout from './components/Layout';
 import { Suspense, lazy } from 'react';
 import type { UploadKnowledgeBaseResponse } from './api/knowledgebase';
 import { ROUTES } from './constants/routes';
+import { AuthProvider, RequireAuth } from './AuthContext';
 
 // Lazy load pages
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const KnowledgeBaseManagePage = lazy(() => import('./pages/KnowledgeBaseManagePage'));
 const KnowledgeBaseUploadPage = lazy(() => import('./pages/KnowledgeBaseUploadPage'));
 const KnowledgeBaseQueryPage = lazy(() => import('./pages/KnowledgeBaseQueryPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const UserProviderPage = lazy(() => import('./pages/UserProviderPage'));
+const StrategyGeneratorPage = lazy(() => import('./pages/StrategyGeneratorPage'));
+const StrategyHistoryPage = lazy(() => import('./pages/StrategyHistoryPage'));
 
 // Loading component
 const Loading = () => (
@@ -66,29 +72,52 @@ function KnowledgeBaseQueryPageWrapper() {
 function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            {/* 默认重定向到知识库管理页面 */}
-            <Route index element={<Navigate to={ROUTES.knowledgebase} replace />} />
+      <AuthProvider>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            {/* 公开页面：登录 / 注册 */}
+            <Route path={ROUTES.login} element={<LoginPage />} />
+            <Route path={ROUTES.register} element={<RegisterPage />} />
 
-            {/* 知识库管理 */}
-            <Route path="knowledgebase" element={<KnowledgeBaseManagePageWrapper />} />
+            {/* 受保护页面：需登录后才能访问 */}
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <Layout />
+                </RequireAuth>
+              }
+            >
+              {/* 默认重定向到知识库管理页面 */}
+              <Route index element={<Navigate to={ROUTES.knowledgebase} replace />} />
 
-            {/* 知识库上传 */}
-            <Route path="knowledgebase/upload" element={<KnowledgeBaseUploadPageWrapper />} />
+              {/* 知识库管理 */}
+              <Route path="knowledgebase" element={<KnowledgeBaseManagePageWrapper />} />
 
-            {/* 问答助手（知识库聊天） */}
-            <Route path="knowledgebase/chat" element={<KnowledgeBaseQueryPageWrapper />} />
+              {/* 知识库上传 */}
+              <Route path="knowledgebase/upload" element={<KnowledgeBaseUploadPageWrapper />} />
 
-            {/* 设置 */}
-            <Route path="settings" element={<SettingsPage />} />
+              {/* 问答助手（知识库聊天） */}
+              <Route path="knowledgebase/chat" element={<KnowledgeBaseQueryPageWrapper />} />
 
-            {/* 未匹配路由回退到知识库管理（后续可在此扩展 /login、/register 等认证页面） */}
-            <Route path="*" element={<Navigate to={ROUTES.knowledgebase} replace />} />
-          </Route>
-        </Routes>
-      </Suspense>
+              {/* 策略生成器 */}
+              <Route path="generator" element={<StrategyGeneratorPage />} />
+
+              {/* 策略生成历史 */}
+              <Route path="generator/history" element={<StrategyHistoryPage />} />
+
+              {/* 我的模型（用户级 Provider 配置） */}
+              <Route path="settings/my-providers" element={<UserProviderPage />} />
+
+              {/* 管理员设置 */}
+              <Route path="settings" element={<SettingsPage />} />
+
+              {/* 未匹配路由回退到知识库管理 */}
+              <Route path="*" element={<Navigate to={ROUTES.knowledgebase} replace />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

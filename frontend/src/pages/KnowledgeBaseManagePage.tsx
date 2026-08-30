@@ -423,6 +423,9 @@ export default function KnowledgeBaseManagePage({ onUpload, onChat }: KnowledgeB
                   名称
                 </th>
                   <th className="text-left px-6 py-4 text-sm font-medium text-slate-600 dark:text-slate-300">
+                  可见性
+                </th>
+                  <th className="text-left px-6 py-4 text-sm font-medium text-slate-600 dark:text-slate-300">
                   分类
                 </th>
                   <th className="text-left px-6 py-4 text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -458,6 +461,24 @@ export default function KnowledgeBaseManagePage({ onUpload, onChat }: KnowledgeB
                           <p className="font-medium text-slate-800 dark:text-white">{kb.name}</p>
                           <p className="text-xs text-slate-400 dark:text-slate-500">{kb.originalFilename}</p>
                       </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex flex-col items-start gap-1">
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-medium ${
+                          kb.visibility === 'PUBLIC'
+                            ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300'
+                            : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                        }`}
+                      >
+                        {kb.visibility === 'PUBLIC' ? '公共' : '私有'}
+                      </span>
+                      {kb.ownerUsername && (
+                        <span className="text-xs text-slate-400 dark:text-slate-500">
+                          {kb.ownerUsername}
+                        </span>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -572,14 +593,16 @@ export default function KnowledgeBaseManagePage({ onUpload, onChat }: KnowledgeB
                           <RefreshCw className={`w-4 h-4 ${revectorizing === kb.id ? 'animate-spin' : ''}`} />
                         </button>
                       )}
-                      {/* 删除按钮 */}
-                      <button
-                        onClick={() => setDeleteItem(kb)}
-                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                        title="删除"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      {/* 删除按钮（仅可删除时显示） */}
+                      {kb.canDelete && (
+                        <button
+                          onClick={() => setDeleteItem(kb)}
+                          className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                          title="删除"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   </td>
                 </motion.tr>

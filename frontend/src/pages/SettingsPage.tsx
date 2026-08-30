@@ -1,15 +1,18 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Settings, Plus, Trash2, Plug, CheckCircle, XCircle,
-  Loader2, Eye, EyeOff, RefreshCw, Server, Edit2, Mic, Volume2, ChevronDown, Database,
+  Loader2, Eye, EyeOff, RefreshCw, Server, Edit2, ChevronDown, Database, Cpu, ShieldAlert,
 } from 'lucide-react';
 import { llmProviderApi } from '../api/llmProvider';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { useAuth } from '../AuthContext';
+import { ROUTES } from '../constants/routes';
 import type {
   ProviderItem, CreateProviderRequest, UpdateProviderRequest,
-  ProviderTestResult, AsrConfig, TtsConfig, AsrConfigRequest, TtsConfigRequest,
+  ProviderTestResult,
 } from '../types/llmProvider';
 
 // Provider 预设：已知 Provider 的 Base URL、推荐模型和向量模型
@@ -138,6 +141,8 @@ function ConfigRow({ label, value, title, monospace = false, emphasis = false }:
 }
 
 export default function SettingsPage() {
+  const { isAdmin } = useAuth();
+
   const [providers, setProviders] = useState<ProviderItem[]>([]);
   const [defaultProviderId, setDefaultProviderId] = useState('');
   const [defaultEmbeddingProviderId, setDefaultEmbeddingProviderId] = useState('');
@@ -184,18 +189,6 @@ export default function SettingsPage() {
     [pendingDefaultEmbeddingProviderId, providers],
   );
 
-  // Voice config state
-  const [asrConfig, setAsrConfig] = useState<AsrConfig | null>(null);
-  const [ttsConfig, setTtsConfig] = useState<TtsConfig | null>(null);
-  const [showVoiceModal, setShowVoiceModal] = useState<'asr' | 'tts' | null>(null);
-  const [testingAsr, setTestingAsr] = useState(false);
-  const [asrTestResult, setAsrTestResult] = useState<ProviderTestResult | null>(null);
-  const [voiceSaving, setVoiceSaving] = useState(false);
-
-  // ASR/TTS form fields
-  const [asrForm, setAsrForm] = useState<AsrConfigRequest>({});
-  const [ttsForm, setTtsForm] = useState<TtsConfigRequest>({});
-
   // Toast notification
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
@@ -214,17 +207,13 @@ export default function SettingsPage() {
 
   const loadData = useCallback(async () => {
     try {
-      const [providerList, defaultProvider, asr, tts] = await Promise.all([
+      const [providerList, defaultProvider] = await Promise.all([
         llmProviderApi.list(),
         llmProviderApi.getDefaultProvider(),
-        llmProviderApi.getAsrConfig(),
-        llmProviderApi.getTtsConfig(),
       ]);
       setProviders(providerList);
       setDefaultProviderId(defaultProvider.defaultProvider);
       setDefaultEmbeddingProviderId(defaultProvider.defaultEmbeddingProvider);
-      setAsrConfig(asr);
-      setTtsConfig(tts);
     } catch (err) {
       console.error('Failed to load settings:', err);
       showToast('加载数据失败', 'error');
@@ -234,8 +223,10 @@ export default function SettingsPage() {
   }, [showToast]);
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    if (isAdmin) {
+      loadData();
+    }
+  }, [isAdmin, loadData]);
 
   // --- Modal helpers ---
   const openCreateModal = () => {
@@ -462,84 +453,36 @@ export default function SettingsPage() {
     }
   };
 
-  // --- Voice config handlers ---
-  const openAsrModal = () => {
-    if (!asrConfig) return;
-    setAsrForm({
-      url: asrConfig.url,
-      model: asrConfig.model,
-      language: asrConfig.language,
-      format: asrConfig.format,
-      sampleRate: asrConfig.sampleRate,
-      enableTurnDetection: asrConfig.enableTurnDetection,
-      turnDetectionType: asrConfig.turnDetectionType,
-      turnDetectionThreshold: asrConfig.turnDetectionThreshold,
-      turnDetectionSilenceDurationMs: asrConfig.turnDetectionSilenceDurationMs,
-    });
-    setShowVoiceModal('asr');
-  };
+  // 非管理员：展示提示并引导到「我的模型」
+  if (!isAdmin) {
+    return (
+      <div className="max-w-2xl mx-auto pt-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-10 text-center"
+        >
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center mb-5">
+            <ShieldAlert className="w-8 h-8 text-amber-500" />
+          </div>
+          <h1 className="text-xl font-bold text-slate-800 dark:text-white mb-2">管理员设置</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+            此页面仅对管理员开放，用于配置全局模型服务与默认向量模型。<br />
+            您可以前往「我的模型」配置自己的 API Key 与默认聊天模型。
+          </p>
+          <Link
+            to={ROUTES.myProviders}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-primary-500 to-primary-600 shadow-lg shadow-primary-500/25 hover:from-primary-600 hover:to-primary-700 transition-all"
+          >
+            <Cpu className="w-4 h-4" />
+            前往我的模型
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
 
-  const openTtsModal = () => {
-    if (!ttsConfig) return;
-    setTtsForm({
-      model: ttsConfig.model,
-      voice: ttsConfig.voice,
-      format: ttsConfig.format,
-      sampleRate: ttsConfig.sampleRate,
-      mode: ttsConfig.mode,
-      languageType: ttsConfig.languageType,
-      speechRate: ttsConfig.speechRate,
-      volume: ttsConfig.volume,
-    });
-    setShowVoiceModal('tts');
-  };
-
-  const handleSaveAsr = async () => {
-    setVoiceSaving(true);
-    try {
-      await llmProviderApi.updateAsrConfig(asrForm);
-      showToast('ASR 配置已更新');
-      setShowVoiceModal(null);
-      await loadData();
-    } catch (err) {
-      showToast(err instanceof Error ? err.message : '更新失败', 'error');
-    } finally {
-      setVoiceSaving(false);
-    }
-  };
-
-  const handleSaveTts = async () => {
-    setVoiceSaving(true);
-    try {
-      await llmProviderApi.updateTtsConfig(ttsForm);
-      showToast('TTS 配置已更新');
-      setShowVoiceModal(null);
-      await loadData();
-    } catch (err) {
-      showToast(err instanceof Error ? err.message : '更新失败', 'error');
-    } finally {
-      setVoiceSaving(false);
-    }
-  };
-
-  const handleTestAsr = async () => {
-    setTestingAsr(true);
-    setAsrTestResult(null);
-    try {
-      const result = await llmProviderApi.testAsr();
-      setAsrTestResult(result);
-    } catch (err) {
-      setAsrTestResult({
-        success: false,
-        message: err instanceof Error ? err.message : '连接测试失败',
-        model: '',
-      });
-    } finally {
-      setTestingAsr(false);
-    }
-  };
-
-  // --- Render ---
+  // --- Render（管理员视图） ---
   return (
     <div className="max-w-4xl mx-auto">
       {/* Page header */}
@@ -549,8 +492,8 @@ export default function SettingsPage() {
             <Settings className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">系统设置</h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-0.5 text-sm">管理聊天模型、向量模型和模块配置</p>
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">管理员设置</h1>
+            <p className="text-slate-500 dark:text-slate-400 mt-0.5 text-sm">管理全局模型服务与默认向量模型</p>
           </div>
         </div>
       </div>
@@ -732,138 +675,6 @@ export default function SettingsPage() {
                   })}
                 </div>
               )}
-
-              {/* Voice service cards */}
-              <div className="mt-6">
-                <h2 className="text-lg font-bold text-slate-800 dark:text-white mb-4">
-                  语音服务
-                </h2>
-                <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2">
-                  {/* ASR Card */}
-                  {asrConfig && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={CARD_CLASS}
-                    >
-                      <div className="mb-4 flex items-start justify-between gap-3">
-                        <div className="flex min-w-0 items-center gap-3">
-                          <div className={ICON_WRAP_CLASS}>
-                            <Mic className="h-4 w-4" />
-                          </div>
-                          <div className="min-w-0">
-                            <h3 className="truncate text-sm font-semibold text-slate-800 dark:text-white">
-                              ASR 语音识别
-                            </h3>
-                            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">实时语音转写配置</p>
-                          </div>
-                        </div>
-                        <StatusBadge icon={<Mic className="h-3 w-3" />}>语音服务</StatusBadge>
-                      </div>
-
-                      <dl className={DETAILS_CLASS}>
-                        <ConfigRow label="WebSocket URL" value={asrConfig.url} title={asrConfig.url} emphasis />
-                        <ConfigRow label="识别模型" value={asrConfig.model} title={asrConfig.model} emphasis />
-                        <ConfigRow label="识别语言" value={asrConfig.language} />
-                        <ConfigRow label="采样率" value={`${asrConfig.sampleRate}Hz`} />
-                        <ConfigRow
-                          label="API Key"
-                          value={asrConfig.maskedApiKey}
-                          title={asrConfig.maskedApiKey}
-                          monospace
-                          emphasis
-                        />
-                      </dl>
-
-                      {asrTestResult && (
-                        <div className={`mb-3 px-3 py-2 rounded-lg text-xs font-medium ${
-                          asrTestResult.success
-                            ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
-                            : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
-                        }`}>
-                          <div className="flex items-center gap-1.5">
-                            {asrTestResult.success
-                              ? <CheckCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                              : <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                            }
-                            <span>{asrTestResult.message}</span>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className={ACTION_BAR_CLASS}>
-                        <button
-                          onClick={openAsrModal}
-                          className={`${ACTION_BUTTON_CLASS} text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700`}
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                          编辑
-                        </button>
-                        <button
-                          onClick={handleTestAsr}
-                          disabled={testingAsr}
-                          className={`${ACTION_BUTTON_CLASS} text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20`}
-                        >
-                          {testingAsr
-                            ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            : <RefreshCw className="w-3.5 h-3.5" />
-                          }
-                          测试
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* TTS Card */}
-                  {ttsConfig && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.05 }}
-                      className={CARD_CLASS}
-                    >
-                      <div className="mb-4 flex items-start justify-between gap-3">
-                        <div className="flex min-w-0 items-center gap-3">
-                          <div className={ICON_WRAP_CLASS}>
-                            <Volume2 className="h-4 w-4" />
-                          </div>
-                          <div className="min-w-0">
-                            <h3 className="truncate text-sm font-semibold text-slate-800 dark:text-white">
-                              TTS 语音合成
-                            </h3>
-                            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">文本转语音输出配置</p>
-                          </div>
-                        </div>
-                        <StatusBadge icon={<Volume2 className="h-3 w-3" />}>语音服务</StatusBadge>
-                      </div>
-
-                      <dl className={DETAILS_CLASS}>
-                        <ConfigRow label="合成模型" value={ttsConfig.model} title={ttsConfig.model} emphasis />
-                        <ConfigRow label="音色" value={ttsConfig.voice} title={ttsConfig.voice} emphasis />
-                        <ConfigRow label="采样率" value={`${ttsConfig.sampleRate}Hz`} />
-                        <ConfigRow label="音量" value={ttsConfig.volume} />
-                        <ConfigRow
-                          label="API Key"
-                          value={ttsConfig.maskedApiKey}
-                          title={ttsConfig.maskedApiKey}
-                          monospace
-                          emphasis
-                        />
-                      </dl>
-
-                      <div className={ACTION_BAR_CLASS}>
-                        <button
-                          onClick={openTtsModal}
-                          className={`${ACTION_BUTTON_CLASS} text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700`}
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                          编辑
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
-              </div>
           </motion.div>
         </AnimatePresence>
       )}
@@ -1172,197 +983,6 @@ export default function SettingsPage() {
                     whileTap={{ scale: 0.98 }}
                   >
                     {saving ? (
-                      <span className="flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        保存中...
-                      </span>
-                    ) : (
-                      '保存'
-                    )}
-                  </motion.button>
-                </div>
-              </motion.div>
-            </div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Voice Edit Modal */}
-      <AnimatePresence>
-        {showVoiceModal && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowVoiceModal(null)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
-            />
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                onClick={(e) => e.stopPropagation()}
-                className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto"
-              >
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-5">
-                  {showVoiceModal === 'asr' ? '编辑 ASR 语音识别' : '编辑 TTS 语音合成'}
-                </h3>
-
-                {showVoiceModal === 'asr' ? (
-                  <div className="space-y-4">
-                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">连接配置</p>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">WebSocket URL</label>
-                      <input type="text" value={asrForm.url || ''} onChange={(e) => setAsrForm(f => ({ ...f, url: e.target.value }))}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Model</label>
-                        <input type="text" value={asrForm.model || ''} onChange={(e) => setAsrForm(f => ({ ...f, model: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">API Key <span className="text-slate-400 font-normal">(留空不改)</span></label>
-                        <input type="password" value={asrForm.apiKey || ''} onChange={(e) => setAsrForm(f => ({ ...f, apiKey: e.target.value }))}
-                          placeholder="留空则保持原值"
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Language</label>
-                      <input type="text" value={asrForm.language || ''} onChange={(e) => setAsrForm(f => ({ ...f, language: e.target.value }))}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                    </div>
-
-                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider pt-2">音频参数</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Format</label>
-                        <input type="text" value={asrForm.format || ''} onChange={(e) => setAsrForm(f => ({ ...f, format: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Sample Rate</label>
-                        <input type="number" value={asrForm.sampleRate || 0} onChange={(e) => setAsrForm(f => ({ ...f, sampleRate: Number(e.target.value) }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                    </div>
-
-                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider pt-2">VAD 参数</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Turn Detection</label>
-                        <select value={asrForm.enableTurnDetection ? 'true' : 'false'} onChange={(e) => setAsrForm(f => ({ ...f, enableTurnDetection: e.target.value === 'true' }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow">
-                          <option value="true">Enabled</option>
-                          <option value="false">Disabled</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Detection Type</label>
-                        <input type="text" value={asrForm.turnDetectionType || ''} onChange={(e) => setAsrForm(f => ({ ...f, turnDetectionType: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Threshold</label>
-                        <input type="number" step="0.1" value={asrForm.turnDetectionThreshold || 0} onChange={(e) => setAsrForm(f => ({ ...f, turnDetectionThreshold: Number(e.target.value) }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Silence Duration (ms)</label>
-                        <input type="number" value={asrForm.turnDetectionSilenceDurationMs || 0} onChange={(e) => setAsrForm(f => ({ ...f, turnDetectionSilenceDurationMs: Number(e.target.value) }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">连接配置</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Model</label>
-                        <input type="text" value={ttsForm.model || ''} onChange={(e) => setTtsForm(f => ({ ...f, model: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">API Key <span className="text-slate-400 font-normal">(留空不改)</span></label>
-                        <input type="password" value={ttsForm.apiKey || ''} onChange={(e) => setTtsForm(f => ({ ...f, apiKey: e.target.value }))}
-                          placeholder="留空则保持原值"
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                    </div>
-
-                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider pt-2">语音参数</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Voice</label>
-                        <input type="text" value={ttsForm.voice || ''} onChange={(e) => setTtsForm(f => ({ ...f, voice: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Format</label>
-                        <input type="text" value={ttsForm.format || ''} onChange={(e) => setTtsForm(f => ({ ...f, format: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-3 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Sample Rate</label>
-                        <input type="number" value={ttsForm.sampleRate || 0} onChange={(e) => setTtsForm(f => ({ ...f, sampleRate: Number(e.target.value) }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Mode</label>
-                        <input type="text" value={ttsForm.mode || ''} onChange={(e) => setTtsForm(f => ({ ...f, mode: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Language</label>
-                        <input type="text" value={ttsForm.languageType || ''} onChange={(e) => setTtsForm(f => ({ ...f, languageType: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                    </div>
-
-                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider pt-2">输出控制</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Speech Rate</label>
-                        <input type="number" step="0.1" value={ttsForm.speechRate || 0} onChange={(e) => setTtsForm(f => ({ ...f, speechRate: Number(e.target.value) }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Volume</label>
-                        <input type="number" value={ttsForm.volume || 0} onChange={(e) => setTtsForm(f => ({ ...f, volume: Number(e.target.value) }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-400 transition-shadow" />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Modal actions */}
-                <div className="flex gap-3 justify-end mt-6">
-                  <motion.button
-                    onClick={() => setShowVoiceModal(null)}
-                    disabled={voiceSaving}
-                    className="px-5 py-2.5 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 rounded-xl font-medium text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    取消
-                  </motion.button>
-                  <motion.button
-                    onClick={showVoiceModal === 'asr' ? handleSaveAsr : handleSaveTts}
-                    disabled={voiceSaving}
-                    className="px-5 py-2.5 text-white rounded-xl font-semibold text-sm bg-gradient-to-r from-primary-500 to-primary-600 shadow-lg shadow-primary-500/25 hover:from-primary-600 hover:to-primary-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {voiceSaving ? (
                       <span className="flex items-center gap-2">
                         <Loader2 className="w-4 h-4 animate-spin" />
                         保存中...

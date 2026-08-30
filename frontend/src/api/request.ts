@@ -1,10 +1,14 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { clearStoredAuth, getStoredToken } from '../utils/authStorage';
 
 declare module 'axios' {
   interface AxiosRequestConfig {
     skipResultTransform?: boolean;
   }
 }
+
+/** 登录页路径，避免 401 时循环跳转 */
+const AUTH_PUBLIC_PATHS = ['/login', '/register'];
 
 /**
  * 后端统一响应结构
@@ -104,11 +108,24 @@ async function getErrorFromResponseData(data: unknown): Promise<Error | null> {
 }
 
 /**
+ * 请求拦截器：自动附加 JWT Token（登录/注册等公开接口无 Token 时忽略）
+ */
+instance.interceptors.request.use((config) => {
+  const token = getStoredToken();
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+/**
  * 响应拦截器
  *
  * 后端约定：所有响应都是 HTTP 200 + Result
  * - code === 200 → 成功，返回 data
  * - code !== 200 → 失败，直接显示 message
+ * - HTTP 401 → 登录态失效，清除凭证并跳转登录页
  */
 instance.interceptors.response.use(
   (response) => {
@@ -135,7 +152,18 @@ instance.interceptors.response.use(
   async (error) => {
     // 有响应的情况：后端返回了结果（即使是错误）
     if (error.response) {
-      const { data } = error.response;
+      const { status, data } = error.response;
+
+      // HTTP 401：未登录或登录已过期，清除本地凭证并跳转登录页
+      if (status === 401) {
+        clearStoredAuth();
+        const currentPath = window.location.pathname;
+        if (!AUTH_PUBLIC_PATHS.includes(currentPath)) {
+          window.location.assign('/login');
+        }
+        return Promise.reject(new Error('未登录或登录已过期'));
+      }
+
       // 尝试解析 Result 格式
       const responseError = await getErrorFromResponseData(data);
       if (responseError) {

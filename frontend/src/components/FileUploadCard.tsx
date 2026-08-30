@@ -1,4 +1,4 @@
-import {ChangeEvent, DragEvent, useCallback, useState} from 'react';
+import {ChangeEvent, DragEvent, ReactNode, useCallback, useState} from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
 import {AlertCircle, FileText, Loader2, Upload, X} from 'lucide-react';
 
@@ -27,6 +27,8 @@ export interface FileUploadCardProps {
   nameLabel?: string;
   /** 错误信息 */
   error?: string;
+  /** 附加字段区域（在名称输入框下方渲染，例如可见性选择） */
+  extraFields?: ReactNode;
   /** 文件选择回调 */
   onFileSelect?: (file: File) => void;
   /** 上传回调 */
@@ -48,6 +50,7 @@ export default function FileUploadCard({
   namePlaceholder = '留空则使用文件名',
   nameLabel = '名称（可选）',
   error,
+  extraFields,
   onFileSelect,
   onUpload,
   onBack,
@@ -237,6 +240,18 @@ export default function FileUploadCard({
             disabled={uploading}
             onClick={(e) => e.stopPropagation()}
           />
+        </motion.div>
+      )}
+
+      {/* 附加字段（如可见性选择） */}
+      {extraFields && selectedFile && (
+        <motion.div
+            className="mt-6 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg dark:shadow-slate-900/50"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {extraFields}
         </motion.div>
       )}
 

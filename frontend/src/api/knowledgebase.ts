@@ -3,7 +3,7 @@ import { streamSse } from './stream';
 
 // 向量化状态
 export type VectorStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
-export type QuestionGenStatus = 'NONE' | 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+export type KbVisibility = 'PUBLIC' | 'PRIVATE';
 
 export interface KnowledgeBaseItem {
   id: number;
@@ -19,8 +19,14 @@ export interface KnowledgeBaseItem {
   vectorStatus: VectorStatus;
   vectorError: string | null;
   chunkCount: number;
-  questionGenStatus: QuestionGenStatus;
-  questionGenError: string | null;
+  /** 归属用户 ID；公共知识库为 null */
+  ownerId: number | null;
+  /** 可见性：公共（全员可见）/ 私有（仅上传者可见） */
+  visibility: KbVisibility;
+  /** 上传者用户名；公共知识库为 null */
+  ownerUsername: string | null;
+  /** 当前用户是否有权删除 */
+  canDelete: boolean;
 }
 
 // 统计信息
@@ -63,8 +69,9 @@ export interface QueryResponse {
 export const knowledgeBaseApi = {
   /**
    * 上传知识库文件
+   * @param visibility 可见性（PUBLIC / PRIVATE），仅管理员可上传公共知识库
    */
-  async uploadKnowledgeBase(file: File, name?: string, category?: string): Promise<UploadKnowledgeBaseResponse> {
+  async uploadKnowledgeBase(file: File, name?: string, category?: string, visibility?: KbVisibility): Promise<UploadKnowledgeBaseResponse> {
     const formData = new FormData();
     formData.append('file', file);
     if (name) {
@@ -72,6 +79,9 @@ export const knowledgeBaseApi = {
     }
     if (category) {
       formData.append('category', category);
+    }
+    if (visibility) {
+      formData.append('visibility', visibility);
     }
     return request.upload<UploadKnowledgeBaseResponse>('/api/knowledgebase/upload', formData);
   },
