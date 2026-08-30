@@ -96,6 +96,11 @@ app:
   jwt:
     secret: ${APP_JWT_SECRET:quantmore-dev-jwt-secret-change-me}
     expiration-days: ${APP_JWT_EXPIRATION_DAYS:7}
+  generator:
+    system-prompt-path: ${APP_GENERATOR_SYSTEM_PROMPT_PATH:classpath:prompts/strategy-generator-system.st}
+    user-prompt-path: ${APP_GENERATOR_USER_PROMPT_PATH:classpath:prompts/strategy-generator-user.st}
+    top-k: ${APP_GENERATOR_TOPK:8}
+    min-score: ${APP_GENERATOR_MIN_SCORE:0.18}
   ai:
     default-provider: dashscope
     default-embedding-provider: dashscope

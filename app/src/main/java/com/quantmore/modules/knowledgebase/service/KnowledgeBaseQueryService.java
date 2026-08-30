@@ -114,7 +114,8 @@ public class KnowledgeBaseQueryService {
     }
 
     private ChatClient getChatClient() {
-        return llmProviderRegistry.getDefaultChatClient();
+        // 按当前用户解析聊天模型（用户自设默认 provider 优先，否则全局默认）
+        return llmProviderRegistry.getDefaultChatClientForUser(currentUserService.get().id());
     }
 
     /**
