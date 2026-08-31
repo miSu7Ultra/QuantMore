@@ -2,6 +2,7 @@ package com.quantmore.modules.user.service;
 
 import com.quantmore.common.exception.BusinessException;
 import com.quantmore.common.exception.ErrorCode;
+import com.quantmore.modules.user.config.AuthProperties;
 import com.quantmore.modules.user.dto.AuthResponse;
 import com.quantmore.modules.user.dto.LoginRequest;
 import com.quantmore.modules.user.dto.RegisterRequest;
@@ -25,12 +26,16 @@ public class UserService {
   private final UserRepository userRepository;
   private final JwtService jwtService;
   private final PasswordEncoder passwordEncoder;
+  private final AuthProperties authProperties;
 
   /**
    * 开放注册；首个注册用户自动成为 ADMIN
    */
   @Transactional
   public UserDTO register(RegisterRequest request) {
+    if (!authProperties.isRegistrationEnabled()) {
+      throw new BusinessException(ErrorCode.REGISTRATION_DISABLED);
+    }
     String username = request.username().trim();
     if (userRepository.existsByUsername(username)) {
       throw new BusinessException(ErrorCode.USERNAME_TAKEN);

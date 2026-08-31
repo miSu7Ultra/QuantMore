@@ -2,6 +2,7 @@ package com.quantmore.modules.user.service;
 
 import com.quantmore.common.exception.BusinessException;
 import com.quantmore.common.exception.ErrorCode;
+import com.quantmore.modules.user.config.AuthProperties;
 import com.quantmore.modules.user.dto.AuthResponse;
 import com.quantmore.modules.user.dto.LoginRequest;
 import com.quantmore.modules.user.dto.RegisterRequest;
@@ -36,11 +37,14 @@ class UserServiceTest {
   @Mock private UserRepository userRepository;
   @Mock private JwtService jwtService;
 
+  private AuthProperties authProperties;
   private UserService userService;
 
   @BeforeEach
   void setUp() {
-    userService = new UserService(userRepository, jwtService, new BCryptPasswordEncoder());
+    authProperties = new AuthProperties();
+    userService = new UserService(userRepository, jwtService, new BCryptPasswordEncoder(),
+        authProperties);
   }
 
   private UserEntity savedUser(Long id, String username, UserRole role) {
@@ -115,6 +119,36 @@ class UserServiceTest {
           .satisfies(e -> assertThat(((BusinessException) e).getCode())
               .isEqualTo(ErrorCode.USERNAME_TAKEN.getCode()));
       verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("注册关闭时抛 REGISTRATION_DISABLED 且不写库")
+    void registrationDisabledThrows() {
+      authProperties.setRegistrationEnabled(false);
+
+      assertThatThrownBy(() -> userService.register(new RegisterRequest("alice", "password123")))
+          .isInstanceOf(BusinessException.class)
+          .satisfies(e -> assertThat(((BusinessException) e).getCode())
+              .isEqualTo(ErrorCode.REGISTRATION_DISABLED.getCode()));
+      verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("注册开启时正常注册")
+    void registrationEnabledRegistersNormally() {
+      authProperties.setRegistrationEnabled(true);
+      when(userRepository.count()).thenReturn(0L);
+      when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> {
+        UserEntity e = inv.getArgument(0);
+        e.setId(1L);
+        return e;
+      });
+
+      UserDTO dto = userService.register(new RegisterRequest("alice", "password123"));
+
+      assertThat(dto.id()).isEqualTo(1L);
+      assertThat(dto.username()).isEqualTo("alice");
+      assertThat(dto.role()).isEqualTo(UserRole.ADMIN);
     }
   }
 
