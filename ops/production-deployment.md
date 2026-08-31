@@ -81,7 +81,7 @@ chmod 600 .env        # 内含数据库密码与各类密钥，必须收紧权�
 
 ```bash
 cd /opt/quantmore
-# .env 中：第 2 节全部密钥已就位；APP_SEED_KB_DIR 保持注释（不导入种子）；
+# .env 中：第 2 节全部密钥已就位；生产段的 APP_SEED_KB_DIR 保持注释（开发段的 Mac 路径在容器内不存在，会自动告警跳过）；
 #          APP_REGISTRATION_ENABLED=true
 docker compose up -d --build
 ```
@@ -118,8 +118,8 @@ cd /opt/quantmore
 ./scripts/deploy.sh    # git pull --ff-only + 重建镜像 + up -d + 前端健康检查
 ```
 
-- 脚本**不做** `down -v`，数据卷不受影响。
-- 回滚：`git checkout <旧tag>` 后重跑 `./scripts/deploy.sh`（镜像会按旧代码重建）。
+- 脚本仅允许在 main 分支执行（其他分支直接拒绝）；**不做** `down -v`，数据卷不受影响。
+- 回滚：直接执行 `git checkout <旧tag> && docker compose build && docker compose up -d`（镜像会按旧代码重建）。**不能重跑 `deploy.sh`——其内置 `git pull` 会把 checkout 拉回 main。**
 - 回滚前先看第 7 节：如果旧版本依赖的 schema 与新版本不一致（validate 校验），旧代码可能无法启动。
 
 ## 5. 备份与恢复
@@ -135,10 +135,11 @@ sudo crontab -e
 10 3 * * * /opt/quantmore/scripts/backup.sh >> /var/log/quantmore-backup.log 2>&1
 ```
 
-脚本产出两个文件（均在 `backups/`，已加入 .gitignore）：
+脚本产出三个文件（均在 `backups/`，已加入 .gitignore）：
 
 - `quantmore_<日期>.dump.gz`：PostgreSQL 逻辑备份（pg_dump 自定义格式，含全部业务数据）；
-- `quantmore_config_<日期>.tgz`：`app_quantmore_data` 卷归档（Provider 运行配置）。
+- `quantmore_config_<日期>.tgz`：`app_quantmore_data` 卷归档（Provider 运行配置）；
+- `quantmore_minio_<日期>.tgz`：`minio_data` 卷归档（上传的知识库原始文档）。
 
 保留策略：日备保留 14 天；每月 1 号的文件视为月备，长期保留。
 
@@ -172,11 +173,15 @@ docker rm -f quantmore-restore-test
 ```bash
 cd /opt/quantmore
 docker compose stop app    # 仅停 app 防止写入，postgres 保持运行
-gunzip -c backups/quantmore_2026-08-31.dump.gz | docker exec -i quantmore-postgres pg_restore --clean --if-exists -U postgres -d quantmore
+gunzip -c backups/quantmore_<日期>.dump.gz | docker exec -i quantmore-postgres pg_restore --clean --if-exists -U postgres -d quantmore
 docker compose start app
 ```
 
 注意：`--clean --if-exists` 会先删除同名对象，恢复是**覆盖式**的，执行前先跑一次 `backup.sh` 留存现状；备份中的 `flyway_schema_history` 会一并恢复，重启 app 时 Flyway 自动补齐备份之后新增的迁移，前提是备份与当前代码在同一演进线上。
+
+若还需还原 `minio_data`（上传文档误删/丢失场景）：同样先 `docker compose stop app`，再解包归档到卷——
+`docker run --rm -v minio_data:/data -v "$PWD/backups":/backup alpine tar xzf /backup/quantmore_minio_<日期>.tgz -C /data`，
+最后 `docker compose start app`，登录后抽查上传文档是否可下载。
 
 ## 6. 常见故障
 
@@ -185,6 +190,14 @@ docker compose start app
 - 早期版本在「无管理员」时种子导入会抛异常导致 app crash-loop；现已修复为**告警跳过**：日志出现「系统中没有管理员用户，跳过种子导入；注册首个用户(自动成为 ADMIN)后重启生效」，容器保持正常运行。处理方式：完成首注册后 `docker compose restart app` 即可触发导入。
 - 若日志出现「APP_AI_CONFIG_ENCRYPTION_KEY 未配置」，或 `docker compose up` 报 `required variable ... is missing`：`.env` 的必填项没填，按第 2 节补齐后重试。
 - 排查命令：`docker logs quantmore-app --tail 100`。
+
+### 模板占位密钥未替换
+
+两种占位值漏改的后果不对称，务必注意：
+
+- `APP_JWT_SECRET` 忘记替换：占位值只有 21 字节，不满足 HS256 要求的 32 字节，app 启动时直接抛 `WeakKeyException` **大声失败**，容易发现。
+- `APP_AI_CONFIG_ENCRYPTION_KEY` 忘记替换：**不会报错**，而是静默派生出公开可算的密钥，数据库中所有 Provider API Key 都能被解密——最危险的一种，务必按第 2 节生成随机值替换。
+- `scripts/deploy.sh` 内置预检会在部署前扫描 `.env` 中的 `change_me`/`your_dashscope` 占位值，两种情况都会被拦截，不会带病上线。
 
 ### 密钥变更的后果
 

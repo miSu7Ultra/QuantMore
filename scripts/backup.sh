@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 生产备份脚本：PostgreSQL 逻辑备份 + app 配置卷归档 + 按保留策略清理旧备份
+# 生产备份脚本：PostgreSQL 逻辑备份 + app 配置卷/MinIO 数据卷归档 + 按保留策略清理旧备份
 #
 # crontab 示例（每天 03:10 执行，日志追加到 /var/log/quantmore-backup.log）：
 #   10 3 * * * /opt/quantmore/scripts/backup.sh >> /var/log/quantmore-backup.log 2>&1
@@ -18,11 +18,14 @@ docker exec quantmore-postgres pg_dump -U postgres -Fc quantmore | gzip > "$BACK
 # 2) app 配置卷归档（app_quantmore_data，容器内 /root/.quantmore，存 Provider 运行配置）
 docker run --rm -v app_quantmore_data:/data -v "$BACKUP_DIR":/backup alpine tar czf /backup/quantmore_config_$(date +%F).tgz -C /data .
 
-# 3) 清理过期日备：文件名形如 quantmore_2026-08-31.dump.gz；每月 1 号的文件跳过（月备）
+# 3) minio_data 卷归档（上传的知识库原始文档）
+docker run --rm -v minio_data:/data -v "$BACKUP_DIR":/backup alpine tar czf /backup/quantmore_minio_$(date +%F).tgz -C /data .
+
+# 4) 清理过期日备：文件名形如 quantmore_2026-08-31.dump.gz；每月 1 号的文件跳过（月备）
 # 注：依赖 GNU date 的 -d 参数（脚本在 Linux 服务器上运行）
 cutoff_epoch="$(date -d '14 days ago' +%s)"
 find "$BACKUP_DIR" -maxdepth 1 -type f \
-  \( -name 'quantmore_????-??-??.dump.gz' -o -name 'quantmore_config_????-??-??.tgz' \) -print0 |
+  \( -name 'quantmore_????-??-??.dump.gz' -o -name 'quantmore_config_????-??-??.tgz' -o -name 'quantmore_minio_????-??-??.tgz' \) -print0 |
 while IFS= read -r -d '' f; do
   base="$(basename "$f")"
   date_part="$(echo "$base" | sed -E 's/.*_([0-9]{4}-[0-9]{2}-[0-9]{2})\..*/\1/')"
