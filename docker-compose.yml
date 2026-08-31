@@ -1,3 +1,15 @@
+# =========================================
+# 日志锚点 (YAML Anchor)
+# -----------------------------------------
+# 作用：统一 json-file 驱动 + 日志轮转（单文件最大 10MB、保留 5 个），防止日志打满磁盘。
+# 所有长驻服务通过 logging: *default-logging 复用同一套轮转策略。
+# =========================================
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
   # =========================================
   # 1. PostgreSQL 数据库服务
@@ -14,17 +26,22 @@ services:
     # 使用带有 pgvector 插件的 PostgreSQL 16 镜像
     image: pgvector/pgvector:pg16
     container_name: quantmore-postgres
+    # 长驻服务：容器意外退出后自动重启（手动 docker compose stop 除外）
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      # 必填变量（:? 语法）：未设置时 docker compose 直接报错退出，避免默认弱口令上线
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD 未设置}
       POSTGRES_DB: quantmore
     volumes:
       # 数据持久化：确保容器重启或删除后，数据库数据不丢失
       - postgres_data:/var/lib/postgresql/data
       # 初始化脚本：容器首次启动时会自动执行 /docker-entrypoint-initdb.d/ 下的 .sql 文件
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5433:5432"
+    # 生产环境不对外暴露数据库端口，仅容器内网可访问；
+    # 需要运维排查时，在服务器上执行：
+    #   docker exec -it quantmore-postgres psql -U postgres
+    logging: *default-logging
     # 健康检查：
     # 后端服务(app)需要等待数据库完全启动并准备好连接后才能启动。
     # 这里通过 pg_isready 命令检测数据库状态。
@@ -47,10 +64,12 @@ services:
   redis:
     image: redis:7
     container_name: quantmore-redis
-    ports:
-      - "6380:6379"
+    # 长驻服务：容器意外退出后自动重启（手动 docker compose stop 除外）
+    restart: unless-stopped
+    # 生产环境不对外暴露端口，仅后端容器内网访问
     volumes:
       - redis_data:/data
+    logging: *default-logging
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -65,23 +84,30 @@ services:
   #
   # 教程知识点：
   #   - MinIO 兼容 AWS S3 协议，这意味着代码中使用 S3 SDK 即可无缝切换到云厂商的对象存储。
-  #   - 端口说明：
-  #     - 9000: API 端口，代码通过此端口上传/下载文件
-  #     - 9001: 控制台端口，浏览器访问此端口管理文件
+  #   - 端口说明（生产环境）：
+  #     - 9000: API 端口，仅容器内网使用，不对公网开放
+  #     - 9001: 控制台端口，只绑定 127.0.0.1，经 SSH 隧道访问
   # =========================================
   minio:
     image: minio/minio
     container_name: quantmore-minio
+    # 长驻服务：容器意外退出后自动重启（手动 docker compose stop 除外）
+    restart: unless-stopped
     # 启动命令：指定数据目录和控制台地址
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      # 必填变量（:? 语法）：未设置时 docker compose 直接报错退出，避免默认弱口令上线
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER 未设置}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD 未设置}
     ports:
-      - "9002:9000"
-      - "9003:9001"
+      # 控制台仅绑定本机回环地址，不直接对公网开放；
+      # 需要管理文件时先 SSH 登录服务器建立隧道（本地执行）：
+      #   ssh -L 9003:127.0.0.1:9003 user@server
+      # 然后浏览器访问 http://localhost:9003
+      - "127.0.0.1:9003:9001"
     volumes:
       - minio_data:/data
+    logging: *default-logging
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 5s
@@ -104,10 +130,14 @@ services:
     depends_on:
       minio:
         condition: service_healthy # 必须等待 MinIO 服务健康（不仅仅是启动）
+    environment:
+      # 复用 MinIO 服务的管理员凭据（必填变量，与 minio 服务一致）
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?}
     entrypoint: >
       /bin/sh -c "
       set -eu;
-      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin &&
+      /usr/bin/mc alias set myminio http://minio:9000 \"$$MINIO_ROOT_USER\" \"$$MINIO_ROOT_PASSWORD\" &&
       (
         /usr/bin/mc ls myminio/quantmore > /dev/null 2>&1 ||
         /usr/bin/mc mb myminio/quantmore
@@ -128,6 +158,8 @@ services:
       context: .
       dockerfile: app/Dockerfile
     container_name: quantmore-app
+    # 长驻服务：容器意外退出后自动重启（手动 docker compose stop 除外）
+    restart: unless-stopped
     # 依赖管理：确保基础设施准备好后再启动后端
     depends_on:
       postgres:
@@ -139,36 +171,64 @@ services:
       createbuckets:
         condition: service_completed_successfully # 等待初始化任务完成
     environment:
+      # 激活生产 profile：关闭 Swagger、限制 actuator 暴露、滚动日志等
+      SPRING_PROFILES_ACTIVE: prod
+
       # === 数据库连接 ===
       # 使用服务名 'postgres' 作为主机名，Docker 内部 DNS 会自动解析
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_DB: quantmore
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      
+      # 必填变量（:? 语法）：与 postgres 服务共用同一份密码
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD 未设置}
+
       # === Redis 连接 ===
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      
+
       # === 对象存储配置 ===
       # 注意：后端在容器内访问 MinIO，使用 http://minio:9000
       APP_STORAGE_ENDPOINT: http://minio:9000
-      APP_STORAGE_ACCESS_KEY: minioadmin
-      APP_STORAGE_SECRET_KEY: minioadmin
+      # 复用 MinIO 服务的管理员凭据（必填变量）
+      APP_STORAGE_ACCESS_KEY: ${MINIO_ROOT_USER}
+      APP_STORAGE_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
       APP_STORAGE_BUCKET: quantmore
       APP_STORAGE_REGION: us-east-1
-      
+
       # === AI 模型配置 (必须配置) ===
       # 这里的变量值来自宿主机的环境变量或 .env 文件
       AI_BAILIAN_API_KEY: ${AI_BAILIAN_API_KEY}
       AI_MODEL: ${AI_MODEL:-qwen3.5-flash}
-      APP_AI_CONFIG_ENCRYPTION_KEY: ${APP_AI_CONFIG_ENCRYPTION_KEY}
+      APP_AI_CONFIG_ENCRYPTION_KEY: ${APP_AI_CONFIG_ENCRYPTION_KEY:?必须设置 APP_AI_CONFIG_ENCRYPTION_KEY}
 
       # === 安全配置 ===
-      APP_JWT_SECRET: ${APP_JWT_SECRET}
-    ports:
-      - "8080:8080"
+      APP_JWT_SECRET: ${APP_JWT_SECRET:?必须设置 APP_JWT_SECRET}
+
+      # === 业务开关 ===
+      # 是否开放用户自助注册；生产默认开启，如需封闭注册在 .env 设置 APP_REGISTRATION_ENABLED=false
+      APP_REGISTRATION_ENABLED: ${APP_REGISTRATION_ENABLED:-true}
+      # 生产环境同源部署（nginx 反代），默认无需跨域；多域名场景按逗号分隔配置
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
+      # 知识库种子文档目录（留空则跳过导入）；容器内已挂载 /seed-docs，
+      # 如需启动时导入种子文档，在 .env 设置 APP_SEED_KB_DIR=/seed-docs
+      APP_SEED_KB_DIR: ${APP_SEED_KB_DIR:-}
+    volumes:
+      # Provider 配置持久化：运行时可写的 llm-providers.yml/.env 落在容器内用户主目录
+      - app_quantmore_data:/root/.quantmore
+      # 日志持久化：对应 application-prod.yml 的 logging.file.name
+      - app_logs:/app/logs
+      # 种子文档：根 .dockerignore 排除了 docs，必须显式挂载容器才能读取
+      - ./docs:/seed-docs:ro
+    logging: *default-logging
+    # 8080 端口不对公网开放，仅容器内网由 nginx 反向代理转发
+    # 健康检查：探测 actuator 健康端点（runtime 镜像已安装 curl）
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
   # =========================================
   # 6. 前端应用服务 (Vue/React + Nginx)
@@ -180,10 +240,16 @@ services:
   frontend:
     build: ./frontend
     container_name: quantmore-frontend
+    # 长驻服务：容器意外退出后自动重启（手动 docker compose stop 除外）
+    restart: unless-stopped
+    # 等待后端健康检查通过后再启动，避免页面先于 API 就绪
     depends_on:
-      - app
+      app:
+        condition: service_healthy
     ports:
+      # 80 端口是唯一对公网开放的入口，所有请求经 nginx 反向代理转发到后端
       - "80:80"
+    logging: *default-logging
 
 # =========================================
 # 定义 Docker 卷 (Volumes)
@@ -195,3 +261,7 @@ volumes:
   postgres_data:
   redis_data:
   minio_data:
+  # 后端 Provider 配置持久化（容器内 /root/.quantmore）
+  app_quantmore_data:
+  # 后端日志持久化（容器内 /app/logs）
+  app_logs:
