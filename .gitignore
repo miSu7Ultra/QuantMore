@@ -13,6 +13,8 @@ build
 test-output.txt
 # 策略评测报告输出
 eval-output/
+# 生产备份脚本输出目录
+backups/
 # IDEA code analysis
 qodana.yaml
 

@@ -6,8 +6,8 @@ dist
 build
 
 # Development files
-.env.local
-.env.*.local
+.env
+.env.*
 *.log
 npm-debug.log*
 yarn-debug.log*

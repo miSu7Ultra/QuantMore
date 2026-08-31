@@ -27,6 +27,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -65,9 +66,12 @@ public class LocalKbSeedRunner implements CommandLineRunner {
       log.warn("APP_SEED_KB_DIR 不是有效目录，跳过种子导入: {}", seedDir);
       return;
     }
-    UserEntity admin = userRepository.findFirstByRoleOrderByIdAsc(UserRole.ADMIN)
-        .orElseThrow(() -> new IllegalStateException(
-            "APP_SEED_KB_DIR 已设置但系统中没有管理员用户，请先注册首个用户(自动成为 ADMIN)"));
+    Optional<UserEntity> adminOpt = userRepository.findFirstByRoleOrderByIdAsc(UserRole.ADMIN);
+    if (adminOpt.isEmpty()) {
+      log.warn("系统中没有管理员用户，跳过种子导入；注册首个用户(自动成为 ADMIN)后重启生效");
+      return;
+    }
+    UserEntity admin = adminOpt.get();
 
     Map<String, List<Path>> units = groupBySubdirectory(root);
     log.info("开始种子导入: dir={}, 知识库单元数={}, 管理员={}",

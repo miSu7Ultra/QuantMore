@@ -51,7 +51,8 @@ public enum ErrorCode {
 
     // ========== 用户模块错误 12xxx ==========
     USERNAME_TAKEN(12001, "用户名已被占用"),
-    INVALID_CREDENTIALS(12002, "用户名或密码错误");
+    INVALID_CREDENTIALS(12002, "用户名或密码错误"),
+    REGISTRATION_DISABLED(12003, "注册已关闭");
 
     private final Integer code;
     private final String message;

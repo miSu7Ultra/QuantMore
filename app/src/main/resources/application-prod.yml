@@ -1,0 +1,30 @@
+# 生产环境 Profile 配置（SPRING_PROFILES_ACTIVE=prod 时生效）
+# 与 docker-compose.yml 的生产编排配套使用
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+server:
+  forward-headers-strategy: native   # Tomcat RemoteIpValve 信任 docker 内网代理
+
+logging:
+  file:
+    name: /app/logs/quantmore.log
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 14
+      total-size-cap: 1GB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  jwt:
+    expiration-days: ${APP_JWT_EXPIRATION_DAYS:30}

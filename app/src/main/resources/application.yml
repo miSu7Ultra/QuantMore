@@ -96,6 +96,8 @@ app:
   jwt:
     secret: ${APP_JWT_SECRET:quantmore-dev-jwt-secret-change-me}
     expiration-days: ${APP_JWT_EXPIRATION_DAYS:7}
+  auth:
+    registration-enabled: ${APP_REGISTRATION_ENABLED:true}
   generator:
     system-prompt-path: ${APP_GENERATOR_SYSTEM_PROMPT_PATH:classpath:prompts/strategy-generator-system.st}
     user-prompt-path: ${APP_GENERATOR_USER_PROMPT_PATH:classpath:prompts/strategy-generator-user.st}

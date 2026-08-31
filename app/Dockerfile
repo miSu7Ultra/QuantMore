@@ -44,6 +44,10 @@ RUN ./gradlew :app:bootJar --no-daemon -x test
 FROM eclipse-temurin:25-jre
 WORKDIR /app
 
+# 安装 curl：docker-compose.yml 中 app 服务的 healthcheck 依赖它探测 /actuator/health
+# eclipse-temurin 基于 Ubuntu，可直接使用 apt 安装
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
 # 从第一阶段 (builder) 中复制生成的 JAR 文件到当前镜像
 # 只复制构建产物，不复制源代码和 Gradle 缓存，保持镜像干净
 COPY --from=builder /workspace/app/build/libs/*.jar app.jar

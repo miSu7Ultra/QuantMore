@@ -2,7 +2,7 @@
 # 第一阶段：构建环境 (Builder Stage)
 # 作用：使用 Node.js 环境来安装依赖并编译前端代码
 # ==============================================================================
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 
 # 1. 优先复制依赖定义文件
@@ -12,9 +12,10 @@ COPY package.json pnpm-lock.yaml ./
 
 # 2. 安装依赖
 # npm install -g pnpm: 全局安装 pnpm 包管理器
-# pnpm install: 安装所有依赖（包括 devDependencies，构建需要 TypeScript、Vite 等）
+# pnpm install --frozen-lockfile: 严格按 pnpm-lock.yaml 安装（与 CI 一致），
+#   锁文件不一致时直接失败，防止镜像构建与本地依赖漂移
 # 注意：不使用 --prod 标志，因为构建阶段需要完整的开发环境
-RUN npm install -g pnpm && pnpm install
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
 
 # 3. 复制源代码并构建
 COPY . .
