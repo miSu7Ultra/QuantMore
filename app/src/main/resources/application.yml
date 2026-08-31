@@ -101,6 +101,17 @@ app:
     user-prompt-path: ${APP_GENERATOR_USER_PROMPT_PATH:classpath:prompts/strategy-generator-user.st}
     top-k: ${APP_GENERATOR_TOPK:8}
     min-score: ${APP_GENERATOR_MIN_SCORE:0.18}
+  eval:
+    enabled: ${APP_EVAL_ENABLED:false}
+    cases-path: ${APP_EVAL_CASES_PATH:classpath:eval/strategy-eval-cases.json}
+    generate-provider: ${APP_EVAL_GENERATE_PROVIDER:}
+    judge-provider: ${APP_EVAL_JUDGE_PROVIDER:}
+    output-dir: ${APP_EVAL_OUTPUT_DIR:eval-output}
+    judge-pass-score: ${APP_EVAL_JUDGE_PASS_SCORE:70.0}
+    python-bin: ${APP_EVAL_PYTHON_BIN:python3}
+    python-timeout: ${APP_EVAL_PYTHON_TIMEOUT:10s}
+    vector-wait-timeout: ${APP_EVAL_VECTOR_WAIT_TIMEOUT:120s}
+    cleanup-records: ${APP_EVAL_CLEANUP_RECORDS:true}
   ai:
     default-provider: qwen
     default-embedding-provider: qwen

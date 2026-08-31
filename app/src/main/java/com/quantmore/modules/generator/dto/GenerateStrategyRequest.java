@@ -32,6 +32,9 @@ public record GenerateStrategyRequest(
     List<Long> knowledgeBaseIds,
 
     // 可选：空 = 用户默认模型
-    String providerId
+    String providerId,
+
+    // 可选：true = 跳过知识库检索（无 RAG 对照生成），null/false = 正常检索
+    Boolean skipRetrieval
 ) {
 }

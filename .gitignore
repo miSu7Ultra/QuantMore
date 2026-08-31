@@ -11,6 +11,8 @@ build
 # Environment variables
 .env
 test-output.txt
+# 策略评测报告输出
+eval-output/
 # IDEA code analysis
 qodana.yaml
 

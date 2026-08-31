@@ -43,6 +43,8 @@ app:
   jwt:
     secret: test-jwt-secret-for-quantmore-tests-0123456789
     expiration-days: 7
+  eval:
+    enabled: false
   ai:
     default-provider: qwen
     security:

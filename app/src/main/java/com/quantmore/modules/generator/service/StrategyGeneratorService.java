@@ -4,6 +4,7 @@ import com.quantmore.common.ai.LlmProviderRegistry;
 import com.quantmore.common.ai.PromptSanitizer;
 import com.quantmore.common.exception.BusinessException;
 import com.quantmore.common.exception.ErrorCode;
+import com.quantmore.common.transaction.TransactionalExecutor;
 import com.quantmore.modules.generator.config.GeneratorProperties;
 import com.quantmore.modules.generator.dto.GenerateStrategyRequest;
 import com.quantmore.modules.generator.dto.GenerateStrategyResponse;
@@ -39,12 +40,16 @@ public class StrategyGeneratorService {
 
   static final Pattern PYTHON_FENCE = Pattern.compile("```python\\s*(.*?)```", Pattern.DOTALL);
 
+  static final String NO_RAG_CONTEXT =
+      "（跳过知识库检索：本次为无 RAG 对照生成，请严格按 PTrade 官方规范编写，不确定的 API 用注释标注）";
+
   private final StrategyGenerationRepository repository;
   private final KnowledgeBaseVectorService vectorService;
   private final KnowledgeBaseRepository knowledgeBaseRepository;
   private final LlmProviderRegistry registry;
   private final CurrentUserService currentUserService;
   private final PromptSanitizer sanitizer;
+  private final TransactionalExecutor transactionalExecutor;
   private final PromptTemplate systemPromptTemplate;
   private final PromptTemplate userPromptTemplate;
   private final int topK;
@@ -58,13 +63,15 @@ public class StrategyGeneratorService {
       CurrentUserService currentUserService,
       PromptSanitizer sanitizer,
       GeneratorProperties properties,
-      ResourceLoader resourceLoader) throws IOException {
+      ResourceLoader resourceLoader,
+      TransactionalExecutor transactionalExecutor) throws IOException {
     this.repository = repository;
     this.vectorService = vectorService;
     this.knowledgeBaseRepository = knowledgeBaseRepository;
     this.registry = registry;
     this.currentUserService = currentUserService;
     this.sanitizer = sanitizer;
+    this.transactionalExecutor = transactionalExecutor;
     this.systemPromptTemplate = new PromptTemplate(
         resourceLoader.getResource(properties.getSystemPromptPath())
             .getContentAsString(StandardCharsets.UTF_8)
@@ -80,10 +87,16 @@ public class StrategyGeneratorService {
   /**
    * 生成策略
    */
-  @Transactional
   public GenerateStrategyResponse generate(GenerateStrategyRequest request) {
     UserPrincipal user = currentUserService.get();
+    return generateForUser(request, user);
+  }
 
+  /**
+   * 生成策略（显式传入用户，供评测等无 SecurityContext 的场景使用）
+   * LLM 调用在事务外执行，仅持久化走小范围事务
+   */
+  public GenerateStrategyResponse generateForUser(GenerateStrategyRequest request, UserPrincipal user) {
     // 1. 输入清洗（反注入）
     String strategyName = sanitizer.sanitize(request.strategyName()).trim();
     String buyConditions = sanitizer.sanitize(request.buyConditions()).trim();
@@ -92,19 +105,25 @@ public class StrategyGeneratorService {
     String riskControls = request.riskControls() == null ? ""
         : sanitizer.sanitize(request.riskControls()).trim();
 
-    // 2. 解析知识库范围并校验可见性
-    List<Long> kbIds = resolveKnowledgeBaseIds(user, request.knowledgeBaseIds());
-    if (user.role() != UserRole.ADMIN) {
-      for (Long kbId : kbIds) {
-        if (!knowledgeBaseRepository.isVisibleToUser(kbId, user.id())) {
-          throw new BusinessException(ErrorCode.KNOWLEDGE_BASE_FORBIDDEN,
-              "知识库不可见或不存在: " + kbId);
+    // 2. 解析知识库范围并校验可见性（跳过检索时不解析、不校验）
+    List<Long> kbIds;
+    String context;
+    if (Boolean.TRUE.equals(request.skipRetrieval())) {
+      kbIds = List.of();
+      context = NO_RAG_CONTEXT;
+    } else {
+      kbIds = resolveKnowledgeBaseIds(user, request.knowledgeBaseIds());
+      if (user.role() != UserRole.ADMIN) {
+        for (Long kbId : kbIds) {
+          if (!knowledgeBaseRepository.isVisibleToUser(kbId, user.id())) {
+            throw new BusinessException(ErrorCode.KNOWLEDGE_BASE_FORBIDDEN,
+                "知识库不可见或不存在: " + kbId);
+          }
         }
       }
+      // 3. 检索参考示例（检索失败不阻断生成）
+      context = retrieveContext(strategyName, request, buyConditions, sellConditions, kbIds);
     }
-
-    // 3. 检索参考示例（检索失败不阻断生成）
-    String context = retrieveContext(strategyName, request, buyConditions, sellConditions, kbIds);
 
     // 4. 渲染提示词并生成
     String systemPrompt = systemPromptTemplate.render(Map.of("context", context));
@@ -136,24 +155,26 @@ public class StrategyGeneratorService {
 
     SplitResult split = splitExplanationAndCode(raw);
 
-    // 5. 持久化
-    StrategyGenerationEntity entity = StrategyGenerationEntity.builder()
-        .userId(user.id())
-        .strategyName(strategyName)
-        .market(request.market())
-        .frequency(request.frequency())
-        .buyConditions(buyConditions)
-        .sellConditions(sellConditions)
-        .riskControls(riskControls)
-        .knowledgeBaseIds(kbIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
-        .providerId(request.providerId())
-        .generatedCode(split.code())
-        .explanation(split.explanation())
-        .build();
-    entity = repository.save(entity);
+    // 5. 持久化（唯一事务点，LLM 调用已在上方事务外完成）
+    GenerateStrategyResponse response = transactionalExecutor.call(() -> {
+      StrategyGenerationEntity entity = StrategyGenerationEntity.builder()
+          .userId(user.id())
+          .strategyName(strategyName)
+          .market(request.market())
+          .frequency(request.frequency())
+          .buyConditions(buyConditions)
+          .sellConditions(sellConditions)
+          .riskControls(riskControls)
+          .knowledgeBaseIds(kbIds.stream().map(String::valueOf).collect(Collectors.joining(",")))
+          .providerId(request.providerId())
+          .generatedCode(split.code())
+          .explanation(split.explanation())
+          .build();
+      return toResponse(repository.save(entity));
+    });
 
-    log.info("策略生成完成: id={}, strategy={}, userId={}", entity.getId(), strategyName, user.id());
-    return toResponse(entity);
+    log.info("策略生成完成: id={}, strategy={}, userId={}", response.id(), strategyName, user.id());
+    return response;
   }
 
   /**
