@@ -1,0 +1,122 @@
+[
+  {
+    "id": "s01",
+    "name": "双均线金叉死叉",
+    "market": "STOCK",
+    "frequency": "DAILY",
+    "buyConditions": "5日均线上穿10日均线时买入",
+    "sellConditions": "5日均线下穿10日均线时卖出",
+    "riskControls": "",
+    "difficulty": "SIMPLE"
+  },
+  {
+    "id": "s02",
+    "name": "MACD金叉死叉",
+    "market": "STOCK",
+    "frequency": "DAILY",
+    "buyConditions": "MACD指标金叉(DIF上穿DEA)时买入",
+    "sellConditions": "MACD指标死叉(DIF下穿DEA)时卖出",
+    "riskControls": "",
+    "difficulty": "SIMPLE"
+  },
+  {
+    "id": "s03",
+    "name": "双均线加止损止盈",
+    "market": "STOCK",
+    "frequency": "DAILY",
+    "buyConditions": "5日均线上穿10日均线时买入",
+    "sellConditions": "5日均线下穿10日均线时卖出",
+    "riskControls": "单只股票仓位不超过总资产50%;持仓亏损达5%止损;盈利达10%止盈",
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "s04",
+    "name": "集合竞价追涨停",
+    "market": "STOCK",
+    "frequency": "DAILY",
+    "buyConditions": "每天9:23集合竞价阶段,判断昨日涨停股今日竞价高开且接近涨停价时以涨停价挂单买入",
+    "sellConditions": "次日开盘后不涨停即卖出",
+    "riskControls": "单只股票仓位不超过总资产30%",
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "s05",
+    "name": "多因子轮动",
+    "market": "STOCK",
+    "frequency": "DAILY",
+    "buyConditions": "从沪深300指数成分股中选出20日动量排名前10且收盘价在60日均线上方的股票,等权重买入",
+    "sellConditions": "股票跌出动量前10名或跌破60日均线时卖出",
+    "riskControls": "停牌股票跳过;单只股票仓位不超过总资产20%;下单前检查未成交订单防止重复下单",
+    "difficulty": "COMPLEX"
+  },
+  {
+    "id": "s06",
+    "name": "5分钟均线突破",
+    "market": "STOCK",
+    "frequency": "MINUTE",
+    "buyConditions": "5分钟K线收盘价上穿20周期均线时买入",
+    "sellConditions": "5分钟K线收盘价下穿20周期均线时卖出",
+    "riskControls": "当日累计亏损达3%后停止当日交易",
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "e01",
+    "name": "创业板ETF均线择时",
+    "market": "ETF",
+    "frequency": "DAILY",
+    "buyConditions": "创业板ETF收盘价站上20日均线时买入",
+    "sellConditions": "创业板ETF收盘价跌破20日均线时卖出",
+    "riskControls": "",
+    "difficulty": "SIMPLE"
+  },
+  {
+    "id": "e02",
+    "name": "ETF分钟网格",
+    "market": "ETF",
+    "frequency": "MINUTE",
+    "buyConditions": "ETF价格跌破预设网格下限时买入一档",
+    "sellConditions": "ETF价格涨破预设网格上限时卖出一档",
+    "riskControls": "网格上下限价格差按ETF最小价差0.001元设置;仓位不超过总资产80%",
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "c01",
+    "name": "可转债双低轮动",
+    "market": "CONVERTIBLE_BOND",
+    "frequency": "DAILY",
+    "buyConditions": "每日收盘后按双低值(价格+溢价率)排序,买入排名前5的可转债",
+    "sellConditions": "可转债跌出双低排名前10时卖出",
+    "riskControls": "单只可转债仓位不超过总资产20%",
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "c02",
+    "name": "可转债轮动加强赎避让",
+    "market": "CONVERTIBLE_BOND",
+    "frequency": "DAILY",
+    "buyConditions": "每日收盘后按双低值排序买入排名前5的可转债,排除已公告强赎或临近到期的转债,溢价率超过30%的排除",
+    "sellConditions": "跌出双低排名前10、触发强赎公告或临近到期时卖出",
+    "riskControls": "单只可转债仓位不超过总资产20%",
+    "difficulty": "COMPLEX"
+  },
+  {
+    "id": "f01",
+    "name": "股指期货均线趋势",
+    "market": "FUTURES",
+    "frequency": "DAILY",
+    "buyConditions": "沪深300股指期货IF主力合约收盘价站上20日均线时开多",
+    "sellConditions": "IF主力合约收盘价跌破20日均线时平多",
+    "riskControls": "单日最大亏损达2%时全部平仓;最大持仓手数不超过2手",
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "f02",
+    "name": "期货分钟动量突破",
+    "market": "FUTURES",
+    "frequency": "MINUTE",
+    "buyConditions": "1分钟K线收盘价突破前20周期最高价时开多,跌破前20周期最低价时开空",
+    "sellConditions": "多头持仓时价格回落至20周期均线下方平多;空头持仓时价格反弹至20周期均线上方平空",
+    "riskControls": "每天14:55强制平掉所有仓位;单日最大亏损达3%停止开仓;最大持仓手数不超过3手",
+    "difficulty": "COMPLEX"
+  }
+]

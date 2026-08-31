@@ -56,6 +56,7 @@ class StrategyGeneratorServiceTest {
   @Mock private CurrentUserService currentUserService;
   @Mock private PromptSanitizer sanitizer;
   @Mock private ResourceLoader resourceLoader;
+  @Mock private com.quantmore.common.transaction.TransactionalExecutor transactionalExecutor;
 
   private StrategyGeneratorService service;
 
@@ -65,7 +66,7 @@ class StrategyGeneratorServiceTest {
     return new GenerateStrategyRequest(
         "双均线策略", "STOCK", "DAILY",
         "五日均线上穿十日均线买入", "五日均线下穿十日均线卖出",
-        "单只股票仓位不超过总资产50%", List.of(1L), null);
+        "单只股票仓位不超过总资产50%", List.of(1L), null, null);
   }
 
   @BeforeEach
@@ -85,7 +86,32 @@ class StrategyGeneratorServiceTest {
 
     service = new StrategyGeneratorService(
         repository, vectorService, knowledgeBaseRepository, registry,
-        currentUserService, sanitizer, properties, resourceLoader);
+        currentUserService, sanitizer, properties, resourceLoader, transactionalExecutor);
+    org.mockito.Mockito.lenient().when(transactionalExecutor.call(any()))
+        .thenAnswer(inv -> ((java.util.function.Supplier<?>) inv.getArgument(0)).get());
+  }
+
+  private java.util.concurrent.atomic.AtomicReference<String> stubChatAndSave() {
+    ChatClient chatClient = mock(ChatClient.class);
+    ChatClient.ChatClientRequestSpec promptSpec = mock(ChatClient.ChatClientRequestSpec.class);
+    when(registry.getChatClientForUser(any(), any())).thenReturn(chatClient);
+    when(chatClient.prompt()).thenReturn(promptSpec);
+    java.util.concurrent.atomic.AtomicReference<String> systemPrompt =
+        new java.util.concurrent.atomic.AtomicReference<>();
+    when(promptSpec.system(anyString())).thenAnswer(inv -> {
+      systemPrompt.set(inv.getArgument(0));
+      return promptSpec;
+    });
+    when(promptSpec.user(anyString())).thenReturn(promptSpec);
+    when(promptSpec.call()).thenReturn(mock(ChatClient.CallResponseSpec.class));
+    when(promptSpec.call().content()).thenReturn("```python\npass\n```");
+    when(repository.save(any())).thenAnswer(inv -> {
+      StrategyGenerationEntity e = inv.getArgument(0);
+      e.setId(1L);
+      e.setCreatedAt(java.time.LocalDateTime.now());
+      return e;
+    });
+    return systemPrompt;
   }
 
   @Nested
@@ -192,11 +218,72 @@ class StrategyGeneratorServiceTest {
       });
 
       GenerateStrategyResponse response = service.generate(new GenerateStrategyRequest(
-          "测试策略", "STOCK", "DAILY", "买入", "", "", null, null));
+          "测试策略", "STOCK", "DAILY", "买入", "", "", null, null, null));
 
       assertThat(response).isNotNull();
       verify(vectorService, org.mockito.Mockito.never())
           .similaritySearch(anyString(), anyList(), anyInt(), anyDouble());
+    }
+  }
+
+  @Nested
+  @DisplayName("跳过检索")
+  class SkipRetrieval {
+
+    private GenerateStrategyRequest skipRequest() {
+      return new GenerateStrategyRequest(
+          "无 RAG 对照策略", "STOCK", "DAILY",
+          "五日均线上穿十日均线买入", "五日均线下穿十日均线卖出",
+          "单只股票仓位不超过总资产50%", List.of(1L), null, true);
+    }
+
+    @Test
+    @DisplayName("skipRetrieval=true 时不检索、不解析知识库范围,提示词携带无 RAG 说明,落库 knowledgeBaseIds 为空")
+    void skipsRetrievalAndKbResolution() {
+      when(currentUserService.get()).thenReturn(new UserPrincipal(1L, "admin", UserRole.ADMIN));
+      java.util.concurrent.atomic.AtomicReference<String> systemPrompt = stubChatAndSave();
+
+      GenerateStrategyResponse response = service.generate(skipRequest());
+
+      assertThat(response).isNotNull();
+      verify(vectorService, org.mockito.Mockito.never())
+          .similaritySearch(anyString(), anyList(), anyInt(), anyDouble());
+      verify(knowledgeBaseRepository, org.mockito.Mockito.never())
+          .findAllByOrderByUploadedAtDesc();
+      assertThat(systemPrompt.get()).isNotNull().contains("跳过知识库检索");
+      ArgumentCaptor<StrategyGenerationEntity> entityCaptor =
+          ArgumentCaptor.forClass(StrategyGenerationEntity.class);
+      verify(repository).save(entityCaptor.capture());
+      assertThat(entityCaptor.getValue().getKnowledgeBaseIds()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("skipRetrieval=true 时普通用户也不做 KB 可见性校验")
+    void skipsVisibilityCheckWhenSkippingRetrieval() {
+      when(currentUserService.get()).thenReturn(new UserPrincipal(2L, "bob", UserRole.USER));
+      stubChatAndSave();
+
+      service.generate(skipRequest());
+
+      verify(knowledgeBaseRepository, org.mockito.Mockito.never())
+          .isVisibleToUser(any(), any());
+    }
+  }
+
+  @Nested
+  @DisplayName("显式用户入口")
+  class GenerateForUser {
+
+    @Test
+    @DisplayName("generateForUser 使用传入用户生成,不依赖 SecurityContext")
+    void generatesWithProvidedUser() {
+      stubChatAndSave();
+
+      GenerateStrategyResponse response = service.generateForUser(
+          request(), new UserPrincipal(1L, "admin", UserRole.ADMIN));
+
+      assertThat(response).isNotNull();
+      verify(currentUserService, org.mockito.Mockito.never()).get();
     }
   }
 
