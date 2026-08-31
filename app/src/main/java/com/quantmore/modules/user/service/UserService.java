@@ -29,7 +29,7 @@ public class UserService {
   private final AuthProperties authProperties;
 
   /**
-   * 开放注册；首个注册用户自动成为 ADMIN
+   * 开放注册；首个注册用户自动成为 ADMIN；是否开放受 app.auth.registration-enabled 开关控制
    */
   @Transactional
   public UserDTO register(RegisterRequest request) {

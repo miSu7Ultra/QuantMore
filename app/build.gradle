@@ -134,9 +134,9 @@ tasks.named('bootRun') {
             if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
                 val = val.substring(1, val.length() - 1)
             }
-            // 空值不覆盖：.env.example 末尾「生产部署」段将 APP_AI_CONFIG_ENCRYPTION_KEY 等必填项留空，
-            // 若用空值覆盖上方开发段的占位值会导致 bootRun 启动失败；跳过空赋值，
-            // 开发沿用占位值，需要时在生产段填入实际值后再生效
+            // 空值不覆盖：.env.example 末尾「生产部署」段将 POSTGRES_PASSWORD（生产段重新定义且留空）等变量留空，
+            // 若用空值覆盖上方开发段的值会导致 bootRun 启动失败；跳过空赋值，
+            // 开发沿用开发段值，需要时在生产段填入实际值后再生效
             if (val.isEmpty()) {
                 return
             }
