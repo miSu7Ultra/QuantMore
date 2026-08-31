@@ -19,12 +19,6 @@
 - **多用户**：开放注册，首个注册用户自动成为管理员；每人独立的对话记录与模型 API Key
 - **多模型**：预置通义千问(qwen) / DeepSeek / Kimi(Moonshot) / 智谱 GLM，支持自定义 OpenAI 兼容端点；API Key 用 AES-GCM 加密存储
 
-## TODO
-
-- [ ] **多平台策略代码生成**：除 PTrade 外支持 QMT / miniQMT / JoinQuant（聚宽）等平台的策略代码生成；将生成器泛化为按平台路由的架构，各平台独立知识库与提示词模板
-- [ ] **数据回测**：接入行情数据，对生成的策略做历史数据回测，输出收益曲线与绩效指标
-- [ ] **手机验证码注册登录**：支持短信验证码注册 / 登录（含发送频率限制与验证码有效期）
-
 ## 技术栈
 
 Spring Boot 4.1 / Java 25 / Spring AI 2.0 / PostgreSQL 16 + pgvector / Redis 7 + Redisson Streams / MinIO / React 18 + TypeScript + Vite + Tailwind 4
