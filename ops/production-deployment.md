@@ -9,7 +9,7 @@
 | `docker-compose.yml` | 生产编排（fail-fast 密钥校验、健康检查、日志轮转、仅暴露 80 端口） |
 | `.env.example` | 密钥模板（末尾「生产部署」段与 compose 对齐） |
 | `scripts/deploy.sh` | 升级/首装脚本（git pull + 重建镜像 + 重启） |
-| `scripts/backup.sh` | 每日备份脚本（数据库 + 配置卷，含保留策略） |
+| `scripts/backup.sh` | 每日备份脚本（数据库 + 配置卷 + MinIO 数据卷，含保留策略） |
 
 ## 架构速览
 
@@ -17,7 +17,7 @@
 
 - 唯一公网入口是 frontend 的 **80 端口**，Nginx 把 `/api/` 反向代理到 app 容器 8080；postgres/redis/minio 均不发布端口。
 - MinIO 控制台只绑定 `127.0.0.1:9003`，需 SSH 隧道访问（见第 8 节）。
-- 数据卷：`postgres_data`、`redis_data`、`minio_data`、`app_quantmore_data`（容器内 `/root/.quantmore`，存 Provider 运行配置）、`app_logs`（容器内 `/app/logs`）。
+- 数据卷（实际名称为 compose 固定项目名 `quantmore` + 定义键前缀）：`quantmore_postgres_data`、`quantmore_redis_data`、`quantmore_minio_data`、`quantmore_app_quantmore_data`（容器内 `/root/.quantmore`，存 Provider 运行配置）、`quantmore_app_logs`（容器内 `/app/logs`）。
 - 种子知识库目录 `./docs` 只读挂载到 app 容器 `/seed-docs`（镜像构建时已排除 docs，必须走挂载）。
 
 ## 1. 服务器初始化
@@ -138,8 +138,8 @@ sudo crontab -e
 脚本产出三个文件（均在 `backups/`，已加入 .gitignore）：
 
 - `quantmore_<日期>.dump.gz`：PostgreSQL 逻辑备份（pg_dump 自定义格式，含全部业务数据）；
-- `quantmore_config_<日期>.tgz`：`app_quantmore_data` 卷归档（Provider 运行配置）；
-- `quantmore_minio_<日期>.tgz`：`minio_data` 卷归档（上传的知识库原始文档）。
+- `quantmore_config_<日期>.tgz`：`quantmore_app_quantmore_data` 卷归档（Provider 运行配置）；
+- `quantmore_minio_<日期>.tgz`：`quantmore_minio_data` 卷归档（上传的知识库原始文档）。
 
 保留策略：日备保留 14 天；每月 1 号的文件视为月备，长期保留。
 
@@ -179,8 +179,8 @@ docker compose start app
 
 注意：`--clean --if-exists` 会先删除同名对象，恢复是**覆盖式**的，执行前先跑一次 `backup.sh` 留存现状；备份中的 `flyway_schema_history` 会一并恢复，重启 app 时 Flyway 自动补齐备份之后新增的迁移，前提是备份与当前代码在同一演进线上。
 
-若还需还原 `minio_data`（上传文档误删/丢失场景）：同样先 `docker compose stop app`，再解包归档到卷——
-`docker run --rm -v minio_data:/data -v "$PWD/backups":/backup alpine tar xzf /backup/quantmore_minio_<日期>.tgz -C /data`，
+若还需还原 `quantmore_minio_data`（上传文档误删/丢失场景）：同样先 `docker compose stop app`，再解包归档到卷——
+`docker run --rm -v quantmore_minio_data:/data -v "$PWD/backups":/backup alpine tar xzf /backup/quantmore_minio_<日期>.tgz -C /data`，
 最后 `docker compose start app`，登录后抽查上传文档是否可下载。
 
 ## 6. 常见故障
@@ -195,7 +195,7 @@ docker compose start app
 
 两种占位值漏改的后果不对称，务必注意：
 
-- `APP_JWT_SECRET` 忘记替换：占位值只有 21 字节，不满足 HS256 要求的 32 字节，app 启动时直接抛 `WeakKeyException` **大声失败**，容易发现。
+- `APP_JWT_SECRET` 忘记替换：占位值只有 20 字节，不满足 HS256 要求的 32 字节，app 启动时直接抛 `WeakKeyException` **大声失败**，容易发现。
 - `APP_AI_CONFIG_ENCRYPTION_KEY` 忘记替换：**不会报错**，而是静默派生出公开可算的密钥，数据库中所有 Provider API Key 都能被解密——最危险的一种，务必按第 2 节生成随机值替换。
 - `scripts/deploy.sh` 内置预检会在部署前扫描 `.env` 中的 `change_me`/`your_dashscope` 占位值，两种情况都会被拦截，不会带病上线。
 

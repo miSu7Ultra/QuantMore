@@ -15,11 +15,12 @@ mkdir -p "$BACKUP_DIR"
 # 1) PostgreSQL 逻辑备份（自定义格式，可用 pg_restore 恢复）
 docker exec quantmore-postgres pg_dump -U postgres -Fc quantmore | gzip > "$BACKUP_DIR/quantmore_$(date +%F).dump.gz"
 
-# 2) app 配置卷归档（app_quantmore_data，容器内 /root/.quantmore，存 Provider 运行配置）
-docker run --rm -v app_quantmore_data:/data -v "$BACKUP_DIR":/backup alpine tar czf /backup/quantmore_config_$(date +%F).tgz -C /data .
+# 2) app 配置卷归档（实际卷名 quantmore_app_quantmore_data，容器内 /root/.quantmore，存 Provider 运行配置）
+#    前缀 quantmore 来自 docker-compose.yml 顶层 name: 固定项目名，此处直接引用最终卷名
+docker run --rm -v quantmore_app_quantmore_data:/data -v "$BACKUP_DIR":/backup alpine tar czf /backup/quantmore_config_$(date +%F).tgz -C /data .
 
-# 3) minio_data 卷归档（上传的知识库原始文档）
-docker run --rm -v minio_data:/data -v "$BACKUP_DIR":/backup alpine tar czf /backup/quantmore_minio_$(date +%F).tgz -C /data .
+# 3) MinIO 数据卷归档（实际卷名 quantmore_minio_data，上传的知识库原始文档；前缀来源同上）
+docker run --rm -v quantmore_minio_data:/data -v "$BACKUP_DIR":/backup alpine tar czf /backup/quantmore_minio_$(date +%F).tgz -C /data .
 
 # 4) 清理过期日备：文件名形如 quantmore_2026-08-31.dump.gz；每月 1 号的文件跳过（月备）
 # 注：依赖 GNU date 的 -d 参数（脚本在 Linux 服务器上运行）
