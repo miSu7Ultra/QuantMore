@@ -22,8 +22,6 @@ app/src/main/resources/application-dev.yml
 /docs/*
 # 知识库汇总文件例外(用户要求入库)
 !/docs/ptrade-knowledge-base.md
-# 生产部署手册例外(入库)
-!/docs/production-deployment.md
 SETUP_API_KEYS.md
 
 # AI Assistant documentation

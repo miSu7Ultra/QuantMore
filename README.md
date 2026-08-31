@@ -53,7 +53,7 @@ cd frontend && pnpm install && pnpm dev   # http://localhost:5173
 
 ## 生产部署
 
-单机 Docker Compose 一键部署：生产编排 `docker-compose.yml` 已内置 fail-fast 密钥校验、健康检查与日志轮转，仅暴露 80 端口。完整手册（服务器初始化、密钥生成、首次部署两阶段、备份恢复、故障排查、schema 变更规范）见 [docs/production-deployment.md](docs/production-deployment.md)。
+单机 Docker Compose 一键部署：生产编排 `docker-compose.yml` 已内置 fail-fast 密钥校验、健康检查与日志轮转，仅暴露 80 端口。完整手册（服务器初始化、密钥生成、首次部署两阶段、备份恢复、故障排查、schema 变更规范）见 [ops/production-deployment.md](ops/production-deployment.md)。
 
 ```bash
 cp .env.example .env    # 按「必需配置」段与末尾「生产部署」段生成并填入全部密钥
