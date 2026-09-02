@@ -1,12 +1,12 @@
 # QuantMore · 量化策略代码生成平台
 
-输入自然语言，产出傻瓜式可运行的量化策略代码，代码成功率远超豆包，元宝等大模型。支持多模态量化指导，让每个不懂代码的人都能参与量化。
+支持多模态量化指导，让每个不懂代码的人都能参与量化；输入自然语言，产出傻瓜式可运行的量化策略代码，代码成功率远超豆包，元宝等大模型。
 
 ## 界面截图
 
-| 登录 | 知识库管理 |
+| 登录 | 量化知识库管理 |
 |---|---|
-| ![登录](screenshots/1-login.png) | ![知识库管理](screenshots/2-knowledgebase.png) |
+| ![登录](screenshots/1-login.png) | ![量化知识库管理](screenshots/2-knowledgebase.png) |
 
 | 问答助手 | 策略生成器 |
 |---|---|
@@ -79,7 +79,7 @@ docker compose up -d --build
 ## 测试
 
 ```bash
-./gradlew :app:test --no-daemon     # 后端（需本机 Redis 于 6379，限流集成测试用）
+./gradlew :app:test --no-daemon     # 后端
 cd frontend && pnpm run build       # 前端
 ```
 
